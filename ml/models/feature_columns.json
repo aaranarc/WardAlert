@@ -1,0 +1,22 @@
+{
+  "model_a": [
+    "rain_1h",
+    "rain_3h",
+    "rain_24h",
+    "antecedent_moisture",
+    "elevation_m",
+    "depression_depth_m"
+  ],
+  "model_b": [
+    "rain_1h",
+    "rain_3h",
+    "rain_24h",
+    "antecedent_moisture",
+    "elevation_m",
+    "depression_depth_m",
+    "drain_distance_m",
+    "monsoon_week",
+    "hour_of_day",
+    "crowd_reports_500m_2h"
+  ]
+}

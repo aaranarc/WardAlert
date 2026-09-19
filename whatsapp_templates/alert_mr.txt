@@ -1,0 +1,9 @@
+*वॉर्डअलर्ट — {spot_name}*
+
+पुराचा धोका: *{risk_level}* ({p_actual_pct}% शक्यता)
+कारण: {cause_label}
+मागील ३ तासांचा पाऊस: {rain_3h} मिमी
+
+कृती: {dispatch_action}
+
+{updated_ago} अद्ययावत. थांबवण्यासाठी STOP पाठवा.
