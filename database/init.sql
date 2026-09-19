@@ -48,17 +48,21 @@ CREATE INDEX IF NOT EXISTS idx_flood_spots_geom ON flood_spots USING GIST (geom)
 
 -- --------------------------------------------------------------------------
 -- 3. drainage_segments — 54 OSM drain/ditch lines (osm_id preserved)
+--    NOTE: osm_id is deliberately NOT unique. The 54 segments are sections cut
+--    from only 10 OSM ways, so one osm_id legitimately covers many rows; the
+--    segment id is the natural key.
 -- --------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS drainage_segments (
     id           INTEGER PRIMARY KEY,
-    osm_id       BIGINT UNIQUE,
+    osm_id       BIGINT,
     name         TEXT,
     drain_type   TEXT,
     length_m     DOUBLE PRECISION,
     geom         geometry(LineString, 4326) NOT NULL,
     created_at   TIMESTAMPTZ NOT NULL DEFAULT now()
 );
-CREATE INDEX IF NOT EXISTS idx_drainage_segments_geom ON drainage_segments USING GIST (geom);
+CREATE INDEX IF NOT EXISTS idx_drainage_segments_geom   ON drainage_segments USING GIST (geom);
+CREATE INDEX IF NOT EXISTS idx_drainage_segments_osm_id ON drainage_segments (osm_id);
 
 -- --------------------------------------------------------------------------
 -- 4. rainfall_daily — 1096 days of CHIRPS/ERA5 rainfall via Open-Meteo
