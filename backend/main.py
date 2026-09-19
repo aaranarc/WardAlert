@@ -17,7 +17,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend.db import engine
-from backend.routers import alerts, crowd_reports, drain_health, health, predict, spots
+from backend.routers import alerts, crowd_reports, drain_health, health, predict, spots, whatsapp
 from config import Config
 
 logger = logging.getLogger("wardalert")
@@ -70,6 +70,7 @@ app.include_router(predict.router)
 app.include_router(drain_health.router)
 app.include_router(crowd_reports.router)
 app.include_router(alerts.router)
+app.include_router(whatsapp.router)
 
 
 @app.get("/", include_in_schema=False)

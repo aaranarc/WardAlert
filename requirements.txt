@@ -2,6 +2,7 @@
 fastapi==0.115.6
 uvicorn[standard]==0.34.0
 pydantic==2.10.4
+python-multipart==0.0.20  # Twilio webhooks are form-encoded
 
 # --- database ---
 sqlalchemy[asyncio]==2.0.36
@@ -27,3 +28,6 @@ rasterio==1.4.3
 
 # --- alerts ---
 twilio==9.4.1
+
+# --- tests ---
+httpx==0.28.1  # fastapi.testclient
