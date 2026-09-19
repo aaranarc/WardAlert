@@ -150,3 +150,11 @@ export interface HealthResponse {
   version: string;
   detail: string | null;
 }
+
+export interface BroadcastResponse {
+  broadcast_count: number;
+}
+
+export interface SubscriberCount {
+  count: number;
+}

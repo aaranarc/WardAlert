@@ -143,3 +143,13 @@ async def active_for_spot(session: AsyncSession, spot_id: int) -> list[dict]:
         {"spot_id": spot_id},
     )
     return [dict(row) for row in result.mappings()]
+
+
+async def count_for_spot(session: AsyncSession, spot_id: int) -> int:
+    result = await session.execute(
+        text(
+            "SELECT COUNT(*) FROM subscribers WHERE spot_id = :spot_id AND expires_at > NOW()"
+        ),
+        {"spot_id": spot_id},
+    )
+    return result.scalar_one()

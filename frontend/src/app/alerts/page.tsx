@@ -4,34 +4,27 @@ import React, { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useSpots } from "@/hooks/useSpots";
 import { useAlertsLog } from "@/hooks/useAlertsLog";
+import { useSubscriberCount } from "@/hooks/useSubscriberCount";
 import { AlertLog } from "@/components/Alerts/AlertLog";
-import { AlertResponse } from "@/lib/types";
-import {
-  Bell,
-  Send,
-  Languages,
-  MapPin,
-  Phone,
-  CheckCircle2,
-  AlertCircle,
-  RefreshCw,
-  Sparkles,
-  ShieldAlert,
-  MessageSquare,
-} from "lucide-react";
+import { Send, MapPin, Users, CheckCircle2, AlertCircle, RefreshCw } from "lucide-react";
 
 function AlertsContent() {
   const searchParams = useSearchParams();
   const urlSpotId = searchParams.get("spot_id");
 
   const { spots } = useSpots();
-  const { logs, isLoading, sendAlert, isSending, sendError, mutate } = useAlertsLog(100);
+  const { logs, isLoading, broadcast, isSending, sendError, mutate } = useAlertsLog(100);
 
   const [selectedSpotId, setSelectedSpotId] = useState<number | "">("");
-  const [selectedLanguage, setSelectedLanguage] = useState<"en" | "hi" | "hinglish" | "mr">("en");
-  const [recipient, setRecipient] = useState<string>("whatsapp:+910000000000");
-  const [lastSentResponse, setLastSentResponse] = useState<AlertResponse | null>(null);
+  const [lastBroadcast, setLastBroadcast] = useState<{ spotName: string; count: number } | null>(
+    null
+  );
   const [formError, setFormError] = useState<string | null>(null);
+
+  const { count: subscriberCount, mutate: refetchCount } = useSubscriberCount(
+    selectedSpotId === "" ? null : selectedSpotId
+  );
+  const selectedSpot = spots.find((s) => s.spot_id === selectedSpotId);
 
   // Auto-select spot from query param if provided, otherwise default to first spot
   useEffect(() => {
@@ -48,21 +41,21 @@ function AlertsContent() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormError(null);
-    setLastSentResponse(null);
+    setLastBroadcast(null);
 
     if (!selectedSpotId) {
       setFormError("Please select a target flood spot.");
       return;
     }
 
-    const response = await sendAlert({
-      spot_id: Number(selectedSpotId),
-      language: selectedLanguage,
-      recipient: recipient.trim() || undefined,
-    });
+    const response = await broadcast(Number(selectedSpotId));
 
     if (response) {
-      setLastSentResponse(response);
+      setLastBroadcast({
+        spotName: selectedSpot?.name ?? `#${selectedSpotId}`,
+        count: response.broadcast_count,
+      });
+      refetchCount();
     }
   };
 
@@ -80,7 +73,7 @@ function AlertsContent() {
             </span>
           </div>
           <p className="text-xs lg:text-sm text-slate-400 mt-1 max-w-2xl">
-            Live automated alerts generated on demand via XGBoost predictions and 4-language localized templates (English, Hindi, Hinglish, Marathi).
+            Broadcast the live XGBoost risk to every citizen subscribed to a spot over WhatsApp, each in their own language. Subscriptions lapse 7 days after the citizen shares a location unless they reply EXTEND.
           </p>
         </div>
 
@@ -95,7 +88,7 @@ function AlertsContent() {
 
       {/* Main Grid: Left Form / Right Log Table */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 items-stretch">
-        {/* Left Col: Dispatch Form (4 cols on lg) */}
+        {/* Left Col: Broadcast Form (4 cols on lg) */}
         <div className="lg:col-span-4 flex flex-col gap-4">
           <div className="p-5 rounded-2xl bg-[#12122b] border border-[#7B68EE]/30 shadow-xl space-y-4">
             <div className="flex items-center gap-2 pb-3 border-b border-[#7B68EE]/20">
@@ -104,10 +97,10 @@ function AlertsContent() {
               </div>
               <div>
                 <h2 className="text-sm font-bold text-white leading-tight">
-                  Send Test Alert
+                  Broadcast to Subscribers
                 </h2>
                 <p className="text-[11px] text-slate-400 font-mono">
-                  Runs live model & dispatches message
+                  Runs live model & alerts every active subscriber
                 </p>
               </div>
             </div>
@@ -135,56 +128,18 @@ function AlertsContent() {
                 </select>
               </div>
 
-              {/* Language Selector */}
-              <div className="space-y-1.5">
-                <label className="text-xs font-mono text-slate-300 flex items-center gap-1.5">
-                  <Languages className="w-3.5 h-3.5 text-[#b8a9ff]" />
-                  <span>Broadcast Language</span>
-                </label>
-                <div className="grid grid-cols-2 gap-2">
-                  {[
-                    { id: "en", label: "English" },
-                    { id: "hi", label: "Hindi (हिंदी)" },
-                    { id: "hinglish", label: "Hinglish" },
-                    { id: "mr", label: "Marathi (मराठी)" },
-                  ].map((lang) => (
-                    <button
-                      key={lang.id}
-                      type="button"
-                      onClick={() =>
-                        setSelectedLanguage(
-                          lang.id as "en" | "hi" | "hinglish" | "mr"
-                        )
-                      }
-                      className={`py-2 px-2.5 rounded-xl text-xs font-medium transition-all text-left border ${
-                        selectedLanguage === lang.id
-                          ? "bg-[#1f1f4a] text-white border-[#b8a9ff] shadow-[0_0_12px_rgba(123,104,238,0.3)]"
-                          : "bg-[#0d0d1a] text-slate-400 hover:text-slate-200 border-slate-800"
-                      }`}
-                    >
-                      {lang.label}
-                    </button>
-                  ))}
-                </div>
+              <div className="p-2.5 rounded-lg bg-[#0d0d1a] border border-slate-800 text-xs font-mono text-slate-300 flex items-center gap-1.5">
+                <Users className="w-3.5 h-3.5 text-[#b8a9ff] shrink-0" />
+                <span>
+                  {subscriberCount === null
+                    ? "Counting active subscribers..."
+                    : `${subscriberCount} active subscriber${subscriberCount === 1 ? "" : "s"} at this spot`}
+                </span>
               </div>
-
-              {/* Recipient Phone / WhatsApp */}
-              <div className="space-y-1.5">
-                <label className="text-xs font-mono text-slate-300 flex items-center gap-1.5">
-                  <Phone className="w-3.5 h-3.5 text-[#b8a9ff]" />
-                  <span>Recipient Format</span>
-                </label>
-                <input
-                  type="text"
-                  value={recipient}
-                  onChange={(e) => setRecipient(e.target.value)}
-                  placeholder="whatsapp:+919876543210"
-                  className="w-full px-3 py-2 text-xs rounded-xl bg-[#0d0d1a] border border-slate-700/80 text-white placeholder-slate-500 focus:outline-none focus:border-[#7B68EE] font-mono"
-                />
-                <p className="text-[10px] text-slate-400">
-                  Note: In simulated mode without Twilio SID, alerts log cleanly to the audit trail.
-                </p>
-              </div>
+              <p className="text-[10px] text-slate-400">
+                Subscribers are stored as phone hashes only, so each message is rendered and
+                logged as simulated in the audit trail.
+              </p>
 
               {formError && (
                 <div className="p-2.5 rounded-lg bg-rose-950/60 border border-rose-800/60 text-xs font-mono text-rose-300 flex items-center gap-1.5">
@@ -195,42 +150,35 @@ function AlertsContent() {
 
               {sendError ? (
                 <div className="p-2.5 rounded-lg bg-rose-950/60 border border-rose-800/60 text-xs font-mono text-rose-300">
-                  Error sending alert. Ensure backend is running.
+                  Error broadcasting alert. Ensure backend is running.
                 </div>
               ) : null}
 
               {/* Submit Button */}
               <button
                 type="submit"
-                disabled={isSending}
+                disabled={isSending || !subscriberCount}
                 className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#7B68EE] to-[#9d8df1] hover:from-[#6c58e8] hover:to-[#8c78eb] text-white font-semibold text-xs flex items-center justify-center gap-2 shadow-lg shadow-[#7B68EE]/25 transition-all disabled:opacity-50"
               >
                 <Send className={`w-4 h-4 ${isSending ? "animate-spin" : ""}`} />
-                <span>{isSending ? "Predicting & Transmitting..." : "Send Test Alert"}</span>
+                <span>
+                  {isSending
+                    ? "Predicting & Broadcasting..."
+                    : `Broadcast to ${subscriberCount ?? "…"} subscriber${subscriberCount === 1 ? "" : "s"}`}
+                </span>
               </button>
             </form>
           </div>
 
-          {/* Last Dispatched Message Card */}
-          {lastSentResponse && (
-            <div className="p-4 rounded-2xl bg-[#0e1726] border border-emerald-500/40 shadow-xl space-y-3 animate-in fade-in zoom-in-95 duration-200">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-300">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                  <span>Alert Successfully Generated!</span>
-                </div>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 uppercase">
-                  {lastSentResponse.status}
+          {/* Last Broadcast Result Card */}
+          {lastBroadcast && (
+            <div className="p-4 rounded-2xl bg-[#0e1726] border border-emerald-500/40 shadow-xl animate-in fade-in zoom-in-95 duration-200">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-300">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                <span>
+                  Broadcast {lastBroadcast.count} alert{lastBroadcast.count === 1 ? "" : "s"} for{" "}
+                  {lastBroadcast.spotName}
                 </span>
-              </div>
-
-              <div className="bg-[#0b141a] p-3 rounded-xl border border-[#233138] text-xs font-mono text-slate-200 whitespace-pre-wrap leading-relaxed max-h-48 overflow-y-auto">
-                {lastSentResponse.body}
-              </div>
-
-              <div className="text-[10px] text-slate-400 font-mono flex items-center justify-between">
-                <span>Spot: {lastSentResponse.spot_name}</span>
-                <span>Language: {lastSentResponse.language}</span>
               </div>
             </div>
           )}
