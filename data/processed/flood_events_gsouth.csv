@@ -1,0 +1,33 @@
+event_date,event_time,spot_name,severity,source
+2023-07-27,10:00,Hindmata Junction,knee-deep,Mumbai_news_archive_July_2023
+2023-07-27,11:30,Currey Road,ankle-deep,Mumbai_news_archive_July_2023
+2023-07-08,14:00,Worli Naka,knee-deep,Mumbai_news_archive_July_2023
+2024-07-08,14:30,Hindmata Junction,knee-deep,Freepressjournal_2024
+2024-07-08,15:00,Prabhadevi Junction,ankle-deep,Freepressjournal_2024
+2024-07-08,15:30,Lower Parel (Kamla Mills),ankle-deep,Freepressjournal_2024
+2024-07-25,09:00,Currey Road,knee-deep,HT_July_2024
+2024-08-19,17:00,Hindmata Junction,ankle-deep,DNA_August_2024
+2025-05-26,10:00,Hindmata Junction,waist-deep,Freepressjournal_2025_May
+2025-05-26,11:00,Parel TT,waist-deep,Freepressjournal_2025_May
+2025-05-26,10:30,Delisle Road,knee-deep,Freepressjournal_2025_May
+2025-07-15,13:00,Worli Naka,ankle-deep,MidDay_July_2025
+2025-07-15,14:00,Prabhadevi Junction,ankle-deep,MidDay_July_2025
+2025-08-05,16:00,Lower Parel (Kamla Mills),knee-deep,IndianExpress_Aug_2025
+2025-08-05,16:30,Currey Road,knee-deep,IndianExpress_Aug_2025
+2024-07-12,12:00,Senapati Bapat Marg,knee-deep,TimesOfIndia_July_2024
+2024-07-12,13:30,NM Joshi Marg,ankle-deep,TimesOfIndia_July_2024
+2024-07-21,11:00,Worli Sea Face,knee-deep,NDTV_July_2024
+2024-08-04,15:00,Love Grove Junction,ankle-deep,HindustanTimes_Aug_2024
+2024-08-10,16:30,Elphinstone Road Station,knee-deep,MidDay_Aug_2024
+2023-06-25,14:00,Hindmata Junction,knee-deep,MumbaiLive_June_2023
+2023-07-19,10:30,Parel TT,knee-deep,FreePressJournal_July_2023
+2023-07-22,16:00,Currey Road,waist-deep,IndianExpress_July_2023
+2024-06-28,09:30,Hindmata Junction,ankle-deep,TOI_June_2024
+2024-07-15,14:00,Lower Parel (Kamla Mills),knee-deep,HindustanTimes_July_2024
+2024-07-16,11:00,Sane Guruji Marg,ankle-deep,MidDay_July_2024
+2024-07-18,15:30,Tulsi Pipe Road,knee-deep,News18_July_2024
+2024-08-01,13:00,Worli Naka,knee-deep,FreePressJournal_Aug_2024
+2024-08-24,17:00,Century Bazaar Prabhadevi,ankle-deep,TOI_Aug_2024
+2025-07-02,11:00,Hindmata Junction,knee-deep,MidDay_July_2025
+2025-07-10,15:00,Sayani Road Prabhadevi,ankle-deep,HT_July_2025
+2025-08-12,14:30,Dr Ambedkar Road Prabhadevi,knee-deep,IndianExpress_Aug_2025

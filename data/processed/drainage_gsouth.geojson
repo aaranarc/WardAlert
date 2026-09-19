@@ -1,0 +1,1247 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1,
+        "osm_id": 152203352,
+        "name": "Drain Sec 1",
+        "type": "drain",
+        "length_m": 16.0
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8286883,
+            19.0097807
+          ],
+          [
+            72.828553,
+            19.0098471
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2,
+        "osm_id": 152203352,
+        "name": "Drain Sec 2",
+        "type": "drain",
+        "length_m": 94.9
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.828553,
+            19.0098471
+          ],
+          [
+            72.8278462,
+            19.0103784
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3,
+        "osm_id": 152203352,
+        "name": "Drain Sec 3",
+        "type": "drain",
+        "length_m": 47.7
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8278462,
+            19.0103784
+          ],
+          [
+            72.8274312,
+            19.0105524
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4,
+        "osm_id": 152203352,
+        "name": "Drain Sec 4",
+        "type": "drain",
+        "length_m": 83.6
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8274312,
+            19.0105524
+          ],
+          [
+            72.8266366,
+            19.0105265
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5,
+        "osm_id": 152203352,
+        "name": "Drain Sec 5",
+        "type": "drain",
+        "length_m": 30.5
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8266366,
+            19.0105265
+          ],
+          [
+            72.8263468,
+            19.0105326
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 6,
+        "osm_id": 152203352,
+        "name": "Drain Sec 6",
+        "type": "drain",
+        "length_m": 20.5
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8263468,
+            19.0105326
+          ],
+          [
+            72.8261536,
+            19.0105098
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 7,
+        "osm_id": 152203352,
+        "name": "Drain Sec 7",
+        "type": "drain",
+        "length_m": 31.9
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8261536,
+            19.0105098
+          ],
+          [
+            72.8258505,
+            19.0104997
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 8,
+        "osm_id": 152203352,
+        "name": "Drain Sec 8",
+        "type": "drain",
+        "length_m": 33.0
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8258505,
+            19.0104997
+          ],
+          [
+            72.8255931,
+            19.0103298
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 9,
+        "osm_id": 152203352,
+        "name": "Drain Sec 9",
+        "type": "drain",
+        "length_m": 16.4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8255931,
+            19.0103298
+          ],
+          [
+            72.8255823,
+            19.0101827
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 10,
+        "osm_id": 152203352,
+        "name": "Drain Sec 10",
+        "type": "drain",
+        "length_m": 25.9
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8255823,
+            19.0101827
+          ],
+          [
+            72.825357,
+            19.0100889
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 11,
+        "osm_id": 204352210,
+        "name": "Drain Sec 1",
+        "type": "drain",
+        "length_m": 488.8
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8206746,
+            18.9920142
+          ],
+          [
+            72.8162456,
+            18.9906778
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 12,
+        "osm_id": 204352210,
+        "name": "Drain Sec 2",
+        "type": "drain",
+        "length_m": 28.1
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8162456,
+            18.9906778
+          ],
+          [
+            72.8159854,
+            18.990622
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 13,
+        "osm_id": 204352210,
+        "name": "Drain Sec 3",
+        "type": "drain",
+        "length_m": 23.7
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8159854,
+            18.990622
+          ],
+          [
+            72.8157601,
+            18.9906169
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 14,
+        "osm_id": 204352210,
+        "name": "Drain Sec 4",
+        "type": "drain",
+        "length_m": 20.3
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8157601,
+            18.9906169
+          ],
+          [
+            72.815567,
+            18.9906245
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 15,
+        "osm_id": 204352210,
+        "name": "Drain Sec 5",
+        "type": "drain",
+        "length_m": 32.1
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.815567,
+            18.9906245
+          ],
+          [
+            72.8153002,
+            18.9907645
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 16,
+        "osm_id": 204352210,
+        "name": "Drain Sec 6",
+        "type": "drain",
+        "length_m": 219.2
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8153002,
+            18.9907645
+          ],
+          [
+            72.814633,
+            18.992632
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 17,
+        "osm_id": 204352210,
+        "name": "Drain Sec 7",
+        "type": "drain",
+        "length_m": 22.3
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.814633,
+            18.992632
+          ],
+          [
+            72.814497,
+            18.9927863
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 18,
+        "osm_id": 204352210,
+        "name": "Drain Sec 8",
+        "type": "drain",
+        "length_m": 89.7
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.814497,
+            18.9927863
+          ],
+          [
+            72.8136577,
+            18.9929325
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 19,
+        "osm_id": 204352210,
+        "name": "Drain Sec 9",
+        "type": "drain",
+        "length_m": 97.7
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8136577,
+            18.9929325
+          ],
+          [
+            72.8127292,
+            18.9929591
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 20,
+        "osm_id": 204352210,
+        "name": "Drain Sec 10",
+        "type": "drain",
+        "length_m": 88.9
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8127292,
+            18.9929591
+          ],
+          [
+            72.8118836,
+            18.992958
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 21,
+        "osm_id": 204352210,
+        "name": "Drain Sec 11",
+        "type": "drain",
+        "length_m": 45.5
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8118836,
+            18.992958
+          ],
+          [
+            72.8114507,
+            18.9929721
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 22,
+        "osm_id": 204352216,
+        "name": "Drain Sec 1",
+        "type": "drain",
+        "length_m": 620.4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8172426,
+            18.985496
+          ],
+          [
+            72.8153002,
+            18.9907645
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 23,
+        "osm_id": 434917789,
+        "name": "Drain Sec 1",
+        "type": "drain",
+        "length_m": 114.2
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8305095,
+            19.0091594
+          ],
+          [
+            72.8294661,
+            19.0094435
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 24,
+        "osm_id": 434917789,
+        "name": "Drain Sec 2",
+        "type": "drain",
+        "length_m": 90.0
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8294661,
+            19.0094435
+          ],
+          [
+            72.8286883,
+            19.0097807
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 25,
+        "osm_id": 988749923,
+        "name": "Drain Sec 1",
+        "type": "drain",
+        "length_m": 57.6
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8352866,
+            19.0063395
+          ],
+          [
+            72.8355682,
+            19.0067839
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 26,
+        "osm_id": 988749923,
+        "name": "Drain Sec 2",
+        "type": "drain",
+        "length_m": 44.1
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8355682,
+            19.0067839
+          ],
+          [
+            72.8357781,
+            19.0071275
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 27,
+        "osm_id": 988749923,
+        "name": "Drain Sec 3",
+        "type": "drain",
+        "length_m": 4.6
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8357781,
+            19.0071275
+          ],
+          [
+            72.8357962,
+            19.0071649
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 28,
+        "osm_id": 988749923,
+        "name": "Drain Sec 4",
+        "type": "drain",
+        "length_m": 5.3
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8357962,
+            19.0071649
+          ],
+          [
+            72.835827,
+            19.007203
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 29,
+        "osm_id": 988749923,
+        "name": "Drain Sec 5",
+        "type": "drain",
+        "length_m": 23.0
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.835827,
+            19.007203
+          ],
+          [
+            72.8359343,
+            19.007383
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 30,
+        "osm_id": 988749923,
+        "name": "Drain Sec 6",
+        "type": "drain",
+        "length_m": 42.2
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8359343,
+            19.007383
+          ],
+          [
+            72.8361301,
+            19.0077139
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 31,
+        "osm_id": 988749923,
+        "name": "Drain Sec 7",
+        "type": "drain",
+        "length_m": 19.2
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8361301,
+            19.0077139
+          ],
+          [
+            72.8362173,
+            19.0078655
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 32,
+        "osm_id": 988749923,
+        "name": "Drain Sec 8",
+        "type": "drain",
+        "length_m": 3.8
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8362173,
+            19.0078655
+          ],
+          [
+            72.8362434,
+            19.0078889
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 33,
+        "osm_id": 988749923,
+        "name": "Drain Sec 9",
+        "type": "drain",
+        "length_m": 2.0
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8362434,
+            19.0078889
+          ],
+          [
+            72.8362434,
+            19.0079067
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 34,
+        "osm_id": 988749923,
+        "name": "Drain Sec 10",
+        "type": "drain",
+        "length_m": 44.4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8362434,
+            19.0079067
+          ],
+          [
+            72.836456,
+            19.0082516
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 35,
+        "osm_id": 988749923,
+        "name": "Drain Sec 11",
+        "type": "drain",
+        "length_m": 16.2
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.836456,
+            19.0082516
+          ],
+          [
+            72.8365345,
+            19.0083771
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 36,
+        "osm_id": 988749923,
+        "name": "Drain Sec 12",
+        "type": "drain",
+        "length_m": 23.9
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8365345,
+            19.0083771
+          ],
+          [
+            72.836635,
+            19.0085698
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 37,
+        "osm_id": 988749923,
+        "name": "Drain Sec 13",
+        "type": "drain",
+        "length_m": 29.4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.836635,
+            19.0085698
+          ],
+          [
+            72.8367624,
+            19.008805
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 38,
+        "osm_id": 988749923,
+        "name": "Drain Sec 14",
+        "type": "drain",
+        "length_m": 70.0
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8367624,
+            19.008805
+          ],
+          [
+            72.8370582,
+            19.0093693
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 39,
+        "osm_id": 988936387,
+        "name": "Drain Sec 1",
+        "type": "drain",
+        "length_m": 73.8
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8382584,
+            19.0107431
+          ],
+          [
+            72.838638,
+            19.0113017
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 40,
+        "osm_id": 988936387,
+        "name": "Drain Sec 2",
+        "type": "drain",
+        "length_m": 3.7
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.838638,
+            19.0113017
+          ],
+          [
+            72.838646,
+            19.011334
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 41,
+        "osm_id": 988936387,
+        "name": "Drain Sec 3",
+        "type": "drain",
+        "length_m": 4.7
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.838646,
+            19.011334
+          ],
+          [
+            72.8386675,
+            19.0113714
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 42,
+        "osm_id": 988936387,
+        "name": "Drain Sec 4",
+        "type": "drain",
+        "length_m": 3.8
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8386675,
+            19.0113714
+          ],
+          [
+            72.8386997,
+            19.0113866
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 43,
+        "osm_id": 988936387,
+        "name": "Drain Sec 5",
+        "type": "drain",
+        "length_m": 14.3
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8386997,
+            19.0113866
+          ],
+          [
+            72.8387681,
+            19.0114982
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 44,
+        "osm_id": 988936387,
+        "name": "Drain Sec 6",
+        "type": "drain",
+        "length_m": 85.6
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8387681,
+            19.0114982
+          ],
+          [
+            72.8392019,
+            19.0121499
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 45,
+        "osm_id": 988936387,
+        "name": "Drain Sec 7",
+        "type": "drain",
+        "length_m": 58.5
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8392019,
+            19.0121499
+          ],
+          [
+            72.8394929,
+            19.0125988
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 46,
+        "osm_id": 988936387,
+        "name": "Drain Sec 8",
+        "type": "drain",
+        "length_m": 68.8
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8394929,
+            19.0125988
+          ],
+          [
+            72.8398383,
+            19.0131243
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 47,
+        "osm_id": 1160014956,
+        "name": "Drain Sec 1",
+        "type": "drain",
+        "length_m": 471.2
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8238256,
+            18.9860563
+          ],
+          [
+            72.8218162,
+            18.9898444
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 48,
+        "osm_id": 1160014957,
+        "name": "Drain Sec 1",
+        "type": "drain",
+        "length_m": 183.7
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8211607,
+            18.9829566
+          ],
+          [
+            72.8228121,
+            18.9834951
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 49,
+        "osm_id": 1160014957,
+        "name": "Drain Sec 2",
+        "type": "drain",
+        "length_m": 173.0
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8228121,
+            18.9834951
+          ],
+          [
+            72.8227894,
+            18.9850511
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 50,
+        "osm_id": 1160014957,
+        "name": "Drain Sec 3",
+        "type": "drain",
+        "length_m": 112.2
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8227894,
+            18.9850511
+          ],
+          [
+            72.8236874,
+            18.9855967
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 51,
+        "osm_id": 1160014957,
+        "name": "Drain Sec 4",
+        "type": "drain",
+        "length_m": 38.1
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8236874,
+            18.9855967
+          ],
+          [
+            72.8239387,
+            18.9858431
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 52,
+        "osm_id": 1160014957,
+        "name": "Drain Sec 5",
+        "type": "drain",
+        "length_m": 26.5
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8239387,
+            18.9858431
+          ],
+          [
+            72.8238256,
+            18.9860563
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 53,
+        "osm_id": 1289081184,
+        "name": "Drain Sec 1",
+        "type": "drain",
+        "length_m": 269.5
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8218162,
+            18.9898444
+          ],
+          [
+            72.8206746,
+            18.9920142
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 54,
+        "osm_id": 1479089322,
+        "name": "Drain Sec 1",
+        "type": "drain",
+        "length_m": 37.0
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8114507,
+            18.9929721
+          ],
+          [
+            72.8110992,
+            18.9929836
+          ]
+        ]
+      }
+    }
+  ]
+}
