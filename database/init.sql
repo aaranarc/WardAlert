@@ -234,3 +234,21 @@ LEFT JOIN LATERAL (
     LIMIT 1
 ) p ON TRUE
 ORDER BY s.id;
+
+-- --------------------------------------------------------------------------
+-- 11. subscribers — citizens who shared a location over WhatsApp
+--     phone_hash is sha256 of Twilio's "From" value; the raw number is never
+--     stored.  One row per phone: re-sharing a location moves the subscription.
+--     Subscriptions lapse after 7 days unless the citizen replies EXTEND.
+--     The index is (spot_id, expires_at) rather than a partial index on
+--     "expires_at > NOW()": index predicates must be IMMUTABLE and NOW() is not.
+-- --------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS subscribers (
+    id          SERIAL PRIMARY KEY,
+    phone_hash  TEXT UNIQUE NOT NULL,
+    spot_id     INT NOT NULL REFERENCES flood_spots (id),
+    language    VARCHAR(10) DEFAULT 'en',
+    created_at  TIMESTAMPTZ DEFAULT NOW(),
+    expires_at  TIMESTAMPTZ DEFAULT (NOW() + INTERVAL '7 days')
+);
+CREATE INDEX IF NOT EXISTS idx_subscribers_spot ON subscribers (spot_id, expires_at);
