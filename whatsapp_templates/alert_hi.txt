@@ -1,0 +1,9 @@
+*वॉर्डअलर्ट — {spot_name}*
+
+बाढ़ का खतरा: *{risk_level}* ({p_actual_pct}% संभावना)
+कारण: {cause_label}
+पिछले 3 घंटे की बारिश: {rain_3h} मिमी
+
+कार्रवाई: {dispatch_action}
+
+{updated_ago} अपडेट किया गया। बंद करने के लिए STOP भेजें।

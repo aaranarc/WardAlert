@@ -1,0 +1,9 @@
+*WardAlert — {spot_name}*
+
+Flooding ka risk: *{risk_level}* ({p_actual_pct}% chance)
+Kya wajah: {cause_label}
+Pichle 3 ghante ki baarish: {rain_3h} mm
+
+Kya karna hai: {dispatch_action}
+
+{updated_ago} update hua. Band karne ke liye STOP bhejein.

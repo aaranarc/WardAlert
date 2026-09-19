@@ -1,0 +1,27 @@
+# WardAlert local database.
+#   docker compose up -d db
+# Every value is taken from .env (see .env.example); the defaults after :- keep
+# a fresh clone working before .env is created.
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    container_name: wardalert-db-1
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-wardalert}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-wardalert}
+      POSTGRES_DB: ${POSTGRES_DB:-wardalert}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - wardalert_pgdata:/var/lib/postgresql/data
+      # Applied once, on first initialisation of an empty data volume.
+      - ./database/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-wardalert} -d ${POSTGRES_DB:-wardalert}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+
+volumes:
+  wardalert_pgdata:
