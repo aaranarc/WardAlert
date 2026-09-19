@@ -169,6 +169,10 @@ class Config:
     DRAIN_HEALTH_MIN_WEEKS = _int("DRAIN_HEALTH_MIN_WEEKS", 4)
     BOOTSTRAP_YEARS = [int(y) for y in _list("BOOTSTRAP_YEARS", "2023,2024,2025")]
     BOOTSTRAP_HOUR = _int("BOOTSTRAP_HOUR", 16)
+    # Timestamps sampled within each bootstrap week. One sample per week would
+    # make avg_delta, max_delta and prediction_count vacuous (every week would
+    # aggregate a single row), so the week is probed at several hours.
+    BOOTSTRAP_SAMPLES_PER_WEEK = _int("BOOTSTRAP_SAMPLES_PER_WEEK", 3)
 
     # ----------------------------------------------------------------- api --
     API_HOST = _str("API_HOST", "0.0.0.0")

@@ -16,7 +16,11 @@ which the API reads at startup:
 
   critical_delta   The CRITICAL_DELTA_PERCENTILE-th percentile of observed Δ —
                    the drain-failure level that drain_health extrapolates
-                   towards to forecast a failure date.
+                   towards to forecast a failure date.  Measured over the
+                   predictions table once it has been populated, because that
+                   is the population the threshold is applied to; the 48-row
+                   test set is only the fallback for the very first run.  See
+                   critical_delta_source in the emitted JSON.
 
     python -m ml.learn_thresholds
 """
@@ -30,6 +34,7 @@ import joblib
 import numpy as np
 
 from config import Config
+from data_loader.db import cursor
 from ml.dataset import TARGET, load_frame, split
 from ml.metrics import evaluate
 
@@ -59,6 +64,30 @@ def youden_j(scores: np.ndarray, labels: np.ndarray) -> tuple[float, float]:
     return best_threshold, best_j
 
 
+def _critical_delta(test_delta: np.ndarray) -> tuple[float, str, int]:
+    """(value, source, n) for the drain-failure Δ level.
+
+    Prefers the predictions population; falls back to the test set on a cold
+    database, where no predictions exist yet.
+    """
+    with cursor() as cur:
+        cur.execute("SELECT COUNT(*) FROM predictions")
+        n_predictions = cur.fetchone()[0]
+        if n_predictions >= len(test_delta):
+            cur.execute(
+                "SELECT percentile_cont(%s) WITHIN GROUP (ORDER BY delta) FROM predictions",
+                (Config.CRITICAL_DELTA_PERCENTILE / 100.0,),
+            )
+            value = cur.fetchone()[0]
+            if value is not None:
+                return float(value), "predictions", int(n_predictions)
+    return (
+        float(np.percentile(test_delta, Config.CRITICAL_DELTA_PERCENTILE)),
+        "test_set",
+        int(len(test_delta)),
+    )
+
+
 def learn() -> dict:
     model_a = joblib.load(Config.model_path("a"))
     model_b = joblib.load(Config.model_path("b"))
@@ -78,7 +107,11 @@ def learn() -> dict:
     q25, q50, q75 = (float(np.percentile(p_actual, q)) for q in (25, 50, 75))
 
     # ---- drain-failure level ----------------------------------------------
-    critical_delta = float(np.percentile(delta, Config.CRITICAL_DELTA_PERCENTILE))
+    # p90 of the test-set Δ is p90 of 48 rows drawn from a different mix than
+    # the monsoon-week population drain_health scores. Using it there marked
+    # every spot overdue and pinned half the health scores at 0. So once
+    # predictions exist, the same percentile is measured over them instead.
+    critical_delta, critical_source, critical_n = _critical_delta(delta)
 
     thresholds = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
@@ -100,6 +133,11 @@ def learn() -> dict:
         },
         "critical_delta": round(critical_delta, 6),
         "critical_delta_percentile": Config.CRITICAL_DELTA_PERCENTILE,
+        "critical_delta_source": critical_source,
+        "critical_delta_n": critical_n,
+        "critical_delta_test_set": round(
+            float(np.percentile(delta, Config.CRITICAL_DELTA_PERCENTILE)), 6
+        ),
         "delta_stats": {
             "min": round(float(delta.min()), 6),
             "mean": round(float(delta.mean()), 6),
@@ -154,7 +192,8 @@ def main() -> int:
           f"(Youden's J = {thresholds['delta_dispatch_j']:.4f}, "
           f"{thresholds['drain_related_positives']}/{thresholds['n_test']} drain-related)")
     print(f"  critical_delta   {thresholds['critical_delta']:.4f}  "
-          f"(p{thresholds['critical_delta_percentile']:.0f} of Δ)")
+          f"(p{thresholds['critical_delta_percentile']:.0f} of Δ over "
+          f"{thresholds['critical_delta_n']} rows from {thresholds['critical_delta_source']})")
     print("  risk bands")
     for level in RISK_ORDER:
         low, high = thresholds["risk_levels"][level]

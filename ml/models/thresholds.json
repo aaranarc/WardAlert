@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-19T14:38:47.916166+00:00",
+  "generated_at": "2026-09-19T14:44:07.574020+00:00",
   "n_test": 48,
   "delta_dispatch": -0.002133,
   "delta_dispatch_method": "Youden's J on \u0394 vs drain_related",
@@ -28,8 +28,11 @@
     "q50": 0.016476,
     "q75": 0.124238
   },
-  "critical_delta": 0.123984,
+  "critical_delta": 0.513539,
   "critical_delta_percentile": 90.0,
+  "critical_delta_source": "predictions",
+  "critical_delta_n": 4650,
+  "critical_delta_test_set": 0.123984,
   "delta_stats": {
     "min": -0.567294,
     "mean": 0.018768,
