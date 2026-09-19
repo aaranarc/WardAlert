@@ -1,0 +1,9 @@
+*WardAlert — {spot_name}*
+
+Flood risk: *{risk_level}* ({p_actual_pct}% chance)
+Cause: {cause_label}
+Rain in last 3h: {rain_3h} mm
+
+Action: {dispatch_action}
+
+Updated {updated_ago}. Reply STOP to unsubscribe.
