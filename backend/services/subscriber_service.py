@@ -128,3 +128,18 @@ async def unsubscribe(session: AsyncSession, phone_hash: str) -> bool:
     )
     await session.commit()
     return result.rowcount > 0
+
+
+async def active_for_spot(session: AsyncSession, spot_id: int) -> list[dict]:
+    result = await session.execute(
+        text(
+            """
+            SELECT phone_hash, language
+              FROM subscribers
+             WHERE spot_id = :spot_id AND expires_at > NOW()
+             ORDER BY id
+            """
+        ),
+        {"spot_id": spot_id},
+    )
+    return [dict(row) for row in result.mappings()]

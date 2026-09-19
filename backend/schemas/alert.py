@@ -40,3 +40,7 @@ class AlertLogEntry(BaseModel):
     error: str | None = None
     body: str
     sent_at: datetime
+
+
+class BroadcastResponse(BaseModel):
+    broadcast_count: int = Field(description="active subscribers of the spot that were alerted")
