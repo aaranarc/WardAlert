@@ -17,7 +17,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend.db import engine
-from backend.routers import health, predict, spots
+from backend.routers import drain_health, health, predict, spots
 from config import Config
 
 logger = logging.getLogger("wardalert")
@@ -67,6 +67,7 @@ app.add_middleware(
 app.include_router(health.router)
 app.include_router(spots.router)
 app.include_router(predict.router)
+app.include_router(drain_health.router)
 
 
 @app.get("/", include_in_schema=False)
