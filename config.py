@@ -153,7 +153,12 @@ class Config:
         }
 
     # ---------------------------------------------------------- thresholds --
-    DRAIN_PROXIMITY_M = _float("DRAIN_PROXIMITY_M", 120.0)
+    # Absolute metres defining a "drain-related" flood. 0 (the default) means
+    # derive the cutoff from the data instead — see DRAIN_PROXIMITY_PERCENTILE.
+    DRAIN_PROXIMITY_M = _float("DRAIN_PROXIMITY_M", 0.0)
+    # Percentile of the observed nearest_drain_m distribution used as that
+    # cutoff. 50 splits the ward into its drain-served and drain-starved halves.
+    DRAIN_PROXIMITY_PERCENTILE = _float("DRAIN_PROXIMITY_PERCENTILE", 50.0)
     CRITICAL_DELTA_PERCENTILE = _float("CRITICAL_DELTA_PERCENTILE", 90.0)
     CONFIDENCE_PRIOR_ALPHA = _float("CONFIDENCE_PRIOR_ALPHA", 1.0)
     CONFIDENCE_PRIOR_BETA = _float("CONFIDENCE_PRIOR_BETA", 1.0)
