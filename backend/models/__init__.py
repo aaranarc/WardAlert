@@ -9,6 +9,7 @@ from backend.models.flood_event import FloodEvent
 from backend.models.flood_spot import FloodSpot
 from backend.models.prediction import Prediction
 from backend.models.rainfall_daily import RainfallDaily
+from backend.models.subscriber import Subscriber
 from backend.models.ward_boundary import WardBoundary
 
 __all__ = [
@@ -22,5 +23,6 @@ __all__ = [
     "FloodSpot",
     "Prediction",
     "RainfallDaily",
+    "Subscriber",
     "WardBoundary",
 ]
