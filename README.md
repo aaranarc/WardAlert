@@ -134,6 +134,27 @@ docs/                  architecture, API reference, provenance, feature status
 
 ---
 
+## Frontend (Next.js Dashboard)
+
+The frontend is a dark-mode Next.js 14 dashboard consuming the FastAPI backend.
+
+```bash
+cd frontend
+cp .env.local.example .env.local
+npm install
+npm run dev
+# Dashboard opens at http://localhost:3000
+```
+
+### Dashboard Pages
+
+- **`/` (Live Flood Map)**: Leaflet map of Ward G-South with 30 chronic spots, color-coded by learned risk quartile, CARTO dark tiles, GeoJSON ward boundary, slide-in RiskPanel with SHAP attribution bars, Bayesian credible interval bar, and dispatch recommendation cards.
+- **`/drain-health` (Drain Health Index)**: Prioritisation leaderboard sorted by health score (worst first), with longitudinal weekly Δ residual trend charts and extrapolated failure horizons.
+- **`/alerts` (Alert Broadcast & Log)**: Live multilingual test-send form (English, Hindi, Hinglish, Marathi) and real-time dispatched audit log with modal message preview.
+- **`/about` (Feature Status & Architecture)**: Interactive mirror of `docs/feature_status.md` disclosing what runs on real data vs simulation.
+
+---
+
 ## Documentation
 
 | Document | What it covers |
@@ -146,3 +167,4 @@ docs/                  architecture, API reference, provenance, feature status
 
 **Read `docs/feature_status.md` before demoing.** It states plainly which parts
 run on real data, which are simulated, and which are not built yet.
+
