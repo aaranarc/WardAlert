@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class ShapFactor(BaseModel):
@@ -49,3 +49,7 @@ class SpotDetail(SpotRisk):
     """Spot detail with its recent prediction history."""
 
     history: list[SpotHistoryPoint] = []
+
+
+class SubscriberCount(BaseModel):
+    count: int = Field(description="subscribers whose 7-day window has not lapsed")

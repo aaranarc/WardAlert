@@ -10,7 +10,8 @@ from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.db import get_session
-from backend.schemas.spot import SpotDetail, SpotRisk
+from backend.schemas.spot import SpotDetail, SpotRisk, SubscriberCount
+from backend.services import subscriber_service
 
 router = APIRouter(prefix="/api/spots", tags=["spots"])
 
@@ -60,3 +61,8 @@ async def get_spot(
         {"spot_id": spot_id, "hours": history_hours},
     )
     return SpotDetail(**dict(row), history=[dict(h) for h in history_result.mappings()])
+
+
+@router.get("/{spot_id}/subscriber-count", response_model=SubscriberCount)
+async def subscriber_count(spot_id: int, session: AsyncSession = Depends(get_session)):
+    return {"count": await subscriber_service.count_for_spot(session, spot_id)}
