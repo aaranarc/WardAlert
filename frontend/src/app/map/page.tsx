@@ -78,7 +78,7 @@ export default function MapPage() {
         {/* Layer Info Pill */}
         <div className="bg-white/95 backdrop-blur-md px-3 py-2 rounded-xl border border-slate-200 shadow-xs pointer-events-auto text-[11px] text-slate-600 flex items-center gap-2">
           <IconLayers className="w-3.5 h-3.5 text-[#0066cc]" />
-          <span>30 Chronic Spots Monitored</span>
+          <span>{spots.length > 0 ? `${spots.length} Chronic Spots Monitored` : "—"}</span>
         </div>
       </div>
 
