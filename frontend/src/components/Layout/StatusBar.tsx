@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import useSWR from "swr";
 import { api } from "@/lib/api";
 import { HealthResponse } from "@/lib/types";
-import { ShieldCheck, ShieldAlert, Activity, Wifi, RefreshCw } from "lucide-react";
+import { RefreshIcon } from "@/components/Icons";
 
 export function StatusBar() {
   const { data: health, error, mutate, isValidating } = useSWR<HealthResponse>(
@@ -13,67 +13,74 @@ export function StatusBar() {
     { refreshInterval: 15000 }
   );
 
-  const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
-  const [minutesAgo, setMinutesAgo] = useState<string>("just now");
+  const [timeIST, setTimeIST] = useState<string>("");
 
   useEffect(() => {
-    if (health) {
-      setLastUpdated(new Date());
-    }
-  }, [health]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
+    const updateTime = () => {
       const now = new Date();
-      const diffSec = Math.floor((now.getTime() - lastUpdated.getTime()) / 1000);
-      if (diffSec < 15) {
-        setMinutesAgo("just now");
-      } else if (diffSec < 60) {
-        setMinutesAgo(`${diffSec}s ago`);
-      } else {
-        const mins = Math.floor(diffSec / 60);
-        setMinutesAgo(`${mins}m ago`);
-      }
-    }, 5000);
+      const istString = now.toLocaleTimeString("en-GB", {
+        timeZone: "Asia/Kolkata",
+        hour12: false,
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      });
+      setTimeIST(`${istString} IST`);
+    };
+
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
     return () => clearInterval(interval);
-  }, [lastUpdated]);
+  }, []);
 
   const isHealthy = health?.status === "ok" && health.db && health.models_loaded;
 
   return (
-    <div className="flex items-center gap-4 text-xs font-mono text-slate-400">
-      {/* Backend Status indicator */}
-      <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-900/80 border border-slate-800">
+    <div className="flex items-center gap-3 text-xs font-mono text-[#5b6478]">
+      {/* Real-time IST Clock */}
+      <div className="hidden sm:flex items-center px-2 py-0.5 bg-[#f1f5f9] border border-[#d4dae3] text-[#1a1f2e] text-[11px]">
+        <span>{timeIST || "--:--:-- IST"}</span>
+      </div>
+
+      {/* Backend / Model Status */}
+      <div className="flex items-center gap-2 px-2.5 py-0.5 bg-[#ffffff] border border-[#d4dae3] text-[11px]">
         <span
-          className={`w-2 h-2 rounded-full ${
+          className={`w-2 h-2 rounded-full shrink-0 ${
             isHealthy
-              ? "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)] animate-pulse"
+              ? "bg-[#166534] animate-live-blink"
               : error
-              ? "bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.6)]"
-              : "bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.6)]"
+              ? "bg-[#b91c1c]"
+              : "bg-[#b45309]"
           }`}
+          aria-hidden="true"
         />
-        <span className="text-slate-300">
-          {isHealthy ? "API v" + (health?.version || "0.1.0") : error ? "API Offline" : "Connecting..."}
+        <span className="text-[#1a1f2e] font-medium uppercase tracking-wider text-[10px]">
+          {isHealthy ? "30 SPOTS MONITORED" : error ? "SYSTEM OFFLINE" : "CONNECTING"}
         </span>
         {health?.models_loaded && (
-          <span className="hidden sm:inline-block text-[10px] text-emerald-400 bg-emerald-950/60 px-1.5 py-0.5 rounded border border-emerald-800/40 ml-1">
-            Dual XGBoost
+          <span className="hidden md:inline text-[10px] text-[#166534] bg-[#f0fdf4] px-1 border border-[#bbf7d0]">
+            DUAL XGBOOST
           </span>
         )}
       </div>
 
-      {/* Last Updated */}
+      {/* Refresh Button */}
       <button
         onClick={() => mutate()}
-        title="Click to refresh status"
-        className="flex items-center gap-1.5 px-2 py-1 rounded hover:bg-slate-800/60 text-slate-400 hover:text-slate-200 transition-colors"
+        title="Refresh telemetry"
+        aria-label="Refresh telemetry status"
+        className="flex items-center gap-1 px-2 py-0.5 border border-[#d4dae3] bg-[#ffffff] hover:bg-[#f8fafc] text-[#5b6478] hover:text-[#1a1f2e] transition-colors text-[11px]"
       >
-        <RefreshCw
-          className={`w-3 h-3 ${isValidating ? "animate-spin text-accent-light" : ""}`}
+        <RefreshIcon
+          className={`w-3 h-3 ${isValidating ? "animate-spin text-[#1e40af]" : ""}`}
         />
-        <span>Updated: {minutesAgo}</span>
+        <span className="hidden lg:inline">SYNC</span>
       </button>
+
+      {/* Version Tag */}
+      <span className="text-[10px] text-[#5b6478] border border-[#d4dae3] px-1.5 py-0.5 bg-[#f8fafc]">
+        v{health?.version || "0.1.0"}
+      </span>
     </div>
   );
 }

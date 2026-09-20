@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect } from "react";
-import { MapContainer, TileLayer, useMap } from "react-leaflet";
+import React, { useEffect, useState } from "react";
+import { MapContainer, TileLayer, useMap, useMapEvents } from "react-leaflet";
 import { SpotRisk } from "@/lib/types";
 import { MAP_CENTER, DEFAULT_ZOOM } from "@/lib/constants";
 import { SpotMarker } from "./SpotMarker";
@@ -19,11 +19,20 @@ function MapController({ center, zoom, selectedSpot }: MapControllerProps) {
   useEffect(() => {
     if (selectedSpot) {
       map.flyTo([selectedSpot.lat, selectedSpot.lng], 15, {
-        duration: 0.8,
+        duration: 0.6,
       });
     }
   }, [selectedSpot, map]);
 
+  return null;
+}
+
+function CoordinatesTracker({ onCoordsChange }: { onCoordsChange: (coords: { lat: number; lng: number }) => void }) {
+  useMapEvents({
+    mousemove: (e) => {
+      onCoordsChange({ lat: e.latlng.lat, lng: e.latlng.lng });
+    },
+  });
   return null;
 }
 
@@ -34,8 +43,13 @@ interface FloodMapProps {
 }
 
 export default function FloodMap({ spots, selectedSpot, onSelectSpot }: FloodMapProps) {
+  const [cursorCoords, setCursorCoords] = useState<{ lat: number; lng: number }>({
+    lat: MAP_CENTER[0],
+    lng: MAP_CENTER[1],
+  });
+
   return (
-    <div className="w-full h-full relative overflow-hidden bg-[#0a0a0f]">
+    <div className="w-full h-full relative overflow-hidden bg-[#e2e8f0]">
       <MapContainer
         center={MAP_CENTER}
         zoom={DEFAULT_ZOOM}
@@ -43,9 +57,9 @@ export default function FloodMap({ spots, selectedSpot, onSelectSpot }: FloodMap
         className="w-full h-full z-0"
       >
         <TileLayer
-          attribution='&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
-          maxZoom={20}
+          attribution='&copy; <a href="https://carto.com/" target="_blank">CARTO</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors'
+          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+          maxZoom={19}
         />
         <WardBoundary />
         {spots.map((spot) => (
@@ -61,7 +75,14 @@ export default function FloodMap({ spots, selectedSpot, onSelectSpot }: FloodMap
           zoom={DEFAULT_ZOOM}
           selectedSpot={selectedSpot}
         />
+        <CoordinatesTracker onCoordsChange={setCursorCoords} />
       </MapContainer>
+
+      {/* Real-time Cursor Coordinate Readout */}
+      <div className="absolute bottom-2 left-2 z-10 bg-[#ffffff] border border-[#d4dae3] px-2.5 py-1 text-[11px] font-mono text-[#1a1f2e] shadow-sm select-none pointer-events-none">
+        <span className="text-[#5b6478]">COORDINATES:</span>{" "}
+        <span>{cursorCoords.lat.toFixed(4)}° N, {cursorCoords.lng.toFixed(4)}° E</span>
+      </div>
     </div>
   );
 }
