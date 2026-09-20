@@ -86,8 +86,8 @@ export default function AboutPage() {
         <h1 className="text-xl font-bold tracking-tight text-slate-900">
           System Architecture and Data Provenance
         </h1>
-        <p className="text-xs text-slate-500 mt-0.5">
-          Engineering transparency on real datasets, dual model mathematics, and simulated components.
+        <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+          WardAlert is a municipal flood dispatch and cause-attribution system for Mumbai Ward G-South. Built for BMC disaster management cells.
         </p>
       </div>
 
