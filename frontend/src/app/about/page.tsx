@@ -1,226 +1,183 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
-import {
-  CheckCircle2,
-  AlertTriangle,
-  XCircle,
-  Shield,
-  Layers,
-  Activity,
-  Droplets,
-  TrendingUp,
-  ExternalLink,
-  MapPin,
-  Cpu,
-  Code2,
-  Terminal,
-} from "lucide-react";
 
 export default function AboutPage() {
   const workingFeatures = [
     {
-      feature: "PostGIS schema, 10 tables + v_latest_risk",
-      evidence: "database/init.sql; created on docker compose up",
+      feature: "PostGIS Schema (10 tables + v_latest_risk)",
+      evidence: "database/init.sql initialized via PostgreSQL 16 + PostGIS container.",
     },
     {
-      feature: "Idempotent data loading",
-      evidence: "30 spots / 54 drains / 1096 days rain / 32 events / 1 boundary",
+      feature: "Idempotent Data Ingestion",
+      evidence: "30 spots, 54 drainage lines, 1096 daily rain rows, 32 events, 1 boundary polygon.",
     },
     {
-      feature: "Label matching",
-      evidence: "32/32 documented flood events matched at similarity 1.000",
+      feature: "Historical Flood Event Matching",
+      evidence: "32 of 32 documented flood incidents matched at 1.000 string similarity.",
     },
     {
-      feature: "Derived spatial features",
-      evidence: "nearest_drain_m 22.8–1702.2 m; depression_depth_m 0–18.8 m",
+      feature: "Derived Spatial Physical Features",
+      evidence: "nearest_drain_m (22.8 m to 1702.2 m), depression_depth_m (0.0 m to 18.8 m).",
     },
     {
-      feature: "Feature engineering snapshots",
-      evidence: "192 snapshots (32 real positives, 160 sampled negatives)",
+      feature: "Feature Engineering Pipeline",
+      evidence: "192 training snapshots (32 verified positives, 160 sampled negative hours).",
     },
     {
-      feature: "Model A (rain + terrain only)",
-      evidence: "test AUC 0.8187",
+      feature: "Model A Baseline (Rain + Terrain)",
+      evidence: "XGBoost classifier, Test ROC-AUC: 0.8187.",
     },
     {
-      feature: "Model B (full context + drains + crowd)",
-      evidence: "test AUC 0.8500, F1 0.50 vs Model A's 0.29",
+      feature: "Model B Full Context (Drains + Silt + Crowd)",
+      evidence: "XGBoost classifier, Test ROC-AUC: 0.8500, F1: 0.50 (vs Model A F1 0.29).",
     },
     {
-      feature: "Dual-model residual Δ",
-      evidence: "Model B beats A by +0.0313; training aborts if it does not",
+      feature: "Dual-Model Residual Gap (Δ)",
+      evidence: "Model B outperforms Model A by +0.0313 AUC. Training aborts if Delta <= 0.02.",
     },
     {
-      feature: "Learned thresholds (no guessing)",
-      evidence: "Youden's J (J = 0.269), quartiles, p90 in thresholds.json",
+      feature: "Learned Operating Thresholds",
+      evidence: "Youden J statistic (J = 0.269), risk quartiles, critical delta from p90 in thresholds.json.",
     },
     {
-      feature: "SHAP feature explanations",
-      evidence: "Top 3 drivers with direction & attribution values per prediction",
+      feature: "TreeSHAP Explanations",
+      evidence: "Top 3 feature drivers with direction and exact attribution value computed per spot.",
     },
     {
-      feature: "Bayesian confidence intervals",
-      evidence: "Beta posterior credible interval [confidence_lower, confidence_upper]",
+      feature: "Bayesian Uncertainty Intervals",
+      evidence: "Beta posterior 95% credible interval [confidence_lower, confidence_upper].",
     },
     {
-      feature: "Drain health index & degradation fit",
-      evidence: "4650 predictions → 1590 weekly rows → 30 linear trends fitted",
+      feature: "Drain Health Siltation Index",
+      evidence: "4650 predictions aggregated into 1590 weekly rows with 30 linear regression fits.",
     },
     {
-      feature: "All 11 FastAPI REST endpoints",
-      evidence: "Fully validated in docs/verification_run.md",
+      feature: "11 FastAPI REST Endpoints",
+      evidence: "Validated in docs/verification_run.md and backend/tests.",
     },
     {
-      feature: "4-language localized alert templates",
-      evidence: "en / hi / hinglish / mr, fully translated with dynamic parameters",
+      feature: "4 Multilingual Alert Templates",
+      evidence: "English, Hindi, Hinglish, Marathi localized templates with dynamic field mapping.",
     },
   ];
 
   const simulatedFeatures = [
     {
-      feature: "Crowd reports",
-      real: "Schema, PostGIS radius matching, the crowd_reports_500m_2h feature, both API endpoints.",
-      notReal: "No live citizen WhatsApp webhook. The feature is 0 for historical training rows; value unlocks when real crowd reports flow.",
+      feature: "Crowd Reports",
+      real: "PostGIS radius matching, crowd_reports_500m_2h spatial feature, and REST endpoints.",
+      simulated: "No live citizen webhook in historical training data. Value activates once real reports flow.",
     },
     {
-      feature: "WhatsApp alerts",
+      feature: "WhatsApp Outbound Alerts",
       real: "Dynamic message composition, 4 languages, alerts_sent audit trail, Twilio client integration.",
-      notReal: "Without TWILIO_ACCOUNT_SID configured, messages log cleanly to the DB as 'simulated' status.",
+      simulated: "Without active Twilio credentials, messages log safely with SIMULATED status.",
     },
     {
-      feature: "Hourly rainfall distribution",
-      real: "Daily rainfall totals are real measured CHIRPS/ERA5 series (1096 days).",
-      notReal: "Within-day distribution is a modelled Gaussian storm curve, not direct 1-minute gauge feeds.",
+      feature: "Hourly Rainfall Distribution",
+      real: "Daily rainfall totals are real CHIRPS/ERA5 measured values across 1096 days.",
+      simulated: "Within-day distribution uses a modeled Gaussian storm curve rather than 1-minute gauge feeds.",
     },
     {
-      feature: "SRTM Elevation coverage",
-      real: "25 of 30 chronic spots fully covered by standard SRTM tile.",
-      notReal: "5 spots south of 19.0°N use edge-clamped neighborhood window (tile N18E072 absent).",
+      feature: "SRTM Elevation Coverage",
+      real: "25 of 30 spots covered by primary NASA SRTM tile.",
+      simulated: "5 spots south of 19.0° N use edge-clamped neighborhood elevation window.",
     },
     {
-      feature: "Negative flood labels",
+      feature: "Negative Flood Labels",
       real: "Timestamps are real historical monsoon hours.",
-      notReal: "'No flood occurred' is inferred from absence of BMC record, not sensor observations.",
+      simulated: "Absence of a news/BMC report is treated as no-flood event.",
     },
     {
-      feature: "Drain health failure dates",
-      real: "Mathematical formulation, linear trend fit, and threshold extrapolation are sound.",
-      notReal: "Fitted on model residual output, not physical pipe sonar. No ground-truth municipal desilting record exists to validate dates against.",
+      feature: "Drain Health Failure Dates",
+      real: "Mathematical slope formulation, linear regression fit, and critical threshold extrapolation.",
+      simulated: "Fitted on model residual output. No municipal desilting record exists to benchmark dates against.",
     },
   ];
 
   const plannedFeatures = [
     {
-      feature: "Live + forecast rainfall",
-      why: "Highest-value gap. Historical record ends 31 Dec 2025; live prediction for today sees rain = 0.",
-      notes: "Open-Meteo forecast API; RainfallSeries is the single insertion point.",
+      feature: "Live & Forecast Rainfall Feeds",
+      importance: "Highest-value gap. Historical reanalysis ends 31 Dec 2025; live prediction for today sees rain = 0.",
+      notes: "Open-Meteo forecast API; RainfallSeries is single insertion point.",
     },
     {
-      feature: "Sub-daily observed rainfall",
-      why: "Replaces the Gaussian assumption with direct gauge measurement.",
-      notes: "BMC AWS telemetry or Open-Meteo hourly rain feeds.",
+      feature: "Sub-Daily Observed Rain Telemetry",
+      importance: "Replaces the Gaussian assumption with direct AWS gauge observations.",
+      notes: "Integration with BMC automatic weather station network.",
     },
     {
-      feature: "Inbound WhatsApp Webhook",
-      why: "Makes citizen crowd reports real and activates the crowd spatial feature live.",
-      notes: "Twilio inbound webhook → POST /api/crowd-report.",
+      feature: "Inbound Citizen WhatsApp Webhook",
+      importance: "Activates the crowd report spatial feature live.",
+      notes: "Twilio inbound webhook connected to POST /api/crowd-report.",
     },
     {
-      feature: "Automated Prediction Cron",
-      why: "Predictions run automatically on a timer rather than solely on-demand.",
-      notes: "Background worker calling /api/predict/all every 15 minutes during monsoon.",
+      feature: "Scheduled Background Prediction Cron",
+      importance: "Runs predictions on a continuous timer rather than on-demand.",
+      notes: "Cron runner executing POST /api/predict/all every 15 minutes during monsoon.",
     },
   ];
 
   return (
-    <div className="p-4 lg:p-8 space-y-8 max-w-6xl mx-auto w-full">
-      {/* Hero */}
-      <div className="p-6 lg:p-8 rounded-3xl bg-gradient-to-br from-[#12122b] via-[#151540] to-[#1c143d] border border-[#7B68EE]/30 shadow-2xl relative overflow-hidden">
-        <div className="relative z-10 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#7B68EE]/20 border border-[#7B68EE]/40 text-[#b8a9ff] text-xs font-mono font-semibold">
-            <span>MUSA CodeX 2026</span>
-            <span>•</span>
-            <span>Ward G/South, Mumbai</span>
-          </div>
-          <h1 className="text-2xl lg:text-4xl font-extrabold text-white tracking-tight">
-            WardAlert: Hyperlocal Residual Flood Predictor
-          </h1>
-          <p className="text-slate-300 text-sm lg:text-base max-w-3xl leading-relaxed">
-            Rainfall alone does not explain why Mumbai floods. Two spots a kilometre apart under the same cloudburst behave completely differently because one of them has a drain that is silting up. WardAlert calculates the mathematical residual <span className="font-mono text-[#b8a9ff] bg-[#7B68EE]/20 px-1.5 py-0.5 rounded">Δ = P_actual − P_rain</span> to isolate infrastructure failure from meteorology.
+    <div className="p-3 lg:p-6 space-y-5 max-w-5xl mx-auto w-full font-sans text-xs">
+      {/* Header */}
+      <div className="p-4 bg-[#ffffff] border border-[#d4dae3] rounded-sm space-y-1">
+        <div className="text-[10px] uppercase font-mono tracking-widest text-[#5b6478]">
+          SYSTEM SPECIFICATION & ARCHITECTURE
+        </div>
+        <h1 className="text-lg font-bold text-[#1a1f2e] tracking-tight">
+          WardAlert: Hyperlocal Residual Flood Predictor
+        </h1>
+        <p className="text-xs text-[#5b6478] leading-relaxed">
+          Municipal flood dispatch and cause-attribution system for Mumbai Ward G-South. Built for BMC disaster management cells and MUSA CodeX 2026.
+        </p>
+      </div>
+
+      {/* Dual Model Residual Methodology */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 font-mono">
+        <div className="p-3 bg-[#ffffff] border border-[#d4dae3]">
+          <div className="text-[10px] text-[#5b6478] uppercase font-bold">MODEL A (BASELINE)</div>
+          <div className="text-sm font-bold text-[#1e40af] mt-1">P_rain</div>
+          <p className="text-[11px] text-[#5b6478] mt-1 font-sans leading-snug">
+            Trained strictly on rainfall metrics (1h, 3h, 6h, 24h, 72h) and terrain elevation. Test ROC-AUC: 0.8187.
+          </p>
+        </div>
+
+        <div className="p-3 bg-[#ffffff] border border-[#d4dae3]">
+          <div className="text-[10px] text-[#5b6478] uppercase font-bold">MODEL B (FULL CONTEXT)</div>
+          <div className="text-sm font-bold text-[#1e40af] mt-1">P_actual</div>
+          <p className="text-[11px] text-[#5b6478] mt-1 font-sans leading-snug">
+            Incorporates stormwater drain distance, depression depth, and crowd reports. Test ROC-AUC: 0.8500.
+          </p>
+        </div>
+
+        <div className="p-3 bg-[#ffffff] border border-[#d4dae3]">
+          <div className="text-[10px] text-[#5b6478] uppercase font-bold">RESIDUAL GAP (Δ)</div>
+          <div className="text-sm font-bold text-[#b45309] mt-1">Δ = P_actual - P_rain</div>
+          <p className="text-[11px] text-[#5b6478] mt-1 font-sans leading-snug">
+            Isolates unexplained risk. High Δ signals conduit siltation and triggers desilting crews before road waterlogging occurs.
           </p>
         </div>
       </div>
 
-      {/* Dual Model Residual Mathematical Formulation */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="p-5 rounded-2xl bg-[#12122b] border border-cyan-500/30 space-y-2.5">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-mono text-cyan-400 font-bold uppercase">
-              Model A (Baseline)
-            </span>
-            <Droplets className="w-4 h-4 text-cyan-400" />
-          </div>
-          <div className="text-lg font-bold font-mono text-white">P_rain</div>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            Trained strictly on rainfall metrics (1h, 3h, 6h, 24h, 72h) and static terrain elevation. Test AUC: <strong className="text-cyan-300">0.8187</strong>.
-          </p>
-        </div>
-
-        <div className="p-5 rounded-2xl bg-[#12122b] border border-[#7B68EE]/40 space-y-2.5">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-mono text-[#b8a9ff] font-bold uppercase">
-              Model B (Full Context)
-            </span>
-            <Layers className="w-4 h-4 text-[#b8a9ff]" />
-          </div>
-          <div className="text-lg font-bold font-mono text-white">P_actual</div>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            Trained on full spatial context: distance to stormwater drain, depression depth, and crowd signals. Test AUC: <strong className="text-[#b8a9ff]">0.8500</strong>.
-          </p>
-        </div>
-
-        <div className="p-5 rounded-2xl bg-[#12122b] border border-amber-500/30 space-y-2.5">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-mono text-amber-400 font-bold uppercase">
-              The Residual Gap
-            </span>
-            <TrendingUp className="w-4 h-4 text-amber-400" />
-          </div>
-          <div className="text-lg font-bold font-mono text-white">Δ = P_actual − P_rain</div>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            Quantifies unexplained flood risk. High Δ signals drain siltation and triggers desilting crews before road waterlogging occurs.
-          </p>
-        </div>
-      </div>
-
-      {/* Feature Status Table: Working on Real Data */}
-      <section className="space-y-4">
-        <div className="flex items-center gap-2">
-          <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-          <h2 className="text-lg font-bold text-white">
-            Working on Real Data
-          </h2>
-        </div>
-
-        <div className="bg-[#12122b] border border-emerald-500/20 rounded-2xl overflow-hidden shadow-lg">
-          <table className="w-full text-left text-xs border-collapse font-mono">
-            <thead className="bg-[#0f1722] text-slate-400 text-[11px] border-b border-slate-800">
+      {/* Table 1: Working Features */}
+      <section className="space-y-1.5">
+        <h2 className="text-xs font-bold text-[#1a1f2e] uppercase font-mono tracking-wider">
+          1. WORKING ON REAL DATA (VERIFIED)
+        </h2>
+        <div className="bg-[#ffffff] border border-[#d4dae3] rounded-sm overflow-hidden">
+          <table className="w-full text-left text-xs border-collapse">
+            <thead className="bg-[#f1f5f9] text-[#5b6478] font-mono text-[10px] uppercase border-b border-[#d4dae3]">
               <tr>
-                <th className="py-3 px-4 w-1/3">Feature</th>
-                <th className="py-3 px-4">Verification & Evidence</th>
+                <th className="py-2 px-3 w-1/3">FEATURE / MODULE</th>
+                <th className="py-2 px-3">VERIFICATION & EVIDENCE</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60">
+            <tbody className="divide-y divide-[#e2e8f0]">
               {workingFeatures.map((item, idx) => (
-                <tr key={idx} className="hover:bg-[#18183c] transition-colors">
-                  <td className="py-2.5 px-4 font-sans font-medium text-slate-200">
-                    {item.feature}
-                  </td>
-                  <td className="py-2.5 px-4 text-emerald-300 font-mono text-[11px]">
-                    {item.evidence}
-                  </td>
+                <tr key={idx} className="hover:bg-[#f8fafc]">
+                  <td className="py-2 px-3 font-semibold text-[#1a1f2e]">{item.feature}</td>
+                  <td className="py-2 px-3 text-[#5b6478] font-mono text-[11px]">{item.evidence}</td>
                 </tr>
               ))}
             </tbody>
@@ -228,36 +185,26 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Feature Status Table: Simulation / Partial */}
-      <section className="space-y-4">
-        <div className="flex items-center gap-2">
-          <AlertTriangle className="w-5 h-5 text-amber-400" />
-          <h2 className="text-lg font-bold text-white">
-            Simulation & Partial Coverage
-          </h2>
-        </div>
-
-        <div className="bg-[#12122b] border border-amber-500/20 rounded-2xl overflow-hidden shadow-lg">
+      {/* Table 2: Simulated Features */}
+      <section className="space-y-1.5">
+        <h2 className="text-xs font-bold text-[#1a1f2e] uppercase font-mono tracking-wider">
+          2. SIMULATION & PARTIAL COVERAGE
+        </h2>
+        <div className="bg-[#ffffff] border border-[#d4dae3] rounded-sm overflow-hidden">
           <table className="w-full text-left text-xs border-collapse">
-            <thead className="bg-[#1c1815] text-slate-400 font-mono text-[11px] border-b border-slate-800">
+            <thead className="bg-[#f1f5f9] text-[#5b6478] font-mono text-[10px] uppercase border-b border-[#d4dae3]">
               <tr>
-                <th className="py-3 px-4 w-1/4 font-mono">Feature</th>
-                <th className="py-3 px-4 w-3/8 text-emerald-400 font-mono">What is Real</th>
-                <th className="py-3 px-4 w-3/8 text-amber-400 font-mono">What is Simulated / Gap</th>
+                <th className="py-2 px-3 w-1/4">FEATURE</th>
+                <th className="py-2 px-3 w-3/8 text-[#166534]">WHAT IS REAL</th>
+                <th className="py-2 px-3 w-3/8 text-[#b45309]">WHAT IS SIMULATED / GAP</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60 font-sans">
+            <tbody className="divide-y divide-[#e2e8f0]">
               {simulatedFeatures.map((item, idx) => (
-                <tr key={idx} className="hover:bg-[#18183c] transition-colors">
-                  <td className="py-3 px-4 font-bold text-slate-200 font-mono">
-                    {item.feature}
-                  </td>
-                  <td className="py-3 px-4 text-slate-300 text-xs leading-relaxed">
-                    {item.real}
-                  </td>
-                  <td className="py-3 px-4 text-slate-400 text-xs leading-relaxed">
-                    {item.notReal}
-                  </td>
+                <tr key={idx} className="hover:bg-[#f8fafc]">
+                  <td className="py-2 px-3 font-semibold text-[#1a1f2e] font-mono">{item.feature}</td>
+                  <td className="py-2 px-3 text-[#1a1f2e] text-[11px]">{item.real}</td>
+                  <td className="py-2 px-3 text-[#5b6478] text-[11px]">{item.simulated}</td>
                 </tr>
               ))}
             </tbody>
@@ -265,36 +212,26 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Feature Status Table: Planned / Not Built */}
-      <section className="space-y-4">
-        <div className="flex items-center gap-2">
-          <XCircle className="w-5 h-5 text-rose-400" />
-          <h2 className="text-lg font-bold text-white">
-            Planned & Future Roadmap
-          </h2>
-        </div>
-
-        <div className="bg-[#12122b] border border-rose-500/20 rounded-2xl overflow-hidden shadow-lg">
+      {/* Table 3: Planned Features */}
+      <section className="space-y-1.5">
+        <h2 className="text-xs font-bold text-[#1a1f2e] uppercase font-mono tracking-wider">
+          3. PLANNED & ROADMAP GAPS
+        </h2>
+        <div className="bg-[#ffffff] border border-[#d4dae3] rounded-sm overflow-hidden">
           <table className="w-full text-left text-xs border-collapse">
-            <thead className="bg-[#1e1014] text-slate-400 font-mono text-[11px] border-b border-slate-800">
+            <thead className="bg-[#f1f5f9] text-[#5b6478] font-mono text-[10px] uppercase border-b border-[#d4dae3]">
               <tr>
-                <th className="py-3 px-4 w-1/4 font-mono">Feature</th>
-                <th className="py-3 px-4 w-3/8 text-rose-300 font-mono">Why it Matters</th>
-                <th className="py-3 px-4 w-3/8 text-slate-400 font-mono">Implementation Note</th>
+                <th className="py-2 px-3 w-1/4">FEATURE</th>
+                <th className="py-2 px-3 w-3/8">OPERATIONAL REASON</th>
+                <th className="py-2 px-3 w-3/8">IMPLEMENTATION NOTES</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60 font-sans">
+            <tbody className="divide-y divide-[#e2e8f0]">
               {plannedFeatures.map((item, idx) => (
-                <tr key={idx} className="hover:bg-[#18183c] transition-colors">
-                  <td className="py-3 px-4 font-bold text-slate-200 font-mono">
-                    {item.feature}
-                  </td>
-                  <td className="py-3 px-4 text-slate-300 text-xs leading-relaxed">
-                    {item.why}
-                  </td>
-                  <td className="py-3 px-4 text-slate-400 text-xs leading-relaxed font-mono text-[11px]">
-                    {item.notes}
-                  </td>
+                <tr key={idx} className="hover:bg-[#f8fafc]">
+                  <td className="py-2 px-3 font-semibold text-[#1a1f2e] font-mono">{item.feature}</td>
+                  <td className="py-2 px-3 text-[#1a1f2e] text-[11px]">{item.importance}</td>
+                  <td className="py-2 px-3 text-[#5b6478] font-mono text-[11px]">{item.notes}</td>
                 </tr>
               ))}
             </tbody>
@@ -303,20 +240,19 @@ export default function AboutPage() {
       </section>
 
       {/* Honest Limitations Box */}
-      <div className="p-6 rounded-3xl bg-[#101026] border border-[#7B68EE]/30 space-y-4">
-        <h3 className="text-base font-bold text-white flex items-center gap-2">
-          <Shield className="w-5 h-5 text-[#b8a9ff]" />
-          <span>Honest Engineering & Scientific Disclosures</span>
+      <div className="p-3.5 bg-[#f8fafc] border border-[#d4dae3] rounded-sm space-y-2">
+        <h3 className="text-xs font-bold text-[#1a1f2e] uppercase font-mono">
+          HONEST ENGINEERING DISCLOSURES
         </h3>
-        <ul className="space-y-3 text-xs text-slate-300 leading-relaxed list-disc list-inside">
+        <ul className="space-y-1.5 text-[11px] text-[#5b6478] list-disc list-inside leading-relaxed">
           <li>
-            <strong>32 documented flood events is a compact positive dataset:</strong> Model AUC 0.85 on test positives carries variance. Bayesian Beta posterior credible intervals are surfaced in the UI precisely so uncertainty is visible.
+            <strong className="text-[#1a1f2e]">Small positive event set (32 historical floods):</strong> Model AUC 0.85 on 8 test positives carries variance. Bayesian Beta posterior credible intervals are surfaced in the UI so uncertainty is transparent.
           </li>
           <li>
-            <strong>Drain health is validated on methodology, not physical ground truth:</strong> Trends and linear extrapolation are mathematically sound, but no BMC desilting records exist to benchmark predicted failure dates against. It is an operational prioritization index.
+            <strong className="text-[#1a1f2e]">Drain health validated on methodology, not physical telemetry:</strong> Trend fits and linear failure forecasts are mathematically grounded on residual Δ, but no municipal desilting record exists to benchmark dates against.
           </li>
           <li>
-            <strong>Predictions for today see rain = 0:</strong> Because historical rainfall data ends 31 Dec 2025, evaluating today returns low risk. For live demonstration, test against the recorded extreme cloudburst at <code className="text-[#b8a9ff] bg-slate-900 px-1 py-0.5 rounded">2025-07-15T10:30:00Z</code> at Hindmata Junction.
+            <strong className="text-[#1a1f2e]">Predictions for today see zero rainfall:</strong> Because historical rainfall reanalysis ends 31 Dec 2025, evaluating today returns low risk. For live demonstration, evaluate against the recorded monsoon cloudburst at <code className="font-mono text-[#1a1f2e] bg-[#ffffff] px-1 border border-[#d4dae3]">2025-07-15T10:30:00Z</code> at Hindmata Junction.
           </li>
         </ul>
       </div>
