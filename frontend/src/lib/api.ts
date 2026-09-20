@@ -8,6 +8,7 @@ import {
   AlertRequest,
   AlertResponse,
   AlertLogEntry,
+  BroadcastResponse,
   HealthResponse,
 } from "./types";
 
@@ -104,4 +105,12 @@ export const api = {
       method: "POST",
       body: JSON.stringify(payload),
     }),
+  broadcast: (spotId: number, mode: "normal" | "critical" = "normal", langs?: string[]) =>
+    fetcher<BroadcastResponse>(`/api/alert/broadcast/${spotId}?mode=${mode}`, {
+      method: "POST",
+      body: JSON.stringify({ mode, langs }),
+    }),
+  getAlertPreview: async (spotId: number, lang: string) => {
+    return fetcher<{ body: string }>(`/api/alert/preview/${spotId}?lang=${lang}`);
+  },
 };

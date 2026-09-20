@@ -145,6 +145,13 @@ export interface AlertLogEntry {
   recipient_count?: number | string;
 }
 
+export interface BroadcastResponse {
+  broadcast_count: number;
+  mode: string;
+  channels: string[];
+  message: string;
+}
+
 export interface HealthResponse {
   status: string;
   db: boolean;
