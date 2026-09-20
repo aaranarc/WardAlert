@@ -124,8 +124,8 @@ export function TrendChart({ detail, isLoading }: TrendChartProps) {
 
         <div className="p-2 bg-[#ffffff] border border-[#d4dae3]">
           <div className="text-[10px] text-[#5b6478] uppercase">PROJECTED FAILURE</div>
-          <div className="text-sm font-bold text-[#b91c1c] truncate">
-            {failureDateFormatted || "NONE PROJECTED"}
+          <div className="text-sm font-bold text-[#b91c1c] truncate" title={failureDateFormatted || "None Projected"}>
+            {failureDateFormatted || "NONE"}
           </div>
         </div>
       </div>
