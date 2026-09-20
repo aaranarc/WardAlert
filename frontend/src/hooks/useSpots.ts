@@ -7,8 +7,9 @@ export function useSpots() {
     "/api/spots",
     () => api.getSpots(),
     {
-      refreshInterval: 15000,
+      refreshInterval: 60000,
       revalidateOnFocus: true,
+      dedupingInterval: 60000,
     }
   );
 
