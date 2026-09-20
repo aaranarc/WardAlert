@@ -63,22 +63,31 @@ export async function fetcher<T>(endpoint: string, options?: RequestInit): Promi
   }
 }
 
+export const HERO_TIMESTAMP = "2025-07-15T10:30:00Z";
+
 // API methods
 export const api = {
   getHealth: () => fetcher<HealthResponse>("/api/health"),
   getSpots: () => fetcher<SpotRisk[]>("/api/spots"),
   getSpot: (id: number, historyHours: number = 24) =>
     fetcher<SpotDetail>(`/api/spots/${id}?history_hours=${historyHours}`),
-  predict: (payload: PredictRequest) =>
-    fetcher<PredictionResponse>("/api/predict", {
+  predict: (payload: PredictRequest) => {
+    const timestamp = payload.timestamp || HERO_TIMESTAMP;
+    return fetcher<PredictionResponse>("/api/predict", {
       method: "POST",
-      body: JSON.stringify(payload),
-    }),
-  predictAll: (timestamp?: string) =>
-    fetcher<PredictionResponse[]>("/api/predict/all", {
+      body: JSON.stringify({
+        ...payload,
+        timestamp,
+      }),
+    });
+  },
+  predictAll: (timestamp?: string) => {
+    const ts = timestamp || HERO_TIMESTAMP;
+    return fetcher<PredictionResponse[]>("/api/predict/all", {
       method: "POST",
-      body: JSON.stringify(timestamp ? { timestamp } : {}),
-    }),
+      body: JSON.stringify({ timestamp: ts }),
+    });
+  },
   getDrainHealth: () => fetcher<DrainHealthEntry[]>("/api/drain-health"),
   getDrainHealthDetail: (spotId: number) =>
     fetcher<DrainHealthDetail>(`/api/drain-health/${spotId}`),

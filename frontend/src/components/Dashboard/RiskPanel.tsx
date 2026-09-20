@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { SpotRisk, PredictionResponse } from "@/lib/types";
+import { HERO_TIMESTAMP } from "@/lib/api";
 import { RISK_COLORS } from "@/lib/constants";
 import { formatPercent } from "@/lib/utils";
 import { usePredict } from "@/hooks/usePredict";
@@ -57,7 +58,7 @@ export function RiskPanel({ spot, onClose, onSpotUpdated }: RiskPanelProps) {
   const handleRunPrediction = async (timestamp?: string) => {
     setStatusMessage(null);
     setErrorMessage(null);
-    const ts = timestamp || new Date().toISOString();
+    const ts = timestamp || HERO_TIMESTAMP;
     try {
       const result = await predict(spot.spot_id, ts);
       if (result) {

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useSpots } from "@/hooks/useSpots";
 import { usePredict } from "@/hooks/usePredict";
 import { SpotRisk, RiskLevel } from "@/lib/types";
+import { HERO_TIMESTAMP } from "@/lib/api";
 import { RiskPanel } from "@/components/Dashboard/RiskPanel";
 import {
   IconWarning,
@@ -77,7 +78,7 @@ export default function DashboardPage() {
         : "Re-evaluating live dual models and sensor telemetry across all spots..."
     );
 
-    const ts = timestamp || new Date().toISOString();
+    const ts = timestamp || HERO_TIMESTAMP;
     const results = await predictAll(ts);
     if (results && results.length > 0) {
       // Optimistically update SWR cache with the results so the 4 KPI cards and map markers update instantly
