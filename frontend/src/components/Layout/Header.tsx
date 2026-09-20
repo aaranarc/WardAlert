@@ -1,9 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { StatusBar } from "./StatusBar";
-import { IconMenu, IconSearch, IconChevronDown } from "@/components/Common/Icons";
+import { IconMenu } from "@/components/Common/Icons";
 
 interface HeaderProps {
   onToggleSidebar?: () => void;
@@ -11,9 +10,38 @@ interface HeaderProps {
 }
 
 export function Header({ onToggleSidebar }: HeaderProps) {
+  const [timeText, setTimeText] = useState<string>("Sun 20 Sep · 18:06 IST");
+
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      const parts = new Intl.DateTimeFormat("en-IN", {
+        timeZone: "Asia/Kolkata",
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      }).formatToParts(now);
+
+      const weekday = parts.find((p) => p.type === "weekday")?.value || "Sun";
+      const day = parts.find((p) => p.type === "day")?.value || "20";
+      const month = parts.find((p) => p.type === "month")?.value || "Sep";
+      const hour = parts.find((p) => p.type === "hour")?.value || "18";
+      const minute = parts.find((p) => p.type === "minute")?.value || "06";
+
+      setTimeText(`${weekday} ${day} ${month} · ${hour}:${minute} IST`);
+    };
+
+    updateTime();
+    const timer = setInterval(updateTime, 10000);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
-    <header className="h-14 bg-white border-b border-slate-200 px-4 flex items-center justify-between sticky top-0 z-30 select-none">
-      {/* Brand & Toggle */}
+    <header className="h-16 bg-white border-b border-slate-200 px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30 select-none">
+      {/* Left: teal logo (32px) + "WardAlert" (Poppins 600, 18px) + divider + "Ward G-South" (Poppins 400, 14px, gray-500) */}
       <div className="flex items-center gap-3">
         {onToggleSidebar && (
           <button
@@ -24,59 +52,40 @@ export function Header({ onToggleSidebar }: HeaderProps) {
             <IconMenu className="w-5 h-5" />
           </button>
         )}
-        <Link href="/" className="flex items-center gap-2.5">
-          {/* Restrained Brand Wave Mark */}
-          <div className="w-7 h-7 rounded-lg bg-[#0066cc] flex items-center justify-center text-white">
-            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="w-4 h-4">
+        <Link href="/" className="flex items-center gap-3">
+          {/* Teal Logo (32px) */}
+          <div className="w-8 h-8 rounded-lg bg-teal-600 flex items-center justify-center text-white shrink-0 shadow-xs">
+            <svg
+              viewBox="0 0 20 20"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              className="w-4 h-4"
+            >
               <path d="M2 10c2.5-3 5-3 8 0s5.5 3 8 0" />
               <path d="M2 14c2.5-3 5-3 8 0s5.5 3 8 0" />
             </svg>
           </div>
-          <div className="flex flex-col">
-            <span className="font-semibold tracking-tight text-slate-900 text-sm leading-tight">
-              WardAlert
-            </span>
-            <span className="text-[10px] text-slate-400 font-normal hidden sm:block">
-              Smarter Flood Insights. Safer Mumbai.
-            </span>
-          </div>
+          <span className="font-semibold text-[18px] text-slate-900 tracking-tight leading-none">
+            WardAlert
+          </span>
+          <span className="text-slate-300 select-none">|</span>
+          <span className="text-[14px] text-gray-500 font-normal leading-none">
+            Ward G-South
+          </span>
         </Link>
       </div>
 
-      {/* Global Location / Search Bar */}
-      <div className="hidden md:flex items-center flex-1 max-w-sm mx-6">
-        <div className="relative w-full">
-          <IconSearch className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-          <input
-            type="text"
-            placeholder="Search location, ward or spot..."
-            className="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#0066cc] focus:bg-white transition-colors"
-            aria-label="Search spots"
-          />
-        </div>
-      </div>
-
-      {/* Authority Profile & Telemetry */}
-      <div className="flex items-center gap-3">
-        {/* Ward Selector Pill */}
-        <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium text-slate-700 bg-slate-50 border border-slate-200 rounded-lg">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#0066cc]" />
-          <span>Mumbai (Ward G/South)</span>
-          <IconChevronDown className="w-3 h-3 text-slate-400" />
-        </div>
-
-        <StatusBar />
-
-        {/* User Pill */}
-        <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
-          <div className="w-7 h-7 rounded-full bg-slate-800 text-white text-[11px] font-semibold flex items-center justify-center">
-            AK
-          </div>
-          <div className="hidden xl:flex flex-col text-left">
-            <span className="text-xs font-medium text-slate-900 leading-tight">Admin</span>
-            <span className="text-[10px] text-slate-400 leading-tight">BMC Authority</span>
-          </div>
-        </div>
+      {/* Right: green pulse dot + "Live · Sun 20 Sep · 18:06 IST" */}
+      <div className="flex items-center gap-2 text-slate-700 text-xs font-medium">
+        <span className="relative flex h-2 w-2">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+        </span>
+        <span className="text-xs sm:text-[13px] text-slate-700 font-medium">
+          Live · {timeText}
+        </span>
       </div>
     </header>
   );
