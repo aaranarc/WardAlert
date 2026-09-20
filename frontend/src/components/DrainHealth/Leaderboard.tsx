@@ -4,16 +4,7 @@ import React, { useState, useMemo } from "react";
 import { DrainHealthEntry } from "@/lib/types";
 import { FailureBadge } from "./FailureBadge";
 import { formatDate, formatNumber } from "@/lib/utils";
-import {
-  TrendingUp,
-  TrendingDown,
-  Minus,
-  Search,
-  ArrowUpDown,
-  Calendar,
-  AlertTriangle,
-  Flame,
-} from "lucide-react";
+import { SearchIcon, ArrowUpDownIcon } from "@/components/Icons";
 
 interface LeaderboardProps {
   drains: DrainHealthEntry[];
@@ -33,14 +24,12 @@ export function Leaderboard({
   const sortedDrains = useMemo(() => {
     let result = [...drains];
 
-    // Filter
     if (search.trim()) {
       result = result.filter((d) =>
         d.name.toLowerCase().includes(search.toLowerCase())
       );
     }
 
-    // Sort
     result.sort((a, b) => {
       if (sortField === "health_score") {
         return sortAsc ? a.health_score - b.health_score : b.health_score - a.health_score;
@@ -66,85 +55,76 @@ export function Leaderboard({
     }
   };
 
-  const getHealthColor = (score: number) => {
-    if (score < 55) return "bg-rose-500";
-    if (score < 75) return "bg-amber-500";
-    return "bg-emerald-500";
-  };
-
   const getHealthTextColor = (score: number) => {
-    if (score < 55) return "text-rose-400";
-    if (score < 75) return "text-amber-400";
-    return "text-emerald-400";
+    if (score < 55) return "text-[#b91c1c]";
+    if (score < 75) return "text-[#b45309]";
+    return "text-[#166534]";
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#12122b] border border-[#7B68EE]/20 rounded-2xl overflow-hidden shadow-xl">
+    <div className="flex flex-col h-full bg-[#ffffff] border border-[#d4dae3] rounded-sm overflow-hidden">
       {/* Header & Search */}
-      <div className="p-4 border-b border-[#7B68EE]/20 bg-[#161638] flex flex-wrap items-center justify-between gap-3">
+      <div className="p-3 border-b border-[#d4dae3] bg-[#f8fafc] flex flex-wrap items-center justify-between gap-2">
         <div>
-          <h2 className="text-sm font-bold text-white font-sans flex items-center gap-2">
-            <span>Drain Silt & Health Leaderboard</span>
-            <span className="text-[10px] font-mono text-slate-400 font-normal">
-              (Sorted by Health ASC — Worst First)
-            </span>
+          <h2 className="text-xs font-bold uppercase tracking-wider text-[#1a1f2e] font-mono">
+            DRAIN SILTATION & HEALTH LEADERBOARD
           </h2>
-          <p className="text-[11px] text-slate-400 mt-0.5">
-            Ranked by learned Δ residual accumulation over historical weeks.
+          <p className="text-[11px] text-[#5b6478] mt-0.5">
+            Ranked by longitudinal residual accumulation (Worst condition first).
           </p>
         </div>
 
-        <div className="relative w-full sm:w-60">
-          <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
+        <div className="relative w-full sm:w-56">
+          <SearchIcon className="w-3.5 h-3.5 text-[#5b6478] absolute left-2.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
-            placeholder="Filter drains by name..."
+            placeholder="Filter drains..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-8 pr-3 py-1 text-xs rounded-lg bg-[#0d0d1a] border border-slate-700/80 text-white placeholder-slate-500 focus:outline-none focus:border-[#7B68EE] font-sans"
+            className="w-full pl-8 pr-2.5 py-1 text-xs bg-[#ffffff] border border-[#d4dae3] text-[#1a1f2e] placeholder-[#5b6478] focus:outline-none focus:border-[#1e40af]"
           />
         </div>
       </div>
 
-      {/* Table Container */}
+      {/* Table */}
       <div className="flex-1 overflow-auto">
-        <table className="w-full text-left text-xs border-collapse">
-          <thead className="bg-[#0e0e22] text-slate-400 font-mono text-[11px] sticky top-0 z-10 border-b border-[#7B68EE]/20 select-none">
+        <table className="w-full text-left text-xs border-collapse font-mono">
+          <thead className="bg-[#f1f5f9] text-[#5b6478] text-[10px] uppercase tracking-wider sticky top-0 z-10 border-b border-[#d4dae3] select-none">
             <tr>
-              <th className="py-2.5 px-3 w-12 text-center">Rank</th>
+              <th className="py-2 px-2.5 w-10 text-center">#</th>
               <th
                 onClick={() => handleHeaderClick("name")}
-                className="py-2.5 px-3 cursor-pointer hover:text-white transition-colors"
+                className="py-2 px-2.5 cursor-pointer hover:text-[#1a1f2e] transition-colors"
               >
-                <div className="flex items-center gap-1">
-                  <span>Spot Location</span>
-                  <ArrowUpDown className="w-3 h-3" />
+                <div className="flex items-center gap-1 font-sans">
+                  <span>LOCATION</span>
+                  <ArrowUpDownIcon className="w-3 h-3" />
                 </div>
               </th>
               <th
                 onClick={() => handleHeaderClick("health_score")}
-                className="py-2.5 px-3 cursor-pointer hover:text-white transition-colors min-w-[120px]"
+                className="py-2 px-2.5 cursor-pointer hover:text-[#1a1f2e] transition-colors min-w-[100px]"
               >
                 <div className="flex items-center gap-1">
-                  <span>Health Score</span>
-                  <ArrowUpDown className="w-3 h-3" />
+                  <span>HEALTH</span>
+                  <ArrowUpDownIcon className="w-3 h-3" />
                 </div>
               </th>
               <th
                 onClick={() => handleHeaderClick("avg_delta")}
-                className="py-2.5 px-3 cursor-pointer hover:text-white transition-colors hidden sm:table-cell"
+                className="py-2 px-2.5 cursor-pointer hover:text-[#1a1f2e] transition-colors hidden sm:table-cell"
               >
                 <div className="flex items-center gap-1">
-                  <span>Avg Δ</span>
-                  <ArrowUpDown className="w-3 h-3" />
+                  <span>AVG Δ</span>
+                  <ArrowUpDownIcon className="w-3 h-3" />
                 </div>
               </th>
-              <th className="py-2.5 px-3 hidden md:table-cell">Trend Slope</th>
-              <th className="py-2.5 px-3">Predicted Failure</th>
-              <th className="py-2.5 px-3 text-right">Status</th>
+              <th className="py-2 px-2.5 hidden md:table-cell">SLOPE</th>
+              <th className="py-2 px-2.5">PROJECTED FAILURE</th>
+              <th className="py-2 px-2.5 text-right">STATUS</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-800/60 font-mono">
+          <tbody className="divide-y divide-[#e2e8f0]">
             {sortedDrains.map((drain, idx) => {
               const isSelected = selectedSpotId === drain.spot_id;
               const slope = drain.trend_slope;
@@ -155,87 +135,60 @@ export function Leaderboard({
                 <tr
                   key={drain.spot_id}
                   onClick={() => onSelectSpot(drain.spot_id)}
-                  className={`cursor-pointer transition-all ${
+                  className={`cursor-pointer transition-colors ${
                     isSelected
-                      ? "bg-[#211f4c] text-white font-semibold border-l-4 border-l-[#b8a9ff]"
-                      : "hover:bg-[#18183c] text-slate-300"
+                      ? "bg-[#eff6ff] text-[#1e40af] font-semibold border-l-2 border-l-[#1e40af]"
+                      : "hover:bg-[#f8fafc] text-[#1a1f2e]"
                   }`}
                 >
-                  {/* Rank */}
-                  <td className="py-3 px-3 text-center text-slate-400 text-[11px]">
-                    #{idx + 1}
+                  <td className="py-2 px-2.5 text-center text-[#5b6478] text-[11px]">
+                    {idx + 1}
                   </td>
 
-                  {/* Name */}
-                  <td className="py-3 px-3 font-sans font-medium text-slate-200">
+                  <td className="py-2 px-2.5 font-sans font-medium">
+                    {drain.name}
+                  </td>
+
+                  <td className="py-2 px-2.5">
                     <div className="flex items-center gap-1.5">
-                      <span>{drain.name}</span>
-                    </div>
-                  </td>
-
-                  {/* Health Score */}
-                  <td className="py-3 px-3">
-                    <div className="space-y-1">
-                      <div className="flex items-center justify-between text-xs">
-                        <span className={`font-bold ${getHealthTextColor(drain.health_score)}`}>
-                          {drain.health_score.toFixed(1)}
-                        </span>
-                        <span className="text-[10px] text-slate-400">/ 100</span>
-                      </div>
-                      <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
-                        <div
-                          className={`h-full ${getHealthColor(drain.health_score)} rounded-full`}
-                          style={{ width: `${Math.max(5, Math.min(100, drain.health_score))}%` }}
-                        />
-                      </div>
-                    </div>
-                  </td>
-
-                  {/* Avg Delta */}
-                  <td className="py-3 px-3 hidden sm:table-cell text-slate-300">
-                    {formatNumber(drain.avg_delta, 3)}
-                  </td>
-
-                  {/* Trend Slope */}
-                  <td className="py-3 px-3 hidden md:table-cell text-[11px]">
-                    <div className="flex items-center gap-1">
-                      {isSlopePositive ? (
-                        <TrendingUp className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                      ) : isSlopeNegative ? (
-                        <TrendingDown className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                      ) : (
-                        <Minus className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                      )}
-                      <span
-                        className={
-                          isSlopePositive
-                            ? "text-amber-300"
-                            : isSlopeNegative
-                            ? "text-emerald-300"
-                            : "text-slate-400"
-                        }
-                      >
-                        {slope !== null
-                          ? `${slope > 0 ? "+" : ""}${(slope * 100).toFixed(2)}%/wk`
-                          : "—"}
+                      <span className={`font-bold ${getHealthTextColor(drain.health_score)}`}>
+                        {drain.health_score.toFixed(1)}
                       </span>
+                      <span className="text-[10px] text-[#5b6478]">/ 100</span>
                     </div>
                   </td>
 
-                  {/* Predicted Failure Date */}
-                  <td className="py-3 px-3 text-xs">
+                  <td className="py-2 px-2.5 hidden sm:table-cell">
+                    +{formatNumber(drain.avg_delta, 3)}
+                  </td>
+
+                  <td className="py-2 px-2.5 hidden md:table-cell text-[11px]">
+                    <span
+                      className={
+                        isSlopePositive
+                          ? "text-[#b45309]"
+                          : isSlopeNegative
+                          ? "text-[#166534]"
+                          : "text-[#5b6478]"
+                      }
+                    >
+                      {slope !== null
+                        ? `${slope > 0 ? "+" : ""}${(slope * 100).toFixed(2)}%/wk`
+                        : "—"}
+                    </span>
+                  </td>
+
+                  <td className="py-2 px-2.5 text-[11px]">
                     {drain.predicted_failure_date ? (
-                      <span className="text-rose-300 font-semibold flex items-center gap-1">
-                        <Calendar className="w-3 h-3 text-rose-400" />
+                      <span className="text-[#b91c1c] font-semibold">
                         {formatDate(drain.predicted_failure_date)}
                       </span>
                     ) : (
-                      <span className="text-slate-400">—</span>
+                      <span className="text-[#5b6478]">—</span>
                     )}
                   </td>
 
-                  {/* Status */}
-                  <td className="py-3 px-3 text-right">
+                  <td className="py-2 px-2.5 text-right">
                     <FailureBadge
                       status={drain.status}
                       predictedFailureDate={drain.predicted_failure_date}
