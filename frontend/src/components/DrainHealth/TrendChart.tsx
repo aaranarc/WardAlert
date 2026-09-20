@@ -63,7 +63,7 @@ export function TrendChart({ detail, isLoading }: TrendChartProps) {
     };
   });
 
-  const criticalDelta = detail.critical_delta ?? 0.5135;
+  const criticalDelta = detail.critical_delta != null ? detail.critical_delta : null;
   const failureDateFormatted = detail.predicted_failure_date
     ? formatDate(detail.predicted_failure_date)
     : null;
@@ -85,7 +85,9 @@ export function TrendChart({ detail, isLoading }: TrendChartProps) {
             <span>•</span>
             <span>{detail.weeks_tracked} Weeks Tracked</span>
             <span>•</span>
-            <span>Critical Δ Threshold: {criticalDelta.toFixed(3)}</span>
+            <span>
+              Critical Δ Threshold: {criticalDelta != null ? criticalDelta.toFixed(3) : "—"}
+            </span>
           </div>
         </div>
 
@@ -105,7 +107,7 @@ export function TrendChart({ detail, isLoading }: TrendChartProps) {
         <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100 space-y-0.5">
           <div className="text-[10px] text-slate-500 font-medium">Current Avg Δ</div>
           <div className="text-xs font-bold font-mono text-slate-900">
-            +{(detail.avg_delta ?? 0).toFixed(4)}
+            {detail.avg_delta != null ? `+${detail.avg_delta.toFixed(4)}` : "—"}
           </div>
         </div>
 
@@ -125,7 +127,7 @@ export function TrendChart({ detail, isLoading }: TrendChartProps) {
         <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100 space-y-0.5">
           <div className="text-[10px] text-slate-500 font-medium">Critical Δ Limit</div>
           <div className="text-xs font-bold font-mono text-rose-600">
-            {criticalDelta.toFixed(4)}
+            {criticalDelta != null ? criticalDelta.toFixed(4) : "—"}
           </div>
         </div>
 
@@ -219,18 +221,20 @@ export function TrendChart({ detail, isLoading }: TrendChartProps) {
                   return null;
                 }}
               />
-              <ReferenceLine
-                y={criticalDelta}
-                stroke="#e11d48"
-                strokeDasharray="4 4"
-                strokeWidth={1.5}
-                label={{
-                  value: `Critical Δ (${criticalDelta.toFixed(3)})`,
-                  fill: "#e11d48",
-                  fontSize: 10,
-                  position: "insideTopRight",
-                }}
-              />
+              {criticalDelta !== null && (
+                <ReferenceLine
+                  y={criticalDelta}
+                  stroke="#e11d48"
+                  strokeDasharray="4 4"
+                  strokeWidth={1.5}
+                  label={{
+                    value: `Critical Δ (${criticalDelta.toFixed(3)})`,
+                    fill: "#e11d48",
+                    fontSize: 10,
+                    position: "insideTopRight",
+                  }}
+                />
+              )}
               <Area
                 type="monotone"
                 dataKey="avgDelta"

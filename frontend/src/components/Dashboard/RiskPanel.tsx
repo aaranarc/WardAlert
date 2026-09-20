@@ -293,8 +293,8 @@ export function RiskPanel({ spot, onClose, onSpotUpdated }: RiskPanelProps) {
               );
             })
           ) : (
-            <div className="text-xs text-slate-400 py-2 text-center">
-              SHAP feature drivers loading...
+            <div className="text-xs text-slate-400 py-2 text-center font-mono">
+              {isPredicting ? "Computing SHAP drivers..." : "—"}
             </div>
           )}
         </div>

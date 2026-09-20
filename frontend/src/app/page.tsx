@@ -132,6 +132,23 @@ export default function DashboardPage() {
     await mutate();
   };
 
+  // Top alert spots from real data
+  const topAlertSpots = useMemo(() => {
+    return [...spots]
+      .filter((s) => s.p_actual != null)
+      .sort((a, b) => (b.p_actual || 0) - (a.p_actual || 0))
+      .slice(0, 4);
+  }, [spots]);
+
+  // Dynamic quick insights from real data
+  const positiveDeltaSpots = useMemo(() => {
+    return spots.filter((s) => s.delta != null && s.delta > 0);
+  }, [spots]);
+
+  const desiltingSpots = useMemo(() => {
+    return spots.filter((s) => s.dispatch_type === "desilting_crew");
+  }, [spots]);
+
   return (
     <div className="flex-1 bg-[#f8fafc] p-4 lg:p-6 space-y-5 max-w-[1600px] mx-auto w-full">
       {/* Top Greeting and Telemetry Row */}
@@ -214,10 +231,12 @@ export default function DashboardPage() {
             <span className="text-xs text-slate-400">›</span>
           </div>
           <div className="text-2xl font-bold font-mono text-slate-900 mt-2">
-            {riskCounts.critical || 5}
+            {spots.length > 0 ? riskCounts.critical : "—"}
           </div>
           <div className="text-xs font-semibold text-rose-700 mt-0.5">Critical Spots</div>
-          <div className="text-[10px] text-slate-400">out of 30 monitored</div>
+          <div className="text-[10px] text-slate-400">
+            {spots.length > 0 ? `out of ${spots.length} monitored` : "—"}
+          </div>
         </button>
 
         {/* High Risk */}
@@ -236,10 +255,12 @@ export default function DashboardPage() {
             <span className="text-xs text-slate-400">›</span>
           </div>
           <div className="text-2xl font-bold font-mono text-slate-900 mt-2">
-            {riskCounts.high || 8}
+            {spots.length > 0 ? riskCounts.high : "—"}
           </div>
           <div className="text-xs font-semibold text-orange-700 mt-0.5">High Risk</div>
-          <div className="text-[10px] text-slate-400">out of 30 monitored</div>
+          <div className="text-[10px] text-slate-400">
+            {spots.length > 0 ? `out of ${spots.length} monitored` : "—"}
+          </div>
         </button>
 
         {/* Moderate Risk */}
@@ -258,10 +279,12 @@ export default function DashboardPage() {
             <span className="text-xs text-slate-400">›</span>
           </div>
           <div className="text-2xl font-bold font-mono text-slate-900 mt-2">
-            {riskCounts.moderate || 11}
+            {spots.length > 0 ? riskCounts.moderate : "—"}
           </div>
           <div className="text-xs font-semibold text-amber-800 mt-0.5">Moderate Risk</div>
-          <div className="text-[10px] text-slate-400">out of 30 monitored</div>
+          <div className="text-[10px] text-slate-400">
+            {spots.length > 0 ? `out of ${spots.length} monitored` : "—"}
+          </div>
         </button>
 
         {/* Low Risk */}
@@ -280,10 +303,12 @@ export default function DashboardPage() {
             <span className="text-xs text-slate-400">›</span>
           </div>
           <div className="text-2xl font-bold font-mono text-slate-900 mt-2">
-            {riskCounts.low || 6}
+            {spots.length > 0 ? riskCounts.low : "—"}
           </div>
           <div className="text-xs font-semibold text-emerald-700 mt-0.5">Low Risk</div>
-          <div className="text-[10px] text-slate-400">out of 30 monitored</div>
+          <div className="text-[10px] text-slate-400">
+            {spots.length > 0 ? `out of ${spots.length} monitored` : "—"}
+          </div>
         </button>
       </div>
 
@@ -339,22 +364,29 @@ export default function DashboardPage() {
                 </Link>
               </div>
               <div className="space-y-2">
-                <div className="flex items-center justify-between text-[11px]">
-                  <span className="text-slate-800 font-medium truncate max-w-[110px]">Hindmata</span>
-                  <span className="px-1.5 py-0.5 rounded text-[9px] font-semibold bg-rose-100 text-rose-700">Critical</span>
-                </div>
-                <div className="flex items-center justify-between text-[11px]">
-                  <span className="text-slate-800 font-medium truncate max-w-[110px]">Parel TT</span>
-                  <span className="px-1.5 py-0.5 rounded text-[9px] font-semibold bg-orange-100 text-orange-700">High</span>
-                </div>
-                <div className="flex items-center justify-between text-[11px]">
-                  <span className="text-slate-800 font-medium truncate max-w-[110px]">Worli Naka</span>
-                  <span className="px-1.5 py-0.5 rounded text-[9px] font-semibold bg-orange-100 text-orange-700">High</span>
-                </div>
-                <div className="flex items-center justify-between text-[11px]">
-                  <span className="text-slate-800 font-medium truncate max-w-[110px]">Mahalaxmi</span>
-                  <span className="px-1.5 py-0.5 rounded text-[9px] font-semibold bg-amber-100 text-amber-700">Moderate</span>
-                </div>
+                {topAlertSpots.length > 0 ? (
+                  topAlertSpots.map((s) => {
+                    const level = s.risk_level || "low";
+                    const badgeClass =
+                      level === "critical"
+                        ? "bg-rose-100 text-rose-700"
+                        : level === "high"
+                        ? "bg-orange-100 text-orange-700"
+                        : level === "moderate"
+                        ? "bg-amber-100 text-amber-700"
+                        : "bg-emerald-100 text-emerald-700";
+                    return (
+                      <div key={s.spot_id} className="flex items-center justify-between text-[11px]">
+                        <span className="text-slate-800 font-medium truncate max-w-[110px]">{s.name}</span>
+                        <span className={`px-1.5 py-0.5 rounded text-[9px] font-semibold capitalize ${badgeClass}`}>
+                          {level}
+                        </span>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div className="text-xs text-slate-400 py-2 text-center font-mono">—</div>
+                )}
               </div>
             </div>
 
@@ -363,12 +395,24 @@ export default function DashboardPage() {
               <span className="text-xs font-bold text-slate-900 block">Quick Insights</span>
               <div className="space-y-2 text-[11px]">
                 <div className="p-1.5 rounded-lg bg-slate-50 border border-slate-100">
-                  <span className="font-semibold text-slate-900">Δ increasing at 3 spots:</span>
-                  <p className="text-slate-500 text-[10px] mt-0.5">Drainage bottlenecks detected.</p>
+                  <span className="font-semibold text-slate-900">
+                    {spots.length > 0 ? `Δ positive at ${positiveDeltaSpots.length} spots:` : "—"}
+                  </span>
+                  <p className="text-slate-500 text-[10px] mt-0.5">
+                    {positiveDeltaSpots.length > 0
+                      ? "Drainage bottlenecks detected."
+                      : "Drainage networks operating within baseline."}
+                  </p>
                 </div>
                 <div className="p-1.5 rounded-lg bg-slate-50 border border-slate-100">
-                  <span className="font-semibold text-slate-900">5 spots need desilting:</span>
-                  <p className="text-slate-500 text-[10px] mt-0.5">High Δ residual signals.</p>
+                  <span className="font-semibold text-slate-900">
+                    {spots.length > 0 ? `${desiltingSpots.length} spots need desilting:` : "—"}
+                  </span>
+                  <p className="text-slate-500 text-[10px] mt-0.5">
+                    {desiltingSpots.length > 0
+                      ? "Priority desilting crew dispatch advised."
+                      : "Standard maintenance intervals sufficient."}
+                  </p>
                 </div>
               </div>
             </div>

@@ -26,6 +26,31 @@ export default function RiskAnalysisPage() {
       ? validPActual.reduce((acc, s) => acc + (s.p_actual || 0), 0) / validPActual.length
       : null;
 
+  const globalShapFactors = React.useMemo(() => {
+    const map: Record<string, { label: string; total: number }> = {};
+    for (const spot of spots) {
+      if (spot.shap_top3 && Array.isArray(spot.shap_top3)) {
+        for (const factor of spot.shap_top3) {
+          const key = factor.feature || factor.label;
+          if (!map[key]) {
+            map[key] = { label: factor.label || factor.feature, total: 0 };
+          }
+          map[key].total += Math.abs(factor.shap_value);
+        }
+      }
+    }
+    const items = Object.values(map);
+    if (items.length === 0) return [];
+    const sumAll = items.reduce((acc, curr) => acc + curr.total, 0);
+    return items
+      .sort((a, b) => b.total - a.total)
+      .slice(0, 5)
+      .map((item) => ({
+        label: item.label,
+        pct: sumAll > 0 ? Math.round((item.total / sumAll) * 100) : 0,
+      }));
+  }, [spots]);
+
   return (
     <div className="flex-1 bg-[#f8fafc] p-4 lg:p-6 space-y-5 max-w-[1600px] mx-auto w-full">
       {/* Header */}
@@ -120,7 +145,9 @@ export default function RiskAnalysisPage() {
         <div className="lg:col-span-7 bg-white rounded-xl border border-slate-200 overflow-hidden shadow-xs">
           <div className="p-3.5 border-b border-slate-100 flex items-center justify-between bg-slate-50/60">
             <h2 className="text-xs font-bold text-slate-900">Risk Ranking by Spot</h2>
-            <span className="text-[11px] text-slate-400 font-mono">30 Locations Monitored</span>
+            <span className="text-[11px] text-slate-400 font-mono">
+              {spots.length > 0 ? `${spots.length} Locations Monitored` : "—"}
+            </span>
           </div>
 
           <div className="overflow-x-auto">
@@ -180,59 +207,31 @@ export default function RiskAnalysisPage() {
               Top Contributing Factors (SHAP Global)
             </h2>
             <p className="text-[11px] text-slate-500">
-              Feature importance distribution computed across the 192 training snapshots.
+              Feature importance distribution computed across monitored flood spots.
             </p>
 
             <div className="space-y-3 pt-1">
-              <div>
-                <div className="flex items-center justify-between text-xs mb-1">
-                  <span className="text-slate-700 font-medium">Drainage Proximity</span>
-                  <span className="font-mono text-slate-900 font-semibold">32%</span>
+              {globalShapFactors.length > 0 ? (
+                globalShapFactors.map((factor, idx) => {
+                  const colors = ["bg-[#0066cc]", "bg-rose-500", "bg-amber-500", "bg-teal-500", "bg-slate-500"];
+                  const barColor = colors[idx % colors.length];
+                  return (
+                    <div key={factor.label}>
+                      <div className="flex items-center justify-between text-xs mb-1">
+                        <span className="text-slate-700 font-medium capitalize">{factor.label}</span>
+                        <span className="font-mono text-slate-900 font-semibold">{factor.pct}%</span>
+                      </div>
+                      <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                        <div className={`${barColor} h-full rounded-full`} style={{ width: `${factor.pct}%` }} />
+                      </div>
+                    </div>
+                  );
+                })
+              ) : (
+                <div className="text-xs text-slate-400 py-3 text-center font-mono">
+                  —
                 </div>
-                <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                  <div className="bg-[#0066cc] h-full rounded-full" style={{ width: "32%" }} />
-                </div>
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between text-xs mb-1">
-                  <span className="text-slate-700 font-medium">Rainfall Intensity</span>
-                  <span className="font-mono text-slate-900 font-semibold">24%</span>
-                </div>
-                <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                  <div className="bg-rose-500 h-full rounded-full" style={{ width: "24%" }} />
-                </div>
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between text-xs mb-1">
-                  <span className="text-slate-700 font-medium">Depression Depth</span>
-                  <span className="font-mono text-slate-900 font-semibold">18%</span>
-                </div>
-                <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                  <div className="bg-amber-500 h-full rounded-full" style={{ width: "18%" }} />
-                </div>
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between text-xs mb-1">
-                  <span className="text-slate-700 font-medium">Citizen Reports (500m)</span>
-                  <span className="font-mono text-slate-900 font-semibold">14%</span>
-                </div>
-                <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                  <div className="bg-teal-500 h-full rounded-full" style={{ width: "14%" }} />
-                </div>
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between text-xs mb-1">
-                  <span className="text-slate-700 font-medium">Topographic Elevation</span>
-                  <span className="font-mono text-slate-900 font-semibold">12%</span>
-                </div>
-                <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                  <div className="bg-slate-400 h-full rounded-full" style={{ width: "12%" }} />
-                </div>
-              </div>
+              )}
             </div>
           </div>
 

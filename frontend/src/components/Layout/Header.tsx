@@ -10,7 +10,7 @@ interface HeaderProps {
 }
 
 export function Header({ onToggleSidebar }: HeaderProps) {
-  const [timeText, setTimeText] = useState<string>("Sun 20 Sep · 18:06 IST");
+  const [timeText, setTimeText] = useState<string>("");
 
   useEffect(() => {
     const updateTime = () => {
@@ -25,13 +25,17 @@ export function Header({ onToggleSidebar }: HeaderProps) {
         hour12: false,
       }).formatToParts(now);
 
-      const weekday = parts.find((p) => p.type === "weekday")?.value || "Sun";
-      const day = parts.find((p) => p.type === "day")?.value || "20";
-      const month = parts.find((p) => p.type === "month")?.value || "Sep";
-      const hour = parts.find((p) => p.type === "hour")?.value || "18";
-      const minute = parts.find((p) => p.type === "minute")?.value || "06";
+      const weekday = parts.find((p) => p.type === "weekday")?.value || "";
+      const day = parts.find((p) => p.type === "day")?.value || "";
+      const month = parts.find((p) => p.type === "month")?.value || "";
+      const hour = parts.find((p) => p.type === "hour")?.value || "";
+      const minute = parts.find((p) => p.type === "minute")?.value || "";
 
-      setTimeText(`${weekday} ${day} ${month} · ${hour}:${minute} IST`);
+      if (weekday && day && month && hour && minute) {
+        setTimeText(`${weekday} ${day} ${month} · ${hour}:${minute} IST`);
+      } else {
+        setTimeText("—");
+      }
     };
 
     updateTime();
