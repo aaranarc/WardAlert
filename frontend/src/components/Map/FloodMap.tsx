@@ -57,8 +57,8 @@ export default function FloodMap({ spots, selectedSpot, onSelectSpot }: FloodMap
         className="w-full h-full z-0"
       >
         <TileLayer
-          attribution="&copy; OpenStreetMap &copy; CARTO"
-          url="https://basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png"
+          attribution="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
+          url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
           maxZoom={19}
         />
         <WardBoundary />
