@@ -1,14 +1,14 @@
 import useSWR from "swr";
 import { useState } from "react";
 import { api } from "@/lib/api";
-import { AlertLogEntry, AlertRequest, AlertResponse } from "@/lib/types";
+import { AlertLogEntry, AlertRequest, AlertResponse, BroadcastResponse } from "@/lib/types";
 
 export function useAlertsLog(limit: number = 50) {
   const { data, error, isLoading, mutate } = useSWR<AlertLogEntry[]>(
     `/api/alerts/log?limit=${limit}`,
     () => api.getAlertsLog(limit),
     {
-      refreshInterval: 10000,
+      refreshInterval: 30000,
       revalidateOnFocus: true,
     }
   );
@@ -31,12 +31,32 @@ export function useAlertsLog(limit: number = 50) {
     }
   };
 
+  const broadcastAlert = async (
+    spotId: number,
+    mode: "normal" | "critical" = "normal",
+    langs?: string[]
+  ): Promise<BroadcastResponse | null> => {
+    setIsSending(true);
+    setSendError(null);
+    try {
+      const res = await api.broadcast(spotId, mode, langs);
+      mutate();
+      return res;
+    } catch (err) {
+      setSendError(err);
+      return null;
+    } finally {
+      setIsSending(false);
+    }
+  };
+
   return {
     logs: data || [],
     isLoading,
     isError: !!error,
     error,
     sendAlert,
+    broadcastAlert,
     isSending,
     sendError,
     mutate,
