@@ -1,7 +1,9 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Link from "next/link";
+import { StatusBar } from "./StatusBar";
+import { IconMenu, IconSearch, IconChevronDown } from "@/components/Common/Icons";
 
 interface HeaderProps {
   onToggleSidebar?: () => void;
@@ -9,90 +11,72 @@ interface HeaderProps {
 }
 
 export function Header({ onToggleSidebar }: HeaderProps) {
-  const [timeIST, setTimeIST] = useState<string>("");
-  const [dateStr, setDateStr] = useState<string>("Live · Sun 20 Sep");
-
-  useEffect(() => {
-    const updateClock = () => {
-      const now = new Date();
-      const istTime = now.toLocaleTimeString("en-GB", {
-        timeZone: "Asia/Kolkata",
-        hour12: false,
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-      });
-      setTimeIST(`IST ${istTime}`);
-
-      const formattedDate = now.toLocaleDateString("en-GB", {
-        timeZone: "Asia/Kolkata",
-        weekday: "short",
-        day: "numeric",
-        month: "short",
-      });
-      setDateStr(`Live · ${formattedDate}`);
-    };
-
-    updateClock();
-    const timer = setInterval(updateClock, 1000);
-    return () => clearInterval(timer);
-  }, []);
-
   return (
-    <header className="h-16 bg-[#ffffff] border-b border-[#e5e7eb] px-4 md:px-6 flex items-center justify-between sticky top-0 z-30 select-none">
-      {/* Brand Identity & Location */}
+    <header className="h-14 bg-white border-b border-slate-200 px-4 flex items-center justify-between sticky top-0 z-30 select-none">
+      {/* Brand & Toggle */}
       <div className="flex items-center gap-3">
         {onToggleSidebar && (
           <button
             onClick={onToggleSidebar}
-            className="p-1.5 border border-[#d4dae3] rounded text-[#1a1f2e] hover:bg-[#f1f5f9] lg:hidden transition-colors"
-            aria-label="Toggle navigation rail"
+            className="p-1.5 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 lg:hidden transition-colors"
+            aria-label="Toggle navigation"
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <line x1="3" y1="12" x2="21" y2="12" />
-              <line x1="3" y1="6" x2="21" y2="6" />
-              <line x1="3" y1="18" x2="21" y2="18" />
-            </svg>
+            <IconMenu className="w-5 h-5" />
           </button>
         )}
-
         <Link href="/" className="flex items-center gap-2.5">
-          {/* Circular teal logo, 32px */}
-          <div className="w-8 h-8 rounded-full bg-[#0d9488] flex items-center justify-center text-white font-bold text-xs shadow-sm shrink-0">
-            <svg
-              className="w-4 h-4 text-white"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-            >
-              <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+          {/* Restrained Brand Wave Mark */}
+          <div className="w-7 h-7 rounded-lg bg-[#0066cc] flex items-center justify-center text-white">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="w-4 h-4">
+              <path d="M2 10c2.5-3 5-3 8 0s5.5 3 8 0" />
+              <path d="M2 14c2.5-3 5-3 8 0s5.5 3 8 0" />
             </svg>
           </div>
-
-          <div className="flex items-center gap-2">
-            <span className="font-poppins font-semibold text-[18px] text-[#111827] leading-none tracking-tight">
+          <div className="flex flex-col">
+            <span className="font-semibold tracking-tight text-slate-900 text-sm leading-tight">
               WardAlert
             </span>
-            <span className="h-4 w-px bg-[#d1d5db]" aria-hidden="true" />
-            <span className="font-poppins font-normal text-[14px] text-gray-500 leading-none">
-              Ward G-South
+            <span className="text-[10px] text-slate-400 font-normal hidden sm:block">
+              Smarter Flood Insights. Safer Mumbai.
             </span>
           </div>
         </Link>
       </div>
 
-      {/* Right: green pulse dot + "Live · Sun 20 Sep" + "IST HH:MM:SS" */}
-      <div className="flex items-center gap-2.5 text-xs text-gray-600">
-        <span className="relative flex h-2.5 w-2.5">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
-        </span>
-        <span className="font-poppins font-medium text-gray-700 text-[13px]">
-          {dateStr}
-        </span>
-        <span className="text-gray-300">·</span>
-        <span className="font-mono text-gray-600 text-[12px] tabular-nums">
-          {timeIST || "IST --:--:--"}
-        </span>
+      {/* Global Location / Search Bar */}
+      <div className="hidden md:flex items-center flex-1 max-w-sm mx-6">
+        <div className="relative w-full">
+          <IconSearch className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <input
+            type="text"
+            placeholder="Search location, ward or spot..."
+            className="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#0066cc] focus:bg-white transition-colors"
+            aria-label="Search spots"
+          />
+        </div>
+      </div>
+
+      {/* Authority Profile & Telemetry */}
+      <div className="flex items-center gap-3">
+        {/* Ward Selector Pill */}
+        <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium text-slate-700 bg-slate-50 border border-slate-200 rounded-lg">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#0066cc]" />
+          <span>Mumbai (Ward G/South)</span>
+          <IconChevronDown className="w-3 h-3 text-slate-400" />
+        </div>
+
+        <StatusBar />
+
+        {/* User Pill */}
+        <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
+          <div className="w-7 h-7 rounded-full bg-slate-800 text-white text-[11px] font-semibold flex items-center justify-center">
+            AK
+          </div>
+          <div className="hidden xl:flex flex-col text-left">
+            <span className="text-xs font-medium text-slate-900 leading-tight">Admin</span>
+            <span className="text-[10px] text-slate-400 leading-tight">BMC Authority</span>
+          </div>
+        </div>
       </div>
     </header>
   );

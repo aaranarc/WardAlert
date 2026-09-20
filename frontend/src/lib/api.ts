@@ -8,9 +8,7 @@ import {
   AlertRequest,
   AlertResponse,
   AlertLogEntry,
-  BroadcastResponse,
   HealthResponse,
-  SubscriberCount,
 } from "./types";
 
 const API_BASE_URL =
@@ -91,8 +89,4 @@ export const api = {
       method: "POST",
       body: JSON.stringify(payload),
     }),
-  getSubscriberCount: (spotId: number) =>
-    fetcher<SubscriberCount>(`/api/spots/${spotId}/subscriber-count`),
-  broadcast: (spotId: number, mode: "normal" | "critical" = "normal") =>
-    fetcher<BroadcastResponse>(`/api/alert/broadcast/${spotId}?mode=${mode}`, { method: "POST" }),
 };

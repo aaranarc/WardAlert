@@ -3,8 +3,8 @@
 import React, { useState, useMemo } from "react";
 import { DrainHealthEntry } from "@/lib/types";
 import { FailureBadge } from "./FailureBadge";
-import { formatDate, formatNumber } from "@/lib/utils";
-import { SearchIcon, ArrowUpDownIcon } from "@/components/Icons";
+import { formatDate } from "@/lib/utils";
+import { IconSearch } from "@/components/Common/Icons";
 
 interface LeaderboardProps {
   drains: DrainHealthEntry[];
@@ -51,85 +51,66 @@ export function Leaderboard({
       setSortAsc(!sortAsc);
     } else {
       setSortField(field);
-      setSortAsc(field === "health_score" ? true : false);
+      setSortAsc(true);
     }
   };
 
-  const getHealthTextColor = (score: number) => {
-    if (score < 55) return "text-[#b91c1c]";
-    if (score < 75) return "text-[#b45309]";
-    return "text-[#166534]";
-  };
-
   return (
-    <div className="flex flex-col h-full bg-[#ffffff] border border-[#d4dae3] rounded-sm overflow-hidden">
-      {/* Header & Search */}
-      <div className="p-3 border-b border-[#d4dae3] bg-[#f8fafc] flex flex-wrap items-center justify-between gap-2">
-        <div>
-          <h2 className="text-xs font-bold uppercase tracking-wider text-[#1a1f2e] font-mono">
-            DRAIN SILTATION & HEALTH LEADERBOARD
-          </h2>
-          <p className="text-[11px] text-[#5b6478] mt-0.5">
-            Ranked by longitudinal residual accumulation (Worst condition first).
-          </p>
+    <div className="flex flex-col h-full bg-white rounded-xl border border-slate-200 overflow-hidden shadow-xs">
+      {/* Header and Search */}
+      <div className="p-3.5 border-b border-slate-100 bg-slate-50/70 space-y-2.5">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-xs font-bold text-slate-900">Drain Leaderboard</h2>
+            <p className="text-[11px] text-slate-500">Sorted by degradation risk</p>
+          </div>
+          <span className="text-[10px] font-mono text-slate-400">
+            {sortedDrains.length} of {drains.length}
+          </span>
         </div>
 
-        <div className="relative w-full sm:w-56">
-          <SearchIcon className="w-3.5 h-3.5 text-[#5b6478] absolute left-2.5 top-1/2 -translate-y-1/2" />
+        <div className="relative">
+          <IconSearch className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
-            placeholder="Filter drains..."
+            placeholder="Search drain spot..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-8 pr-2.5 py-1 text-xs bg-[#ffffff] border border-[#d4dae3] text-[#1a1f2e] placeholder-[#5b6478] focus:outline-none focus:border-[#1e40af]"
+            className="w-full pl-8 pr-3 py-1.5 text-xs bg-white border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#0066cc]"
           />
         </div>
       </div>
 
       {/* Table */}
-      <div className="flex-1 overflow-auto">
-        <table className="w-full text-left text-xs border-collapse font-mono">
-          <thead className="bg-[#f1f5f9] text-[#5b6478] text-[10px] uppercase tracking-wider sticky top-0 z-10 border-b border-[#d4dae3] select-none">
+      <div className="flex-1 overflow-y-auto min-h-[320px]">
+        <table className="w-full text-left text-xs border-collapse">
+          <thead className="bg-slate-50 border-b border-slate-100 text-[10px] text-slate-500 uppercase font-semibold tracking-wider sticky top-0 z-10">
             <tr>
-              <th className="py-2 px-2.5 w-10 text-center">#</th>
               <th
                 onClick={() => handleHeaderClick("name")}
-                className="py-2 px-2.5 cursor-pointer hover:text-[#1a1f2e] transition-colors"
+                className="py-2.5 px-3 cursor-pointer hover:text-slate-900"
               >
-                <div className="flex items-center gap-1 font-sans">
-                  <span>LOCATION</span>
-                  <ArrowUpDownIcon className="w-3 h-3" />
-                </div>
+                Location {sortField === "name" && (sortAsc ? "↑" : "↓")}
               </th>
               <th
                 onClick={() => handleHeaderClick("health_score")}
-                className="py-2 px-2.5 cursor-pointer hover:text-[#1a1f2e] transition-colors min-w-[100px]"
+                className="py-2.5 px-3 cursor-pointer hover:text-slate-900 text-right"
               >
-                <div className="flex items-center gap-1">
-                  <span>HEALTH</span>
-                  <ArrowUpDownIcon className="w-3 h-3" />
-                </div>
+                Health {sortField === "health_score" && (sortAsc ? "↑" : "↓")}
               </th>
               <th
                 onClick={() => handleHeaderClick("avg_delta")}
-                className="py-2 px-2.5 cursor-pointer hover:text-[#1a1f2e] transition-colors hidden sm:table-cell"
+                className="py-2.5 px-3 cursor-pointer hover:text-slate-900 text-right"
               >
-                <div className="flex items-center gap-1">
-                  <span>AVG Δ</span>
-                  <ArrowUpDownIcon className="w-3 h-3" />
-                </div>
+                Avg Δ {sortField === "avg_delta" && (sortAsc ? "↑" : "↓")}
               </th>
-              <th className="py-2 px-2.5 hidden md:table-cell">SLOPE</th>
-              <th className="py-2 px-2.5">PROJECTED FAILURE</th>
-              <th className="py-2 px-2.5 text-right">STATUS</th>
+              <th className="py-2.5 px-3 text-center">Status</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#e2e8f0]">
-            {sortedDrains.map((drain, idx) => {
+          <tbody className="divide-y divide-slate-100">
+            {sortedDrains.map((drain) => {
               const isSelected = selectedSpotId === drain.spot_id;
-              const slope = drain.trend_slope;
-              const isSlopePositive = slope !== null && slope > 0.0001;
-              const isSlopeNegative = slope !== null && slope < -0.0001;
+              const isLowHealth = drain.health_score < 60;
 
               return (
                 <tr
@@ -137,58 +118,32 @@ export function Leaderboard({
                   onClick={() => onSelectSpot(drain.spot_id)}
                   className={`cursor-pointer transition-colors ${
                     isSelected
-                      ? "bg-[#eff6ff] text-[#1e40af] font-semibold border-l-2 border-l-[#1e40af]"
-                      : "hover:bg-[#f8fafc] text-[#1a1f2e]"
+                      ? "bg-[#e8f2fc]"
+                      : "hover:bg-slate-50/80"
                   }`}
                 >
-                  <td className="py-2 px-2.5 text-center text-[#5b6478] text-[11px]">
-                    {idx + 1}
-                  </td>
-
-                  <td className="py-2 px-2.5 font-sans font-medium">
-                    {drain.name}
-                  </td>
-
-                  <td className="py-2 px-2.5">
-                    <div className="flex items-center gap-1.5">
-                      <span className={`font-bold ${getHealthTextColor(drain.health_score)}`}>
-                        {drain.health_score.toFixed(1)}
-                      </span>
-                      <span className="text-[10px] text-[#5b6478]">/ 100</span>
+                  <td className="py-2.5 px-3">
+                    <div className="font-semibold text-slate-900 truncate max-w-[130px]">
+                      {drain.name}
                     </div>
-                  </td>
-
-                  <td className="py-2 px-2.5 hidden sm:table-cell">
-                    +{formatNumber(drain.avg_delta, 3)}
-                  </td>
-
-                  <td className="py-2 px-2.5 hidden md:table-cell text-[11px]">
-                    <span
-                      className={
-                        isSlopePositive
-                          ? "text-[#b45309]"
-                          : isSlopeNegative
-                          ? "text-[#166534]"
-                          : "text-[#5b6478]"
-                      }
-                    >
-                      {slope !== null
-                        ? `${slope > 0 ? "+" : ""}${(slope * 100).toFixed(2)}%/wk`
-                        : "—"}
-                    </span>
-                  </td>
-
-                  <td className="py-2 px-2.5 text-[11px]">
-                    {drain.predicted_failure_date ? (
-                      <span className="text-[#b91c1c] font-semibold">
-                        {formatDate(drain.predicted_failure_date)}
-                      </span>
-                    ) : (
-                      <span className="text-[#5b6478]">—</span>
+                    {drain.predicted_failure_date && (
+                      <div className="text-[10px] text-rose-600 font-mono mt-0.5">
+                        Failure: {formatDate(drain.predicted_failure_date)}
+                      </div>
                     )}
                   </td>
 
-                  <td className="py-2 px-2.5 text-right">
+                  <td className="py-2.5 px-3 text-right font-mono font-medium">
+                    <span className={isLowHealth ? "text-rose-600 font-bold" : "text-slate-800"}>
+                      {drain.health_score.toFixed(1)}
+                    </span>
+                  </td>
+
+                  <td className="py-2.5 px-3 text-right font-mono text-slate-600">
+                    +{drain.avg_delta.toFixed(3)}
+                  </td>
+
+                  <td className="py-2.5 px-3 text-center">
                     <FailureBadge
                       status={drain.status}
                       predictedFailureDate={drain.predicted_failure_date}

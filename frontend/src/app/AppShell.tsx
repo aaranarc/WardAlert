@@ -10,12 +10,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#f7f8fa]">
+    <div className="flex flex-col min-h-screen bg-[#f8fafc] text-slate-900">
       <Header
         onToggleSidebar={() => setMobileOpen(!mobileOpen)}
         isSidebarOpen={mobileOpen}
       />
-      <div className="flex flex-1 relative overflow-hidden">
+      <div className="flex flex-1 relative">
         <Sidebar
           collapsed={collapsed}
           setCollapsed={setCollapsed}
@@ -24,8 +24,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         />
         <main
           className={cn(
-            "flex-1 flex flex-col transition-all duration-200 min-h-[calc(100vh-4rem)]",
-            collapsed ? "lg:pl-[60px]" : "lg:pl-[240px]"
+            "flex-1 flex flex-col transition-all duration-200 min-h-[calc(100vh-3.5rem)]",
+            collapsed ? "lg:pl-[68px]" : "lg:pl-[220px]"
           )}
         >
           {children}

@@ -5,7 +5,7 @@ import { useDrainHealth, useDrainHealthDetail } from "@/hooks/useDrainHealth";
 import { Leaderboard } from "@/components/DrainHealth/Leaderboard";
 import { TrendChart } from "@/components/DrainHealth/TrendChart";
 import { formatDate } from "@/lib/utils";
-import { RefreshIcon } from "@/components/Icons";
+import { IconRefresh } from "@/components/Common/Icons";
 
 export default function DrainHealthPage() {
   const { drains, isLoading: isListLoading, mutate } = useDrainHealth();
@@ -47,7 +47,7 @@ export default function DrainHealthPage() {
       drainsWithFailures.length > 0
         ? {
             name: drainsWithFailures[0].name,
-            date: drainsWithFailures[0].predicted_failure_date!,
+            date: drainsWithFailures[0].predicted_failure_date as string,
           }
         : null;
 
@@ -60,69 +60,77 @@ export default function DrainHealthPage() {
   }, [drains]);
 
   return (
-    <div className="p-3 lg:p-4 space-y-3 max-w-[1600px] mx-auto w-full min-h-[calc(100vh-4rem)] flex flex-col">
-      {/* Top Header & Refresh */}
-      <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-[#d4dae3]">
+    <div className="flex-1 bg-[#f8fafc] p-4 lg:p-6 space-y-5 max-w-[1600px] mx-auto w-full">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-base font-bold text-[#1a1f2e] tracking-tight font-sans">
-            DRAIN HEALTH & SILTATION INDEX
+          <h1 className="text-xl font-bold tracking-tight text-slate-900">
+            Drain Health Index
           </h1>
-          <p className="text-xs text-[#5b6478]">
-            Longitudinal degradation monitoring for proactive municipal desilting schedule across Ward G-South.
+          <p className="text-xs text-slate-500 mt-0.5">
+            Maintenance prioritization leaderboard and degradation trend models for Ward G/South.
           </p>
         </div>
 
         <button
           onClick={() => mutate()}
-          className="flex items-center gap-1.5 px-2.5 py-1 border border-[#d4dae3] bg-[#ffffff] hover:bg-[#f8fafc] text-[#1a1f2e] text-xs font-mono transition-colors"
+          className="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-medium transition-colors flex items-center gap-1.5 w-fit"
+          aria-label="Refresh drain health data"
         >
-          <RefreshIcon className="w-3.5 h-3.5 text-[#1e40af]" />
-          <span>REFRESH STANDINGS</span>
+          <IconRefresh className="w-3.5 h-3.5 text-[#0066cc]" />
+          <span>Refresh Data</span>
         </button>
       </div>
 
-      {/* 4 KPI Metric Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 text-xs font-mono">
-        <div className="p-4 bg-[#ffffff] border border-[#d4dae3] flex flex-col justify-between">
-          <span className="text-[10px] text-[#5b6478] uppercase">RISK</span>
-          <div className="text-xl font-bold text-[#b45309] mt-1">
+      {/* Summary KPI Cards */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-xs">
+          <div className="text-2xl font-bold font-mono text-slate-900">
+            {stats.avgHealth ? stats.avgHealth.toFixed(1) : "-"}
+          </div>
+          <div className="text-xs font-semibold text-slate-800 mt-1">Average Ward Health</div>
+          <div className="text-[10px] text-slate-400">Score out of 100 across 30 spots</div>
+        </div>
+
+        <div className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-xs">
+          <div className="text-2xl font-bold font-mono text-amber-600">
             {stats.atRiskCount}
           </div>
+          <div className="text-xs font-semibold text-slate-800 mt-1">Degrading Drains</div>
+          <div className="text-[10px] text-slate-400">Upward Δ trajectory tracked</div>
         </div>
 
-        <div className="p-4 bg-[#ffffff] border border-[#d4dae3] flex flex-col justify-between">
-          <span className="text-[10px] text-[#5b6478] uppercase">FAILURE</span>
-          <div className="text-sm font-bold text-[#b91c1c] truncate mt-1">
-            {stats.nextFailure?.name || "NONE"}
+        <div className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-xs">
+          <div className="text-2xl font-bold font-mono text-rose-600">
+            {stats.overdueCount}
           </div>
+          <div className="text-xs font-semibold text-slate-800 mt-1">Overdue for Desilting</div>
+          <div className="text-[10px] text-slate-400">Passed critical threshold level</div>
         </div>
 
-        <div className="p-4 bg-[#ffffff] border border-[#d4dae3] flex flex-col justify-between">
-          <span className="text-[10px] text-[#5b6478] uppercase">HEALTH</span>
-          <div className="text-xl font-bold text-[#1e40af] mt-1">
-            {stats.avgHealth.toFixed(1)}
+        <div className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-xs">
+          <div className="text-sm font-bold text-slate-900 truncate mt-1">
+            {stats.nextFailure ? stats.nextFailure.name : "None Projected"}
           </div>
-        </div>
-
-        <div className="p-4 bg-[#ffffff] border border-[#d4dae3] flex flex-col justify-between">
-          <span className="text-[10px] text-[#5b6478] uppercase">DRAINS</span>
-          <div className="text-xl font-bold text-[#166534] mt-1">
-            {drains.length}
+          <div className="text-xs font-semibold text-rose-600 mt-0.5">
+            {stats.nextFailure ? formatDate(stats.nextFailure.date) : "Drains within thresholds"}
           </div>
+          <div className="text-[10px] text-slate-400">Next projected failure date</div>
         </div>
       </div>
 
-      {/* Main Grid: Left Leaderboard / Right Trend Chart */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 flex-1 items-stretch">
-        <div className="lg:col-span-6 h-full min-h-[500px]">
+      {/* Main Split Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+        <div className="lg:col-span-5">
           <Leaderboard
             drains={drains}
             selectedSpotId={selectedSpotId}
             onSelectSpot={(id) => setSelectedSpotId(id)}
           />
         </div>
-        <div className="lg:col-span-6 h-full min-h-[500px]">
-          <TrendChart detail={detail} isLoading={isDetailLoading} />
+
+        <div className="lg:col-span-7">
+          <TrendChart detail={detail ?? null} isLoading={isDetailLoading} />
         </div>
       </div>
     </div>

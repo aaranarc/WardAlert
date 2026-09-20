@@ -9,63 +9,49 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        canvas: "#f7f8fa",
+        background: "#f8fafc",
         surface: "#ffffff",
-        border: {
-          DEFAULT: "#d4dae3",
-          light: "#e2e8f0",
-          dark: "#94a3b8",
+        border: "#e2e8f0",
+        primary: "#0f172a",
+        muted: "#64748b",
+        card: {
+          DEFAULT: "#ffffff",
+          subtle: "#f1f5f9",
+          border: "#e2e8f0",
         },
-        ink: {
-          DEFAULT: "#1a1f2e",
-          muted: "#5b6478",
-          subtle: "#838d9e",
+        accent: {
+          DEFAULT: "#0066cc",
+          hover: "#0055b3",
+          soft: "#e8f2fc",
         },
-        navy: {
-          DEFAULT: "#1e40af",
-          dark: "#172554",
-          light: "#dbeafe",
-        },
-        alarm: {
-          critical: "#b91c1c",
-          "critical-bg": "#fef2f2",
-          warning: "#b45309",
-          "warning-bg": "#fffbeb",
+        risk: {
+          low: "#16a34a",
           moderate: "#d97706",
-          safe: "#166534",
-          "safe-bg": "#f0fdf4",
+          high: "#ea580c",
+          critical: "#e11d48",
         },
       },
       fontFamily: {
-        poppins: ["Poppins", "sans-serif"],
         sans: [
-          "IBM Plex Sans",
-          "system-ui",
           "-apple-system",
           "BlinkMacSystemFont",
-          '"Segoe UI"',
+          "SF Pro Text",
+          "Segoe UI",
           "Roboto",
+          "Helvetica Neue",
           "Arial",
           "sans-serif",
         ],
         mono: [
-          "IBM Plex Mono",
-          "ui-monospace",
-          '"SF Mono"',
-          '"Roboto Mono"',
+          "SF Mono",
           "Menlo",
           "Consolas",
+          "Courier New",
           "monospace",
         ],
-      },
-      borderRadius: {
-        DEFAULT: "3px",
-        sm: "2px",
-        md: "4px",
       },
     },
   },
   plugins: [],
 };
-
 export default config;

@@ -5,66 +5,61 @@ import Link from "next/link";
 
 export default function PrivacyPage() {
   return (
-    <div className="p-4 lg:p-6 space-y-4 max-w-4xl mx-auto w-full font-sans text-xs">
-      <div className="p-4 bg-[#ffffff] border border-[#d4dae3] rounded-sm space-y-2">
-        <div className="flex items-center justify-between">
-          <div className="text-[10px] uppercase font-mono tracking-widest text-[#5b6478]">
-            DATA PRIVACY POLICY
-          </div>
-          <span className="px-1.5 py-0.5 bg-[#fffbeb] text-[#b45309] border border-[#fde68a] text-[10px] font-mono font-bold">
-            DRAFT · REVIEW REQUIRED
-          </span>
-        </div>
-        <h1 className="text-base font-bold text-[#1a1f2e] tracking-tight">
-          WardAlert Operations Privacy Policy
+    <div className="flex-1 bg-[#f8fafc] p-4 lg:p-8 max-w-[860px] mx-auto w-full space-y-6 text-slate-800">
+      <div>
+        <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+          Privacy Policy
         </h1>
-        <p className="text-[#5b6478] text-xs">
-          Last Updated: September 2026 · MUSA CodeX 2026 Research Prototype
+        <p className="text-xs text-slate-500 mt-1">
+          Last updated: September 2026 (Draft for administrative review)
         </p>
       </div>
 
-      <div className="p-5 bg-[#ffffff] border border-[#d4dae3] rounded-sm space-y-4 leading-relaxed text-[#1a1f2e]">
-        <section className="space-y-1.5">
-          <h2 className="text-xs font-bold uppercase font-mono tracking-wider text-[#1a1f2e]">
-            1. Data Minimization & Phone Number Hashing
-          </h2>
-          <p className="text-[#5b6478]">
-            WardAlert enforces strict cryptographic data minimization. When a citizen subscribes to alerts via WhatsApp location sharing, their raw phone number is immediately converted to a one-way SHA-256 cryptographic hash (<code className="font-mono text-[#1a1f2e] bg-[#f1f5f9] px-1 border border-[#d4dae3]">phone_hash</code>). <strong>Zero plain-text phone numbers are stored in the database.</strong>
+      <div className="bg-white rounded-xl border border-slate-200 p-6 space-y-6 text-xs leading-relaxed shadow-xs">
+        <section className="space-y-2">
+          <h2 className="text-sm font-bold text-slate-900">1. Overview and Commitment</h2>
+          <p>
+            WardAlert is designed to protect citizen privacy while monitoring public infrastructure. The platform does not track user browsing habits, install tracking cookies, or sell municipal data to commercial third parties.
           </p>
         </section>
 
-        <section className="space-y-1.5">
-          <h2 className="text-xs font-bold uppercase font-mono tracking-wider text-[#1a1f2e]">
-            2. Ephemeral Subscription Retention (7 to 30 Days)
-          </h2>
-          <p className="text-[#5b6478]">
-            Citizen location subscriptions expire automatically after 7 days from last interaction. Lapsed subscriber records are purged within a maximum 30-day retention window. Users can immediately delete their subscription record at any time by texting <code className="font-mono text-[#1a1f2e] bg-[#f1f5f9] px-1 border border-[#d4dae3]">STOP</code>.
+        <section className="space-y-2">
+          <h2 className="text-sm font-bold text-slate-900">2. Information Handled by the Platform</h2>
+          <p>
+            The system processes public geographic and meteorological data:
+          </p>
+          <ul className="list-disc list-inside space-y-1 text-slate-600 pl-2">
+            <li>Public geographic coordinates of 30 BMC flood monitoring locations.</li>
+            <li>Aggregated drainage geometries from OpenStreetMap.</li>
+            <li>Historical rainfall totals from CHIRPS and ERA5 reanalysis.</li>
+            <li>Simulated phone identifiers used strictly for broadcast testing.</li>
+          </ul>
+        </section>
+
+        <section className="space-y-2">
+          <h2 className="text-sm font-bold text-slate-900">3. Citizen Reports and Geolocation</h2>
+          <p>
+            When crowd reports are received through the API, incoming coordinates are snapped to the nearest monitored flood spot using PostGIS. Exact personal coordinates and personal device identifiers are not permanently stored.
           </p>
         </section>
 
-        <section className="space-y-1.5">
-          <h2 className="text-xs font-bold uppercase font-mono tracking-wider text-[#1a1f2e]">
-            3. No Data Commercialization
-          </h2>
-          <p className="text-[#5b6478]">
-            No citizen information, location pins, or telemetry logs are ever sold, rented, or shared with commercial entities, third-party advertisers, or external marketing platforms.
+        <section className="space-y-2">
+          <h2 className="text-sm font-bold text-slate-900">4. Data Retention and Storage</h2>
+          <p>
+            Model predictions and drain health indexes are stored in municipal database instances. No personal identity files are created or maintained by the predictive models.
           </p>
         </section>
 
-        <section className="space-y-1.5">
-          <h2 className="text-xs font-bold uppercase font-mono tracking-wider text-[#1a1f2e]">
-            4. Citizen Crowd Reports
-          </h2>
-          <p className="text-[#5b6478]">
-            When citizen waterlogging reports are submitted, only approximate coordinates, depth severity, and timestamp are recorded to feed spatial model validation. Raw reporter identities are never exposed in public dashboards.
+        <section className="space-y-2">
+          <h2 className="text-sm font-bold text-slate-900">5. Updates to This Policy</h2>
+          <p>
+            This policy will be revised when transitioning from pilot simulation to live production deployment with the Brihanmumbai Municipal Corporation.
           </p>
         </section>
       </div>
 
-      <div className="text-center pt-2">
-        <Link href="/" className="text-xs font-mono text-[#1e40af] hover:underline">
-          ← Return to Operational Map
-        </Link>
+      <div className="text-center text-xs text-slate-400">
+        <Link href="/" className="text-[#0066cc] hover:underline">Return to Dashboard</Link>
       </div>
     </div>
   );
