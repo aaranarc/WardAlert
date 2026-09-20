@@ -74,10 +74,11 @@ export default function DashboardPage() {
     setBannerMessage(
       isMonsoon
         ? "Simulating 2025 Monsoon cloudburst (75mm/h rain + 4.2m Arabian Sea high tide)..."
-        : "Re-evaluating live dual models and sensor telemetry across 30 spots..."
+        : "Re-evaluating live dual models and sensor telemetry across all spots..."
     );
 
-    const results = await predictAll(timestamp);
+    const ts = timestamp || new Date().toISOString();
+    const results = await predictAll(ts);
     if (results && results.length > 0) {
       // Optimistically update SWR cache with the results so the 4 KPI cards and map markers update instantly
       await mutate(
@@ -114,6 +115,8 @@ export default function DashboardPage() {
           : `Fresh dual-model predictions calculated with live telemetry for ${results.length} spots.`
       );
       setTimeout(() => setBannerMessage(null), 6000);
+    } else {
+      setBannerMessage("Failed to calculate predictions. Please verify backend connection.");
     }
   };
 
@@ -152,13 +155,13 @@ export default function DashboardPage() {
         <div className="flex items-center gap-2 flex-wrap">
           {isMonsoonMode ? (
             <button
-              onClick={() => handlePredictAll()}
+              onClick={() => handlePredictAll(new Date().toISOString())}
               disabled={isPredicting}
               className="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium transition-colors disabled:opacity-50 flex items-center gap-1.5 shadow-xs"
               title="Reset models back to live sensor conditions"
             >
               <IconRefresh className={`w-3.5 h-3.5 ${isPredicting ? "animate-spin" : ""}`} />
-              <span>Reset to Live Conditions</span>
+              <span>{isPredicting ? "Resetting..." : "Reset to Live Conditions"}</span>
             </button>
           ) : (
             <button
@@ -167,15 +170,16 @@ export default function DashboardPage() {
               className="px-3 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-medium transition-colors disabled:opacity-50 flex items-center gap-1.5 shadow-2xs"
               title="Simulate 2025 historical monsoon cloudburst event"
             >
-              <span>Replay 2025 Monsoon</span>
+              <IconRefresh className={`w-3.5 h-3.5 ${isPredicting ? "animate-spin" : ""}`} />
+              <span>{isPredicting ? "Simulating..." : "Replay 2025 Monsoon"}</span>
             </button>
           )}
 
           <button
-            onClick={() => handlePredictAll()}
+            onClick={() => handlePredictAll(new Date().toISOString())}
             disabled={isPredicting}
             className="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-medium transition-colors disabled:opacity-50 flex items-center gap-1.5 shadow-2xs"
-            title="Recalculate dual models for all 30 spots with fresh telemetry"
+            title="Recalculate dual models for all spots with fresh telemetry"
           >
             <IconRefresh className={`w-3.5 h-3.5 ${isPredicting ? "animate-spin text-[#0066cc]" : ""}`} />
             <span>{isPredicting ? "Calculating..." : "Recalculate All"}</span>
