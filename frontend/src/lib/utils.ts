@@ -6,17 +6,17 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatPercent(val: number | null | undefined, digits: number = 1): string {
-  if (val === null || val === undefined || isNaN(val)) return "—";
+  if (val === null || val === undefined || isNaN(val)) return "-";
   return `${(val * 100).toFixed(digits)}%`;
 }
 
 export function formatNumber(val: number | null | undefined, digits: number = 2): string {
-  if (val === null || val === undefined || isNaN(val)) return "—";
+  if (val === null || val === undefined || isNaN(val)) return "-";
   return val.toFixed(digits);
 }
 
 export function formatDate(dateStr: string | null | undefined): string {
-  if (!dateStr) return "—";
+  if (!dateStr) return "-";
   try {
     const d = new Date(dateStr);
     if (isNaN(d.getTime())) return dateStr;
@@ -31,7 +31,7 @@ export function formatDate(dateStr: string | null | undefined): string {
 }
 
 export function formatDateTime(dateStr: string | null | undefined): string {
-  if (!dateStr) return "—";
+  if (!dateStr) return "-";
   try {
     const d = new Date(dateStr);
     if (isNaN(d.getTime())) return dateStr;

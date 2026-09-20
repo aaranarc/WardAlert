@@ -2,41 +2,41 @@
 
 import React from "react";
 import {
-  ResponsiveContainer,
   ComposedChart,
   Line,
   Area,
   XAxis,
   YAxis,
-  Tooltip,
-  ReferenceLine,
   CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  ReferenceLine,
 } from "recharts";
 import { DrainHealthDetail } from "@/lib/types";
-import { formatDate } from "@/lib/utils";
 import { FailureBadge } from "./FailureBadge";
+import { formatDate } from "@/lib/utils";
 
 interface TrendChartProps {
-  detail: DrainHealthDetail | null | undefined;
+  detail: DrainHealthDetail | null;
   isLoading: boolean;
 }
 
 export function TrendChart({ detail, isLoading }: TrendChartProps) {
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center h-full min-h-[400px] bg-[#ffffff] border border-[#d4dae3] p-6 text-[#5b6478] font-mono text-xs gap-2">
-        <div className="w-5 h-5 border-2 border-[#1e40af] border-t-transparent animate-spin" />
-        <span>LOADING LONGITUDINAL DRAIN TELEMETRY...</span>
+      <div className="flex flex-col items-center justify-center h-full min-h-[420px] bg-white border border-slate-200 rounded-xl p-6 text-slate-400 font-sans text-xs gap-2.5 shadow-xs">
+        <div className="w-6 h-6 border-2 border-[#0066cc] border-t-transparent rounded-full animate-spin" />
+        <span>Loading Longitudinal Drain Health Series...</span>
       </div>
     );
   }
 
   if (!detail) {
     return (
-      <div className="flex flex-col items-center justify-center h-full min-h-[400px] bg-[#ffffff] border border-[#d4dae3] p-6 text-[#5b6478] font-mono text-xs text-center">
-        <p className="font-bold text-[#1a1f2e] uppercase">SELECT A DRAIN SPOT FROM THE LEADERBOARD</p>
-        <p className="text-[11px] text-[#5b6478] mt-1 max-w-sm">
-          Inspect weekly residual Δ progression, linear degradation fit, and projected failure boundary.
+      <div className="flex flex-col items-center justify-center h-full min-h-[420px] bg-white border border-slate-200 rounded-xl p-6 text-slate-400 font-sans text-xs text-center shadow-xs">
+        <p className="font-semibold text-slate-700 text-sm">Select a drain spot from the leaderboard</p>
+        <p className="text-xs text-slate-400 mt-1 max-w-sm">
+          Inspect weekly Δ residual trend progression, linear degradation fit, and failure horizon.
         </p>
       </div>
     );
@@ -55,113 +55,126 @@ export function TrendChart({ detail, isLoading }: TrendChartProps) {
       name: label,
       week: pt.week_number,
       year: pt.year,
-      avgDelta: Number(pt.avg_delta.toFixed(4)),
-      maxDelta: Number(pt.max_delta.toFixed(4)),
+      avgDelta: Number((pt.avg_delta ?? 0).toFixed(4)),
+      maxDelta: Number((pt.max_delta ?? 0).toFixed(4)),
       trend: trendVal,
       healthScore: pt.health_score,
       predictions: pt.prediction_count,
     };
   });
 
-  const criticalDelta = detail.critical_delta;
+  const criticalDelta = detail.critical_delta ?? 0.5135;
   const failureDateFormatted = detail.predicted_failure_date
     ? formatDate(detail.predicted_failure_date)
     : null;
 
   return (
-    <div className="flex flex-col h-full bg-[#ffffff] border border-[#d4dae3] rounded-sm overflow-hidden">
+    <div className="flex flex-col h-full bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xs">
       {/* Detail Header */}
-      <div className="p-3 border-b border-[#d4dae3] bg-[#f8fafc] flex flex-wrap items-center justify-between gap-2">
+      <div className="p-4 border-b border-slate-100 bg-slate-50/70 flex flex-wrap items-center justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
-            <h3 className="text-sm font-bold text-[#1a1f2e] font-sans">{detail.name}</h3>
+            <h3 className="text-sm font-bold text-slate-900">{detail.name}</h3>
             <FailureBadge
               status={detail.status}
               predictedFailureDate={detail.predicted_failure_date}
             />
           </div>
-          <div className="text-[11px] text-[#5b6478] font-mono mt-0.5">
-            Spot #{detail.spot_id} · {detail.weeks_tracked} Weeks Tracked · Critical Δ Limit: {detail.critical_delta.toFixed(3)}
+          <div className="text-[11px] text-slate-500 font-mono mt-0.5 flex items-center gap-2">
+            <span>Spot #{detail.spot_id}</span>
+            <span>•</span>
+            <span>{detail.weeks_tracked} Weeks Tracked</span>
+            <span>•</span>
+            <span>Critical Δ Threshold: {criticalDelta.toFixed(3)}</span>
           </div>
         </div>
 
-        <div className="bg-[#ffffff] px-2.5 py-1 border border-[#d4dae3] text-right">
-          <div className="text-[9px] text-[#5b6478] font-mono uppercase">DRAIN HEALTH</div>
-          <div className="text-sm font-bold font-mono text-[#1e40af]">
-            {detail.health_score.toFixed(1)} <span className="text-[10px] text-[#5b6478] font-normal">/ 100</span>
+        {/* Health Score Pill */}
+        <div className="flex items-center gap-3 bg-white px-3 py-1.5 rounded-lg border border-slate-200">
+          <div className="text-right">
+            <div className="text-[9px] text-slate-400 uppercase font-semibold">Drain Health</div>
+            <div className="text-sm font-bold font-mono text-[#0066cc]">
+              {(detail.health_score ?? 0).toFixed(1)} <span className="text-[10px] text-slate-400">/ 100</span>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Metric Cards Banner */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 p-3 border-b border-[#e2e8f0] bg-[#f8fafc] text-xs font-mono">
-        <div className="p-2 bg-[#ffffff] border border-[#d4dae3]">
-          <div className="text-[10px] text-[#5b6478] uppercase">CURRENT AVG Δ</div>
-          <div className="text-sm font-bold text-[#1a1f2e]">
-            +{detail.avg_delta.toFixed(4)}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 p-3.5 border-b border-slate-100 bg-white">
+        <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100 space-y-0.5">
+          <div className="text-[10px] text-slate-500 font-medium">Current Avg Δ</div>
+          <div className="text-xs font-bold font-mono text-slate-900">
+            +{(detail.avg_delta ?? 0).toFixed(4)}
           </div>
         </div>
 
-        <div className="p-2 bg-[#ffffff] border border-[#d4dae3]">
-          <div className="text-[10px] text-[#5b6478] uppercase">WEEKLY SLOPE</div>
+        <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100 space-y-0.5">
+          <div className="text-[10px] text-slate-500 font-medium">Weekly Slope</div>
           <div
-            className={`text-sm font-bold ${
-              detail.trend_slope && detail.trend_slope > 0 ? "text-[#b45309]" : "text-[#166534]"
+            className={`text-xs font-bold font-mono ${
+              detail.trend_slope && detail.trend_slope > 0 ? "text-amber-600" : "text-emerald-600"
             }`}
           >
             {detail.trend_slope !== null
               ? `${detail.trend_slope > 0 ? "+" : ""}${(detail.trend_slope * 100).toFixed(3)}%/wk`
-              : "—"}
+              : "Stable"}
           </div>
         </div>
 
-        <div className="p-2 bg-[#ffffff] border border-[#d4dae3]">
-          <div className="text-[10px] text-[#5b6478] uppercase">CRITICAL LIMIT</div>
-          <div className="text-sm font-bold text-[#b91c1c]">
-            {detail.critical_delta.toFixed(4)}
+        <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100 space-y-0.5">
+          <div className="text-[10px] text-slate-500 font-medium">Critical Δ Limit</div>
+          <div className="text-xs font-bold font-mono text-rose-600">
+            {criticalDelta.toFixed(4)}
           </div>
         </div>
 
-        <div className="p-2 bg-[#ffffff] border border-[#d4dae3]">
-          <div className="text-[10px] text-[#5b6478] uppercase">PROJECTED FAILURE</div>
-          <div className="text-sm font-bold text-[#b91c1c] truncate" title={failureDateFormatted || "None Projected"}>
-            {failureDateFormatted || "NONE"}
+        <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100 space-y-0.5">
+          <div className="text-[10px] text-slate-500 font-medium">Predicted Failure</div>
+          <div className="text-xs font-bold font-mono text-slate-800 truncate">
+            {failureDateFormatted || "Safe"}
           </div>
         </div>
       </div>
 
       {/* Chart Canvas */}
-      <div className="flex-1 p-3 min-h-[300px] flex flex-col justify-between">
-        <div className="flex items-center justify-between text-[11px] font-mono text-[#5b6478] mb-1">
-          <span className="font-semibold text-[#1a1f2e] uppercase">
-            WEEKLY RESIDUAL Δ TIME SERIES
+      <div className="flex-1 p-4 min-h-[320px] flex flex-col justify-between">
+        <div className="flex items-center justify-between text-xs font-sans text-slate-500 mb-2">
+          <span className="font-semibold text-slate-800">
+            Longitudinal Weekly Residual Δ Series
           </span>
-          <div className="flex items-center gap-3 text-[10px]">
-            <span className="flex items-center gap-1 text-[#1e40af]">
-              <span className="w-2.5 h-0.5 bg-[#1e40af]" />
+          <div className="flex items-center gap-3 text-[11px]">
+            <span className="flex items-center gap-1 text-[#0066cc]">
+              <span className="w-2.5 h-0.5 bg-[#0066cc]" />
               Weekly Avg Δ
             </span>
-            <span className="flex items-center gap-1 text-[#b45309]">
-              <span className="w-2.5 h-0.5 border-t border-dashed border-[#b45309]" />
-              Linear Trend
+            <span className="flex items-center gap-1 text-amber-600">
+              <span className="w-2.5 h-0.5 border-t border-dashed border-amber-600" />
+              Trend Fit
             </span>
-            <span className="flex items-center gap-1 text-[#b91c1c]">
-              <span className="w-2.5 h-0.5 bg-[#b91c1c]" />
-              Critical Boundary
+            <span className="flex items-center gap-1 text-rose-600">
+              <span className="w-2.5 h-0.5 bg-rose-600" />
+              Critical Threshold
             </span>
           </div>
         </div>
 
-        <div className="flex-1 w-full min-h-[240px]">
+        <div className="flex-1 w-full min-h-[260px]">
           <ResponsiveContainer width="100%" height="100%">
             <ComposedChart
               data={chartData}
-              margin={{ top: 10, right: 20, left: -15, bottom: 20 }}
+              margin={{ top: 10, right: 20, left: -10, bottom: 20 }}
             >
-              <CartesianGrid strokeDasharray="2 2" stroke="#e2e8f0" />
+              <defs>
+                <linearGradient id="deltaGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#0066cc" stopOpacity={0.15} />
+                  <stop offset="95%" stopColor="#0066cc" stopOpacity={0.0} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
               <XAxis
                 dataKey="name"
-                stroke="#5b6478"
+                stroke="#64748b"
                 fontSize={10}
                 tickLine={false}
                 angle={-30}
@@ -169,7 +182,7 @@ export function TrendChart({ detail, isLoading }: TrendChartProps) {
                 height={40}
               />
               <YAxis
-                stroke="#5b6478"
+                stroke="#64748b"
                 fontSize={10}
                 tickLine={false}
                 domain={[0, "auto"]}
@@ -180,24 +193,24 @@ export function TrendChart({ detail, isLoading }: TrendChartProps) {
                   if (active && payload && payload.length) {
                     const data = payload[0].payload;
                     return (
-                      <div className="bg-[#ffffff] border border-[#d4dae3] p-2.5 shadow-md text-xs font-mono">
-                        <div className="font-bold text-[#1a1f2e] mb-1 pb-1 border-b border-[#e2e8f0]">
+                      <div className="bg-white border border-slate-200 p-3 rounded-xl shadow-md text-xs font-mono">
+                        <div className="font-bold text-slate-900 mb-1.5 pb-1 border-b border-slate-100">
                           {data.name} (W{data.week}, {data.year})
                         </div>
-                        <div className="space-y-0.5 text-[#1a1f2e]">
+                        <div className="space-y-1 text-slate-600">
                           <p>
-                            Avg Δ: <span className="text-[#1e40af] font-bold">+{data.avgDelta}</span>
+                            Avg Δ: <span className="text-[#0066cc] font-bold">+{data.avgDelta}</span>
                           </p>
                           <p>
-                            Max Δ: <span className="text-[#5b6478]">+{data.maxDelta}</span>
+                            Max Δ: <span className="text-slate-800">+{data.maxDelta}</span>
                           </p>
                           {data.trend !== null && (
                             <p>
-                              Linear Fit: <span className="text-[#b45309] font-bold">+{data.trend}</span>
+                              Linear Fit: <span className="text-amber-600 font-bold">+{data.trend}</span>
                             </p>
                           )}
                           <p>
-                            Health Score: <span className="text-[#166534] font-bold">{data.healthScore?.toFixed(1) || "—"}</span>
+                            Health Score: <span className="text-emerald-600 font-bold">{data.healthScore?.toFixed(1) || "N/A"}</span>
                           </p>
                         </div>
                       </div>
@@ -208,12 +221,12 @@ export function TrendChart({ detail, isLoading }: TrendChartProps) {
               />
               <ReferenceLine
                 y={criticalDelta}
-                stroke="#b91c1c"
-                strokeDasharray="3 3"
+                stroke="#e11d48"
+                strokeDasharray="4 4"
                 strokeWidth={1.5}
                 label={{
-                  value: `Critical (${criticalDelta.toFixed(3)})`,
-                  fill: "#b91c1c",
+                  value: `Critical Δ (${criticalDelta.toFixed(3)})`,
+                  fill: "#e11d48",
                   fontSize: 10,
                   position: "insideTopRight",
                 }}
@@ -221,26 +234,23 @@ export function TrendChart({ detail, isLoading }: TrendChartProps) {
               <Area
                 type="monotone"
                 dataKey="avgDelta"
-                fill="#dbeafe"
-                stroke="#1e40af"
-                strokeWidth={1.5}
-                name="Avg Δ"
+                stroke="#0066cc"
+                strokeWidth={2}
+                fillOpacity={1}
+                fill="url(#deltaGradient)"
+                name="Weekly Avg Δ"
               />
               <Line
                 type="monotone"
                 dataKey="trend"
-                stroke="#b45309"
-                strokeWidth={1.5}
+                stroke="#d97706"
                 strokeDasharray="4 4"
+                strokeWidth={1.5}
                 dot={false}
-                name="Linear Fit"
+                name="Trend Fit"
               />
             </ComposedChart>
           </ResponsiveContainer>
-        </div>
-
-        <div className="p-2 bg-[#f8fafc] border border-[#d4dae3] text-[10px] text-[#5b6478] font-mono mt-1">
-          METHODOLOGY NOTE: Residual Δ measures flood probability unexplained by rainfall. Consistent week-over-week upward slope indicates silt buildup. Linear extrapolation forecasts the date Δ crosses critical_delta, enabling proactive desilting before road waterlogging occurs.
         </div>
       </div>
     </div>

@@ -3,9 +3,9 @@ import "@/styles/globals.css";
 import { AppShell } from "./AppShell";
 
 export const metadata: Metadata = {
-  title: "WardAlert G-South · Municipal Flood & Drainage Operations",
+  title: "WardAlert: Hyperlocal Flood and Drainage Intelligence for Mumbai Ward G/South",
   description:
-    "Real-time residual flood risk and cause diagnosis system for Mumbai Ward G-South. Operational dashboard for BMC disaster management.",
+    "Real-time residual flood risk dashboard separating rainfall from drainage failure with XGBoost, SHAP explanations, and drain health tracking for Mumbai Ward G/South.",
 };
 
 export default function RootLayout({
@@ -15,7 +15,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-[#f7f8fa] text-[#1a1f2e] min-h-screen antialiased flex flex-col">
+      <body className="bg-[#f8fafc] text-slate-900 min-h-screen antialiased flex flex-col selection:bg-[#0066cc]/15 selection:text-[#0066cc]">
         <AppShell>{children}</AppShell>
       </body>
     </html>

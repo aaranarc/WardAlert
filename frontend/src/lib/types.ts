@@ -141,6 +141,8 @@ export interface AlertLogEntry {
   error: string | null;
   body: string;
   sent_at: string;
+  dispatched_at?: string;
+  recipient_count?: number | string;
 }
 
 export interface HealthResponse {
@@ -149,15 +151,4 @@ export interface HealthResponse {
   models_loaded: boolean;
   version: string;
   detail: string | null;
-}
-
-export interface BroadcastResponse {
-  broadcast_count: number;
-  mode?: "normal" | "critical" | string;
-  channels?: string[];
-  message?: string;
-}
-
-export interface SubscriberCount {
-  count: number;
 }
