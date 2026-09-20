@@ -153,6 +153,9 @@ export interface HealthResponse {
 
 export interface BroadcastResponse {
   broadcast_count: number;
+  mode?: "normal" | "critical" | string;
+  channels?: string[];
+  message?: string;
 }
 
 export interface SubscriberCount {

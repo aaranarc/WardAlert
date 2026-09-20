@@ -191,6 +191,7 @@ class Config:
     TWILIO_AUTH_TOKEN = _str("TWILIO_AUTH_TOKEN", "")
     TWILIO_WHATSAPP_FROM = _str("TWILIO_WHATSAPP_FROM", "whatsapp:+14155238886")
     ALERT_DEFAULT_RECIPIENT = _str("ALERT_DEFAULT_RECIPIENT", "whatsapp:+910000000000")
+    CRITICAL_RADIUS_KM = _float("CRITICAL_RADIUS_KM", 2.0)
 
     @classmethod
     def twilio_enabled(cls) -> bool:

@@ -129,7 +129,7 @@ export default function AboutPage() {
           WardAlert: Hyperlocal Residual Flood Predictor
         </h1>
         <p className="text-xs text-[#5b6478] leading-relaxed">
-          Municipal flood dispatch and cause-attribution system for Mumbai Ward G-South. Built for BMC disaster management cells and MUSA CodeX 2026.
+          Municipal flood dispatch and cause-attribution system for Mumbai Ward G-South. Deployed for BMC disaster management cells.
         </p>
       </div>
 

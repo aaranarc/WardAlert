@@ -83,40 +83,32 @@ export default function DrainHealthPage() {
 
       {/* 4 KPI Metric Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 text-xs font-mono">
-        <div className="p-2.5 bg-[#ffffff] border border-[#d4dae3] flex flex-col justify-between">
-          <span className="text-[10px] text-[#5b6478] uppercase">DRAINS AT RISK</span>
+        <div className="p-4 bg-[#ffffff] border border-[#d4dae3] flex flex-col justify-between">
+          <span className="text-[10px] text-[#5b6478] uppercase">RISK</span>
           <div className="text-xl font-bold text-[#b45309] mt-1">
-            {stats.atRiskCount} <span className="text-xs text-[#5b6478] font-normal">/ {drains.length}</span>
+            {stats.atRiskCount}
           </div>
-          <span className="text-[10px] text-[#5b6478] mt-0.5">
-            {stats.overdueCount > 0 ? `${stats.overdueCount} overdue for desilting` : "Degrading Δ capacity"}
-          </span>
         </div>
 
-        <div className="p-2.5 bg-[#ffffff] border border-[#d4dae3] flex flex-col justify-between">
-          <span className="text-[10px] text-[#5b6478] uppercase">NEXT PROJECTED FAILURE</span>
+        <div className="p-4 bg-[#ffffff] border border-[#d4dae3] flex flex-col justify-between">
+          <span className="text-[10px] text-[#5b6478] uppercase">FAILURE</span>
           <div className="text-sm font-bold text-[#b91c1c] truncate mt-1">
-            {stats.nextFailure?.name || "NONE PROJECTED"}
+            {stats.nextFailure?.name || "NONE"}
           </div>
-          <span className="text-[10px] text-[#5b6478] mt-0.5">
-            {stats.nextFailure?.date ? formatDate(stats.nextFailure.date) : "Safe horizon"}
-          </span>
         </div>
 
-        <div className="p-2.5 bg-[#ffffff] border border-[#d4dae3] flex flex-col justify-between">
-          <span className="text-[10px] text-[#5b6478] uppercase">WARD AVG HEALTH INDEX</span>
+        <div className="p-4 bg-[#ffffff] border border-[#d4dae3] flex flex-col justify-between">
+          <span className="text-[10px] text-[#5b6478] uppercase">HEALTH</span>
           <div className="text-xl font-bold text-[#1e40af] mt-1">
-            {stats.avgHealth.toFixed(1)} <span className="text-xs text-[#5b6478] font-normal">/ 100</span>
+            {stats.avgHealth.toFixed(1)}
           </div>
-          <span className="text-[10px] text-[#5b6478] mt-0.5">Learned zero-Δ benchmark</span>
         </div>
 
-        <div className="p-2.5 bg-[#ffffff] border border-[#d4dae3] flex flex-col justify-between">
-          <span className="text-[10px] text-[#5b6478] uppercase">MONITORED OUTFALLS</span>
+        <div className="p-4 bg-[#ffffff] border border-[#d4dae3] flex flex-col justify-between">
+          <span className="text-[10px] text-[#5b6478] uppercase">DRAINS</span>
           <div className="text-xl font-bold text-[#166534] mt-1">
-            {drains.length} <span className="text-xs text-[#5b6478] font-normal">SPOTS</span>
+            {drains.length}
           </div>
-          <span className="text-[10px] text-[#5b6478] mt-0.5">53 weeks history</span>
         </div>
       </div>
 
