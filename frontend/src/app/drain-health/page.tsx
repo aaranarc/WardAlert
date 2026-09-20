@@ -60,7 +60,7 @@ export default function DrainHealthPage() {
   }, [drains]);
 
   return (
-    <div className="p-3 lg:p-4 space-y-3 max-w-[1600px] mx-auto w-full min-h-[calc(100vh-3.25rem)] flex flex-col">
+    <div className="p-3 lg:p-4 space-y-3 max-w-[1600px] mx-auto w-full min-h-[calc(100vh-4rem)] flex flex-col">
       {/* Top Header & Refresh */}
       <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-[#d4dae3]">
         <div>

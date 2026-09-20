@@ -17,31 +17,51 @@ interface ShapChartProps {
   factors: ShapFactor[] | null | undefined;
 }
 
+const FEATURE_DISPLAY_NAMES: Record<string, string> = {
+  rain_1h: "rain_1h (1h rain)",
+  rain_3h: "rain_3h (3h rain)",
+  rain_24h: "rain_24h (24h rain)",
+  antecedent_moisture: "antecedent_moisture",
+  elevation_m: "elevation_m",
+  depression_depth_m: "depression_depth_m",
+  drain_distance_m: "drain_distance_m",
+  monsoon_week: "monsoon_week",
+  hour_of_day: "hour_of_day",
+  crowd_reports_500m_2h: "crowd_reports_500m_2h",
+};
+
 export function ShapChart({ factors }: ShapChartProps) {
   if (!factors || factors.length === 0) {
     return (
-      <div className="p-3 bg-[#f8fafc] border border-[#d4dae3] text-xs text-[#5b6478] font-mono text-center">
-        No SHAP feature attribution data available for this prediction.
+      <div className="p-4 bg-[#f8fafc] border border-[#d4dae3] text-xs text-[#5b6478] font-mono text-center flex flex-col items-center justify-center min-h-[160px]">
+        <span className="text-xl font-bold text-[#1a1f2e]">—</span>
+        <span className="text-[11px] text-[#5b6478] mt-1">No SHAP attribution data</span>
       </div>
     );
   }
 
-  const data = factors.map((f) => ({
-    name: f.label || f.feature,
-    feature: f.feature,
-    shapValue: Number(f.shap_value.toFixed(3)),
-    value: f.value,
-    direction: f.direction,
-    isIncreases:
+  const data = factors.map((f) => {
+    const rawContribution = (f as any).contribution ?? f.shap_value ?? 0;
+    const shapVal = Number(Number(rawContribution).toFixed(3));
+    const isIncreases =
       f.direction === "increases_risk" ||
-      (f.direction !== "decreases_risk" && f.shap_value > 0),
-  }));
+      (f.direction !== "decreases_risk" && shapVal > 0);
+
+    return {
+      featureName: f.feature,
+      displayName: FEATURE_DISPLAY_NAMES[f.feature] || f.label || f.feature,
+      shapValue: shapVal,
+      value: f.value,
+      direction: f.direction || (shapVal > 0 ? "increases_risk" : "decreases_risk"),
+      isIncreases,
+    };
+  });
 
   return (
     <div className="p-3 bg-[#ffffff] border border-[#d4dae3] space-y-2 rounded-sm">
       <div className="flex items-center justify-between">
         <span className="text-[11px] font-semibold uppercase tracking-wider text-[#5b6478]">
-          TREESHAP FEATURE ATTRIBUTION (TOP 3 DRIVERS)
+          TREESHAP FEATURE ATTRIBUTION (TOP 3)
         </span>
         <div className="flex items-center gap-3 text-[10px] font-mono">
           <span className="flex items-center gap-1 text-[#166534]">
@@ -71,7 +91,7 @@ export function ShapChart({ factors }: ShapChartProps) {
             />
             <YAxis
               type="category"
-              dataKey="name"
+              dataKey="displayName"
               stroke="#1a1f2e"
               fontSize={11}
               tickLine={false}
@@ -85,12 +105,12 @@ export function ShapChart({ factors }: ShapChartProps) {
                   const item = payload[0].payload;
                   return (
                     <div className="bg-[#ffffff] border border-[#d4dae3] p-2.5 shadow-md text-xs font-mono">
-                      <p className="font-bold text-[#1a1f2e] mb-1">{item.name}</p>
+                      <p className="font-bold text-[#1a1f2e] mb-1">{item.featureName}</p>
                       <p className="text-[#5b6478]">
-                        Feature Value: <span className="text-[#1a1f2e] font-bold">{item.value}</span>
+                        Value: <span className="text-[#1a1f2e] font-bold">{item.value ?? "—"}</span>
                       </p>
                       <p className="text-[#5b6478]">
-                        SHAP Contribution:{" "}
+                        Contribution:{" "}
                         <span
                           className={
                             item.isIncreases ? "text-[#b91c1c] font-bold" : "text-[#166534] font-bold"

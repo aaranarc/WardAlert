@@ -37,6 +37,7 @@ const config: Config = {
         },
       },
       fontFamily: {
+        poppins: ["Poppins", "sans-serif"],
         sans: [
           "IBM Plex Sans",
           "system-ui",

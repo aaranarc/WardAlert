@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { SpotRisk, PredictionResponse } from "@/lib/types";
 import { RISK_COLORS, RISK_BG_COLORS, RISK_BORDER_COLORS } from "@/lib/constants";
@@ -21,6 +21,34 @@ export function RiskPanel({ spot, onClose, onSpotUpdated }: RiskPanelProps) {
   const { predict, isPredicting } = usePredict();
   const [livePrediction, setLivePrediction] = useState<PredictionResponse | null>(null);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
+
+  // Automatically request live prediction & SHAP when spot is selected
+  useEffect(() => {
+    if (spot?.spot_id) {
+      setLivePrediction(null);
+      setStatusMessage(null);
+      predict(spot.spot_id).then((result) => {
+        if (result) {
+          setLivePrediction(result);
+          if (onSpotUpdated) {
+            onSpotUpdated({
+              ...spot,
+              p_actual: result.p_actual,
+              p_rain: result.p_rain,
+              delta: result.delta,
+              risk_level: result.risk_level,
+              cause_label: result.cause_label,
+              dispatch_type: result.dispatch_type,
+              confidence_lower: result.confidence_lower,
+              confidence_upper: result.confidence_upper,
+              shap_top3: result.shap_top3,
+              predicted_for: result.predicted_for,
+            });
+          }
+        }
+      });
+    }
+  }, [spot?.spot_id]);
 
   if (!spot) return null;
 
@@ -66,7 +94,7 @@ export function RiskPanel({ spot, onClose, onSpotUpdated }: RiskPanelProps) {
   };
 
   return (
-    <div className="fixed top-13 right-0 bottom-0 w-full sm:w-[480px] md:w-[720px] lg:w-[760px] bg-[#ffffff] border-l border-[#d4dae3] shadow-lg z-30 flex flex-col justify-between overflow-hidden">
+    <div className="fixed top-16 right-0 bottom-0 w-full sm:w-[480px] md:w-[720px] lg:w-[760px] bg-[#ffffff] border-l border-[#d4dae3] shadow-lg z-30 flex flex-col justify-between overflow-hidden">
       {/* Header */}
       <div className="p-3.5 border-b border-[#d4dae3] flex items-center justify-between bg-[#f8fafc]">
         <div className="overflow-hidden pr-2">
@@ -210,7 +238,7 @@ export function RiskPanel({ spot, onClose, onSpotUpdated }: RiskPanelProps) {
         {/* Model Simulation Buttons */}
         <div className="p-3 bg-[#f8fafc] border border-[#d4dae3] space-y-2">
           <div className="text-[10px] uppercase font-mono tracking-wider font-semibold text-[#5b6478]">
-            MODEL INFERENCE & HISTORICAL REPLAY
+            MODEL INFERENCE &amp; HISTORICAL REPLAY
           </div>
 
           <div className="flex flex-col gap-1.5">
