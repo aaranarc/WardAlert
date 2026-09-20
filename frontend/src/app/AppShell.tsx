@@ -10,7 +10,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#0a0a0f]">
+    <div className="flex flex-col min-h-screen bg-[#f7f8fa]">
       <Header
         onToggleSidebar={() => setMobileOpen(!mobileOpen)}
         isSidebarOpen={mobileOpen}
@@ -24,8 +24,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         />
         <main
           className={cn(
-            "flex-1 flex flex-col transition-all duration-300 min-h-[calc(100vh-3.5rem)]",
-            collapsed ? "lg:pl-[72px]" : "lg:pl-[240px]"
+            "flex-1 flex flex-col transition-all duration-200 min-h-[calc(100vh-3.25rem)]",
+            collapsed ? "lg:pl-[60px]" : "lg:pl-[240px]"
           )}
         >
           {children}

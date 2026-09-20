@@ -7,31 +7,20 @@ import { usePredict } from "@/hooks/usePredict";
 import { SpotRisk, RiskLevel } from "@/lib/types";
 import { RiskPanel } from "@/components/Dashboard/RiskPanel";
 import { RISK_COLORS } from "@/lib/constants";
-import {
-  Search,
-  Filter,
-  RefreshCw,
-  AlertTriangle,
-  Flame,
-  Calendar,
-  Layers,
-  MapPin,
-  Sparkles,
-} from "lucide-react";
+import { SearchIcon, RefreshIcon } from "@/components/Icons";
 
-// Dynamically import Leaflet FloodMap with SSR disabled
 const FloodMap = dynamic(() => import("@/components/Map/FloodMap"), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-full flex flex-col items-center justify-center bg-[#0a0a0f] text-slate-400 font-mono gap-3">
-      <div className="w-10 h-10 border-2 border-[#7B68EE] border-t-transparent rounded-full animate-spin" />
-      <span className="text-sm">Initializing Ward G-South Spatial Grid...</span>
+    <div className="w-full h-full flex flex-col items-center justify-center bg-[#f7f8fa] text-[#5b6478] font-mono text-xs gap-2">
+      <div className="w-6 h-6 border-2 border-[#1e40af] border-t-transparent animate-spin" />
+      <span>INITIALIZING WARD G-SOUTH SPATIAL LAYER...</span>
     </div>
   ),
 });
 
 export default function DashboardPage() {
-  const { spots, isLoading, isError, mutate } = useSpots();
+  const { spots, isLoading, mutate } = useSpots();
   const { predictAll, isPredicting } = usePredict();
 
   const [selectedSpot, setSelectedSpot] = useState<SpotRisk | null>(null);
@@ -39,7 +28,6 @@ export default function DashboardPage() {
   const [riskFilter, setRiskFilter] = useState<string>("all");
   const [bannerMessage, setBannerMessage] = useState<string | null>(null);
 
-  // Filter spots by search and risk level
   const filteredSpots = useMemo(() => {
     return spots.filter((spot) => {
       const matchesSearch = spot.name
@@ -51,24 +39,25 @@ export default function DashboardPage() {
     });
   }, [spots, searchQuery, riskFilter]);
 
-  // Risk distribution count
   const riskCounts = useMemo(() => {
-    const counts = { critical: 0, high: 0, moderate: 0, low: 0, unknown: 0 };
+    const counts = { critical: 0, high: 0, moderate: 0, low: 0, unknown: 0, drainageFailure: 0 };
     spots.forEach((s) => {
       if (s.risk_level && counts[s.risk_level] !== undefined) {
         counts[s.risk_level]++;
       } else {
         counts.unknown++;
       }
+      if (s.cause_label === "drainage_failure") {
+        counts.drainageFailure++;
+      }
     });
     return counts;
   }, [spots]);
 
-  // Handle batch prediction
   const handlePredictAll = async (timestamp?: string) => {
     setBannerMessage(
       timestamp
-        ? `Running batch predictions for 2025 Monsoon instant: ${timestamp}...`
+        ? `Running batch predictions for 2025 monsoon moment: ${timestamp}...`
         : "Computing fresh dual-model predictions for all 30 spots..."
     );
     const results = await predictAll(timestamp);
@@ -76,8 +65,8 @@ export default function DashboardPage() {
       await mutate();
       setBannerMessage(
         timestamp
-          ? `✓ Replayed 2025 Monsoon event across all ${results.length} spots.`
-          : `✓ Successfully updated all ${results.length} spot predictions.`
+          ? `Simulated 2025 monsoon cloudburst event across all ${results.length} spots.`
+          : `Updated all ${results.length} spot predictions.`
       );
       setTimeout(() => setBannerMessage(null), 6000);
     }
@@ -89,108 +78,112 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="relative w-full h-[calc(100vh-3.5rem)] overflow-hidden flex flex-col bg-[#0a0a0f]">
-      {/* Top Floating Command Bar */}
-      <div className="absolute top-3 left-3 right-3 lg:left-6 lg:right-6 z-20 pointer-events-none flex flex-col gap-2">
-        <div className="flex flex-wrap items-center justify-between gap-3 bg-[#0d0d1a]/90 backdrop-blur-md p-2.5 rounded-xl border border-[#7B68EE]/30 shadow-2xl pointer-events-auto">
+    <div className="relative w-full h-[calc(100vh-3.25rem)] overflow-hidden flex flex-col bg-[#f7f8fa]">
+      {/* Top Operational Command Bar & KPI Strip */}
+      <div className="bg-[#ffffff] border-b border-[#d4dae3] px-3 py-2 z-20 flex flex-col gap-2 shadow-sm">
+        {/* Unadorned Monospace KPI Strip */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono border-b border-[#e2e8f0] pb-2">
+          <div className="flex items-center justify-between px-2 py-1 bg-[#f8fafc] border border-[#d4dae3]">
+            <span className="text-[#5b6478]">TOTAL SPOTS:</span>
+            <span className="font-bold text-[#1a1f2e]">{spots.length}</span>
+          </div>
+          <div className="flex items-center justify-between px-2 py-1 bg-[#fef2f2] border border-[#fecaca]">
+            <span className="text-[#b91c1c]">CRITICAL RISK:</span>
+            <span className="font-bold text-[#b91c1c]">{riskCounts.critical}</span>
+          </div>
+          <div className="flex items-center justify-between px-2 py-1 bg-[#fffbeb] border border-[#fde68a]">
+            <span className="text-[#b45309]">DRAIN FAILURES:</span>
+            <span className="font-bold text-[#b45309]">{riskCounts.drainageFailure}</span>
+          </div>
+          <div className="flex items-center justify-between px-2 py-1 bg-[#f0fdf4] border border-[#bbf7d0]">
+            <span className="text-[#166534]">SAFE / LOW:</span>
+            <span className="font-bold text-[#166534]">{riskCounts.low}</span>
+          </div>
+        </div>
+
+        {/* Filters & Actions Bar */}
+        <div className="flex flex-wrap items-center justify-between gap-2">
           {/* Search Input */}
           <div className="relative flex-1 min-w-[200px] max-w-sm">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <SearchIcon className="w-3.5 h-3.5 text-[#5b6478] absolute left-2.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Search 30 flood spots (e.g. Hindmata)..."
+              placeholder="Filter 30 spots (e.g. Hindmata)..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-1.5 text-xs rounded-lg bg-[#12122b] border border-slate-700/80 text-white placeholder-slate-500 focus:outline-none focus:border-[#7B68EE] transition-colors font-sans"
+              className="w-full pl-8 pr-3 py-1 text-xs bg-[#ffffff] border border-[#d4dae3] text-[#1a1f2e] placeholder-[#5b6478] focus:outline-none focus:border-[#1e40af] font-sans"
             />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery("")}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-white"
-              >
-                ✕
-              </button>
-            )}
           </div>
 
           {/* Risk Filter Buttons */}
-          <div className="flex items-center gap-1.5 overflow-x-auto text-xs font-mono">
+          <div className="flex items-center gap-1 text-xs font-mono">
             <button
               onClick={() => setRiskFilter("all")}
-              className={`px-2.5 py-1 rounded-lg transition-all font-medium ${
+              className={`px-2 py-1 transition-colors border ${
                 riskFilter === "all"
-                  ? "bg-[#7B68EE] text-white shadow-[0_0_10px_rgba(123,104,238,0.4)]"
-                  : "bg-[#12122b] text-slate-400 hover:text-slate-200 border border-slate-800"
+                  ? "bg-[#1e40af] text-white border-[#1e40af]"
+                  : "bg-[#ffffff] text-[#1a1f2e] border-[#d4dae3] hover:bg-[#f8fafc]"
               }`}
             >
-              All ({spots.length})
+              ALL ({spots.length})
             </button>
-            {(["critical", "high", "moderate", "low"] as RiskLevel[]).map(
-              (level) => {
-                const count = riskCounts[level];
-                const isActive = riskFilter === level;
-                return (
-                  <button
-                    key={level}
-                    onClick={() => setRiskFilter(isActive ? "all" : level)}
-                    className={`px-2.5 py-1 rounded-lg capitalize transition-all flex items-center gap-1.5 ${
-                      isActive
-                        ? "bg-[#1f1f45] text-white border"
-                        : "bg-[#12122b] text-slate-400 hover:text-slate-200 border border-slate-800/80"
-                    }`}
-                    style={{
-                      borderColor: isActive ? RISK_COLORS[level] : undefined,
-                    }}
-                  >
-                    <span
-                      className="w-2 h-2 rounded-full"
-                      style={{ backgroundColor: RISK_COLORS[level] }}
-                    />
-                    <span>{level}</span>
-                    <span className="text-[10px] text-slate-400">({count})</span>
-                  </button>
-                );
-              }
-            )}
+            {(["critical", "high", "moderate", "low"] as RiskLevel[]).map((level) => {
+              const count = riskCounts[level];
+              const isActive = riskFilter === level;
+              return (
+                <button
+                  key={level}
+                  onClick={() => setRiskFilter(isActive ? "all" : level)}
+                  className={`px-2 py-1 uppercase transition-colors border flex items-center gap-1 ${
+                    isActive
+                      ? "bg-[#1e40af] text-white border-[#1e40af]"
+                      : "bg-[#ffffff] text-[#1a1f2e] border-[#d4dae3] hover:bg-[#f8fafc]"
+                  }`}
+                >
+                  <span
+                    className="w-2 h-2 rounded-full"
+                    style={{ backgroundColor: RISK_COLORS[level] }}
+                  />
+                  <span>{level}</span>
+                  <span className="text-[10px] opacity-75">({count})</span>
+                </button>
+              );
+            })}
           </div>
 
-          {/* Batch Actions & Historical Simulation */}
-          <div className="flex items-center gap-2">
+          {/* Batch Actions */}
+          <div className="flex items-center gap-1.5">
             <button
               onClick={() => handlePredictAll()}
               disabled={isPredicting}
-              className="py-1.5 px-3 rounded-lg bg-[#7B68EE]/20 hover:bg-[#7B68EE]/30 border border-[#7B68EE]/40 text-[#b8a9ff] hover:text-white text-xs font-semibold flex items-center gap-1.5 transition-colors disabled:opacity-50"
-              title="Run live inference on all 30 spots"
+              className="py-1 px-2.5 bg-[#1e40af] hover:bg-[#1d4ed8] text-white text-xs font-medium font-sans flex items-center gap-1 transition-colors disabled:opacity-50"
+              title="Run inference across all 30 spots"
             >
-              <RefreshCw
-                className={`w-3.5 h-3.5 ${isPredicting ? "animate-spin" : ""}`}
-              />
-              <span className="hidden sm:inline">Predict All</span>
+              <RefreshIcon className={`w-3 h-3 ${isPredicting ? "animate-spin" : ""}`} />
+              <span>Predict All</span>
             </button>
 
             <button
               onClick={() => handlePredictAll("2025-07-15T10:30:00Z")}
               disabled={isPredicting}
-              className="py-1.5 px-3 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 border border-rose-500/40 text-rose-300 hover:text-white text-xs font-mono font-medium flex items-center gap-1.5 transition-colors disabled:opacity-50 shadow-[0_0_12px_rgba(244,63,94,0.15)]"
-              title="Replay historical extreme cloudburst on 15 July 2025"
+              className="py-1 px-2.5 bg-[#ffffff] hover:bg-[#fef2f2] border border-[#b91c1c] text-[#b91c1c] text-xs font-mono flex items-center gap-1 transition-colors disabled:opacity-50"
+              title="Replay extreme cloudburst on 15 July 2025"
             >
-              <Calendar className="w-3.5 h-3.5 text-rose-400" />
-              <span className="hidden md:inline">Replay 2025 Monsoon Flood</span>
-              <span className="md:hidden">2025 Monsoon</span>
+              <span>[SIMULATION] Replay 2025 Monsoon</span>
             </button>
           </div>
         </div>
 
-        {/* Live Notification Banner */}
+        {/* Live Notification Bar */}
         {bannerMessage && (
-          <div className="self-center bg-[#151538]/95 border border-[#7B68EE]/50 text-[#b8a9ff] px-4 py-2 rounded-xl text-xs font-mono shadow-2xl backdrop-blur-md animate-in fade-in slide-in-from-top-2 duration-200 pointer-events-auto flex items-center gap-2">
-            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+          <div className="bg-[#eff6ff] border border-[#bfdbfe] text-[#1e40af] px-3 py-1 text-xs font-mono flex items-center gap-2">
+            <span>ℹ</span>
             <span>{bannerMessage}</span>
           </div>
         )}
       </div>
 
-      {/* Main Map View */}
+      {/* Main Map Area */}
       <div className="flex-1 w-full h-full relative">
         <FloodMap
           spots={filteredSpots}
@@ -198,32 +191,26 @@ export default function DashboardPage() {
           onSelectSpot={(spot) => setSelectedSpot(spot)}
         />
 
-        {/* Bottom Left Map Legend */}
-        <div className="absolute bottom-4 left-4 z-10 bg-[#0d0d1a]/90 backdrop-blur-md p-3 rounded-xl border border-[#7B68EE]/20 shadow-xl text-xs space-y-2 pointer-events-auto">
-          <div className="font-bold text-white text-[11px] uppercase tracking-wider font-mono flex items-center gap-1.5">
-            <Layers className="w-3.5 h-3.5 text-[#b8a9ff]" />
-            <span>Risk Index Legend</span>
+        {/* Map Legend */}
+        <div className="absolute top-3 right-3 z-10 bg-[#ffffff] border border-[#d4dae3] p-2 text-xs space-y-1 shadow-sm pointer-events-auto">
+          <div className="font-bold text-[#1a1f2e] text-[10px] uppercase tracking-wider font-mono">
+            RISK TIER LEGEND
           </div>
-          <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-[11px]">
-            {(["critical", "high", "moderate", "low"] as RiskLevel[]).map(
-              (level) => (
-                <div key={level} className="flex items-center gap-2">
-                  <span
-                    className="w-2.5 h-2.5 rounded-full"
-                    style={{ backgroundColor: RISK_COLORS[level] }}
-                  />
-                  <span className="capitalize text-slate-300">{level}</span>
-                </div>
-              )
-            )}
-          </div>
-          <div className="pt-1.5 border-t border-slate-800 text-[10px] text-slate-400 font-mono">
-            Ward G-South boundary (dashed)
+          <div className="grid grid-cols-2 gap-x-3 gap-y-0.5 text-[11px] font-mono">
+            {(["critical", "high", "moderate", "low"] as RiskLevel[]).map((level) => (
+              <div key={level} className="flex items-center gap-1.5">
+                <span
+                  className="w-2 h-2 rounded-full"
+                  style={{ backgroundColor: RISK_COLORS[level] }}
+                />
+                <span className="capitalize text-[#1a1f2e]">{level}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* Risk Slide-in Panel */}
+      {/* Slide-out Risk Detail Panel */}
       {selectedSpot && (
         <RiskPanel
           spot={selectedSpot}

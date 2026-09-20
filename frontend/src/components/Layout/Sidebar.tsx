@@ -4,17 +4,13 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  Map,
-  Activity,
-  Bell,
-  Info,
-  ChevronLeft,
-  ChevronRight,
-  Shield,
-  Layers,
-  BarChart3,
-  Flame,
-} from "lucide-react";
+  MapIcon,
+  ActivityIcon,
+  BellIcon,
+  InfoIcon,
+  ShieldIcon,
+  LayersIcon,
+} from "@/components/Icons";
 import { cn } from "@/lib/utils";
 
 interface SidebarProps {
@@ -34,51 +30,53 @@ export function Sidebar({
 
   const navItems = [
     {
-      label: "Flood Map",
-      description: "Live 30-Spot Residual Risk",
+      label: "LIVE DISPATCH MAP",
       href: "/",
-      icon: Map,
+      icon: MapIcon,
     },
     {
-      label: "Drain Health",
-      description: "Maintenance Leaderboard & Δ",
+      label: "DRAIN HEALTH INDEX",
       href: "/drain-health",
-      icon: Activity,
+      icon: ActivityIcon,
     },
     {
-      label: "Alerts Log",
-      description: "WhatsApp Broadcast & Audit",
+      label: "WHATSAPP DISPATCH",
       href: "/alerts",
-      icon: Bell,
+      icon: BellIcon,
     },
     {
-      label: "About & Docs",
-      description: "Model Status & Architecture",
+      label: "ARCHITECTURE & STATUS",
       href: "/about",
-      icon: Info,
+      icon: InfoIcon,
     },
+  ];
+
+  const legalItems = [
+    { label: "TERMS OF SERVICE", href: "/terms" },
+    { label: "PRIVACY POLICY", href: "/privacy" },
   ];
 
   return (
     <>
-      {/* Mobile backdrop */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
+          className="fixed inset-0 bg-black/40 z-40 lg:hidden"
           onClick={() => setMobileOpen(false)}
         />
       )}
 
       <aside
         className={cn(
-          "fixed top-14 bottom-0 left-0 z-40 bg-[#0d0d1a]/95 backdrop-blur-md border-r border-[#7B68EE]/20 transition-all duration-300 flex flex-col justify-between select-none",
-          collapsed ? "w-[72px]" : "w-[240px]",
+          "fixed top-13 bottom-0 left-0 z-40 bg-[#ffffff] border-r border-[#d4dae3] transition-all duration-200 flex flex-col justify-between select-none",
+          collapsed ? "w-[60px]" : "w-[240px]",
           mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         )}
       >
-        <div className="p-3 space-y-4">
-          {/* Navigation Links */}
-          <nav className="space-y-1.5">
+        <div className="p-2 space-y-4">
+          <nav className="space-y-0.5">
+            <div className="px-2.5 py-1 text-[10px] uppercase tracking-widest font-semibold text-[#5b6478]">
+              {!collapsed && "OPERATIONAL MODULES"}
+            </div>
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = pathname === item.href;
@@ -88,32 +86,23 @@ export function Sidebar({
                   href={item.href}
                   onClick={() => setMobileOpen(false)}
                   className={cn(
-                    "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all group relative",
+                    "flex items-center gap-2.5 px-3 py-2 text-xs font-semibold tracking-tight transition-colors rounded-sm",
                     isActive
-                      ? "bg-gradient-to-r from-[#7B68EE]/30 to-[#b8a9ff]/10 text-white border border-[#7B68EE]/50 shadow-[0_0_15px_rgba(123,104,238,0.25)]"
-                      : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40"
+                      ? "bg-[#1e40af] text-white"
+                      : "text-[#1a1f2e] hover:bg-[#f1f5f9] hover:text-[#1e40af]"
                   )}
                   title={collapsed ? item.label : undefined}
                 >
                   <Icon
                     className={cn(
-                      "w-5 h-5 shrink-0 transition-colors",
-                      isActive ? "text-[#b8a9ff]" : "text-slate-400 group-hover:text-slate-200"
+                      "w-4 h-4 shrink-0",
+                      isActive ? "text-white" : "text-[#5b6478]"
                     )}
                   />
                   {!collapsed && (
-                    <div className="flex flex-col truncate">
-                      <span className="truncate leading-tight font-semibold">
-                        {item.label}
-                      </span>
-                      <span className="text-[11px] text-slate-400 truncate mt-0.5">
-                        {item.description}
-                      </span>
-                    </div>
-                  )}
-
-                  {isActive && (
-                    <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-[#b8a9ff] rounded-r-full" />
+                    <span className="truncate uppercase text-[11px] tracking-wide font-sans">
+                      {item.label}
+                    </span>
                   )}
                 </Link>
               );
@@ -121,38 +110,41 @@ export function Sidebar({
           </nav>
         </div>
 
-        {/* Bottom Section */}
-        <div className="p-3 border-t border-[#7B68EE]/15 space-y-3">
+        {/* Bottom Rail Details */}
+        <div className="p-3 border-t border-[#d4dae3] space-y-2 bg-[#f8fafc]">
           {!collapsed ? (
-            <div className="p-2.5 rounded-lg bg-[#12122b]/80 border border-[#7B68EE]/20 text-xs">
-              <div className="flex items-center justify-between text-slate-400 font-mono mb-1">
-                <span className="text-[10px] uppercase tracking-wider">Model Status</span>
-                <span className="text-emerald-400 font-bold text-[10px]">ACTIVE</span>
+            <div className="space-y-1.5 text-[11px] font-mono text-[#5b6478]">
+              <div className="flex items-center justify-between text-[#1a1f2e] font-semibold">
+                <span>WARD G-SOUTH</span>
+                <span>9.29 km²</span>
               </div>
-              <p className="text-slate-300 text-[11px] leading-snug">
-                Dual XGBoost residual <span className="text-[#b8a9ff] font-mono">P_act − P_rain</span>
-              </p>
+              <div className="text-[10px] text-[#5b6478]">
+                Worli · Lower Parel · Prabhadevi
+              </div>
+              <div className="pt-2 border-t border-[#e2e8f0] flex flex-col gap-1 text-[10px]">
+                {legalItems.map((l) => (
+                  <Link
+                    key={l.href}
+                    href={l.href}
+                    className="hover:text-[#1e40af] transition-colors"
+                  >
+                    {l.label}
+                  </Link>
+                ))}
+              </div>
             </div>
           ) : (
-            <div className="flex justify-center">
-              <Shield className="w-5 h-5 text-[#b8a9ff]/60" />
+            <div className="flex justify-center text-[#5b6478]">
+              <LayersIcon className="w-4 h-4" />
             </div>
           )}
 
-          {/* Desktop Collapse Toggle */}
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="hidden lg:flex w-full items-center justify-center py-1.5 px-2 rounded-lg bg-slate-800/40 hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition-colors text-xs font-mono"
-            title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            className="hidden lg:flex w-full items-center justify-center py-1 border border-[#d4dae3] bg-[#ffffff] hover:bg-[#f1f5f9] text-[#5b6478] hover:text-[#1a1f2e] text-[10px] font-mono transition-colors"
+            title={collapsed ? "Expand rail" : "Collapse rail"}
           >
-            {collapsed ? (
-              <ChevronRight className="w-4 h-4" />
-            ) : (
-              <div className="flex items-center gap-2">
-                <ChevronLeft className="w-4 h-4" />
-                <span>Collapse</span>
-              </div>
-            )}
+            {collapsed ? "»" : "« COLLAPSE"}
           </button>
         </div>
       </aside>

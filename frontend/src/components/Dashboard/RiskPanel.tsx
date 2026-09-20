@@ -4,25 +4,12 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { SpotRisk, PredictionResponse } from "@/lib/types";
 import { RISK_COLORS, RISK_BG_COLORS, RISK_BORDER_COLORS } from "@/lib/constants";
-import { formatPercent, formatNumber, formatDateTime } from "@/lib/utils";
+import { formatPercent, formatDateTime } from "@/lib/utils";
 import { ConfidenceBadge } from "./ConfidenceBadge";
 import { ShapChart } from "./ShapChart";
 import { DispatchCard } from "./DispatchCard";
 import { usePredict } from "@/hooks/usePredict";
-import {
-  X,
-  MapPin,
-  TrendingUp,
-  CloudRain,
-  Activity,
-  Layers,
-  Sparkles,
-  Bell,
-  ArrowUpRight,
-  RefreshCw,
-  Calendar,
-  AlertCircle,
-} from "lucide-react";
+import { CloseIcon, RefreshIcon } from "@/components/Icons";
 
 interface RiskPanelProps {
   spot: SpotRisk | null;
@@ -33,12 +20,10 @@ interface RiskPanelProps {
 export function RiskPanel({ spot, onClose, onSpotUpdated }: RiskPanelProps) {
   const { predict, isPredicting } = usePredict();
   const [livePrediction, setLivePrediction] = useState<PredictionResponse | null>(null);
-  const [customTimestamp, setCustomTimestamp] = useState<string>("");
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
   if (!spot) return null;
 
-  // Use live prediction if just generated, else spot's existing prediction
   const activePActual = livePrediction?.p_actual ?? spot.p_actual;
   const activePRain = livePrediction?.p_rain ?? spot.p_rain;
   const activeDelta = livePrediction?.delta ?? spot.delta;
@@ -50,7 +35,7 @@ export function RiskPanel({ spot, onClose, onSpotUpdated }: RiskPanelProps) {
   const activeShap = livePrediction?.shap_top3 ?? spot.shap_top3;
   const activePredictedFor = livePrediction?.predicted_for ?? spot.predicted_for;
 
-  const riskColor = RISK_COLORS[activeRiskLevel] || "#94a3b8";
+  const riskColor = RISK_COLORS[activeRiskLevel] || "#64748b";
 
   const handleRunPrediction = async (timestamp?: string) => {
     setStatusMessage(null);
@@ -60,7 +45,7 @@ export function RiskPanel({ spot, onClose, onSpotUpdated }: RiskPanelProps) {
       setStatusMessage(
         timestamp
           ? `Predicted for monsoon instant: ${timestamp}`
-          : "Fresh prediction generated successfully!"
+          : "Fresh dual-model prediction completed."
       );
       if (onSpotUpdated) {
         onSpotUpdated({
@@ -81,133 +66,119 @@ export function RiskPanel({ spot, onClose, onSpotUpdated }: RiskPanelProps) {
   };
 
   return (
-    <div className="fixed top-14 right-0 bottom-0 w-full sm:w-[420px] bg-[#0d0d1a]/95 backdrop-blur-xl border-l border-[#7B68EE]/30 shadow-2xl z-30 flex flex-col justify-between overflow-hidden animate-in slide-in-from-right duration-300">
+    <div className="fixed top-13 right-0 bottom-0 w-full sm:w-[420px] bg-[#ffffff] border-l border-[#d4dae3] shadow-lg z-30 flex flex-col justify-between overflow-hidden">
       {/* Header */}
-      <div className="p-4 border-b border-[#7B68EE]/20 flex items-center justify-between bg-[#12122b]/90">
-        <div className="flex items-center gap-2.5 overflow-hidden">
-          <div
-            className="w-3.5 h-3.5 rounded-full shrink-0 shadow-[0_0_10px]"
-            style={{
-              backgroundColor: riskColor,
-              boxShadow: `0 0 10px ${riskColor}`,
-            }}
-          />
-          <div className="truncate">
-            <h2 className="text-base font-bold text-white truncate leading-tight">
+      <div className="p-3.5 border-b border-[#d4dae3] flex items-center justify-between bg-[#f8fafc]">
+        <div className="overflow-hidden pr-2">
+          <div className="flex items-center gap-2">
+            <span
+              className="w-2.5 h-2.5 rounded-full shrink-0"
+              style={{ backgroundColor: riskColor }}
+              aria-hidden="true"
+            />
+            <h2 className="text-sm font-bold text-[#1a1f2e] truncate leading-tight font-sans">
               {spot.name}
             </h2>
-            <div className="text-[11px] text-slate-400 font-mono flex items-center gap-2">
-              <span>Spot #{spot.spot_id}</span>
-              <span>•</span>
-              <span>
-                {spot.lat.toFixed(4)}°N, {spot.lng.toFixed(4)}°E
-              </span>
-            </div>
+          </div>
+          <div className="text-[11px] text-[#5b6478] font-mono mt-0.5">
+            Spot #{spot.spot_id} · {spot.lat.toFixed(4)}° N, {spot.lng.toFixed(4)}° E
           </div>
         </div>
 
         <button
           onClick={onClose}
-          className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors shrink-0"
-          aria-label="Close risk panel"
+          className="p-1.5 border border-[#d4dae3] bg-[#ffffff] hover:bg-[#f1f5f9] text-[#1a1f2e] transition-colors shrink-0"
+          aria-label="Close detail pane"
         >
-          <X className="w-5 h-5" />
+          <CloseIcon className="w-4 h-4" />
         </button>
       </div>
 
-      {/* Scrollable Body */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      {/* Body */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-3.5">
         {/* Risk Level Badge & Timestamp */}
         <div className="flex items-center justify-between">
           <div
-            className="px-3 py-1 rounded-lg text-xs font-mono font-bold uppercase tracking-wider border flex items-center gap-1.5"
+            className="px-2.5 py-1 text-xs font-mono font-bold uppercase tracking-wider border rounded-sm"
             style={{
               backgroundColor: RISK_BG_COLORS[activeRiskLevel],
               borderColor: RISK_BORDER_COLORS[activeRiskLevel],
               color: riskColor,
             }}
           >
-            <span
-              className="w-2 h-2 rounded-full animate-pulse"
-              style={{ backgroundColor: riskColor }}
-            />
-            {activeRiskLevel} Risk
+            {activeRiskLevel} RISK
           </div>
 
-          <div className="text-[11px] text-slate-400 font-mono">
+          <div className="text-[11px] text-[#5b6478] font-mono">
             {formatDateTime(activePredictedFor)}
           </div>
         </div>
 
-        {/* Spot Physical Attributes */}
-        <div className="grid grid-cols-3 gap-2 p-2.5 rounded-xl bg-[#0e0e24] border border-slate-800 text-xs">
+        {/* Physical Metadata */}
+        <div className="grid grid-cols-3 gap-2 p-2.5 bg-[#f8fafc] border border-[#d4dae3] text-xs font-mono">
           <div>
-            <div className="text-[10px] text-slate-400 font-mono">Elevation</div>
-            <div className="text-white font-mono font-semibold">
+            <div className="text-[10px] uppercase text-[#5b6478]">ELEVATION</div>
+            <div className="text-[#1a1f2e] font-bold">
               {spot.elevation_m !== null ? `${spot.elevation_m} m` : "—"}
             </div>
           </div>
           <div>
-            <div className="text-[10px] text-slate-400 font-mono">Depression</div>
-            <div className="text-white font-mono font-semibold">
+            <div className="text-[10px] uppercase text-[#5b6478]">DEPRESSION</div>
+            <div className="text-[#1a1f2e] font-bold">
               {spot.depression_depth_m !== null ? `${spot.depression_depth_m} m` : "—"}
             </div>
           </div>
           <div>
-            <div className="text-[10px] text-slate-400 font-mono">Drain Dist</div>
-            <div className="text-white font-mono font-semibold">
+            <div className="text-[10px] uppercase text-[#5b6478]">DRAIN DIST</div>
+            <div className="text-[#1a1f2e] font-bold">
               {spot.nearest_drain_m !== null ? `${Math.round(spot.nearest_drain_m)} m` : "—"}
             </div>
           </div>
         </div>
 
-        {/* Spot Notes if available */}
         {spot.notes && (
-          <div className="p-2.5 rounded-xl bg-[#12122b]/80 border border-[#7B68EE]/20 text-xs text-slate-300 flex items-start gap-2">
-            <AlertCircle className="w-4 h-4 text-[#b8a9ff] shrink-0 mt-0.5" />
-            <span className="leading-snug">{spot.notes}</span>
+          <div className="p-2.5 bg-[#f8fafc] border border-[#d4dae3] text-xs text-[#1a1f2e] leading-snug">
+            <span className="font-semibold text-[#5b6478] uppercase text-[10px] block font-mono">BMC OBSERVER NOTE:</span>
+            {spot.notes}
           </div>
         )}
 
         {/* Probabilities Comparison Cards */}
-        <div className="grid grid-cols-3 gap-2.5">
+        <div className="grid grid-cols-3 gap-2">
           {/* P_actual */}
-          <div className="p-3 rounded-xl bg-[#141432] border border-[#7B68EE]/30 space-y-1">
-            <div className="text-[10px] text-slate-400 font-mono flex items-center justify-between">
-              <span>P_actual</span>
-              <Activity className="w-3 h-3 text-[#b8a9ff]" />
+          <div className="p-2.5 bg-[#ffffff] border border-[#d4dae3]">
+            <div className="text-[10px] text-[#5b6478] font-mono uppercase">
+              P_ACTUAL
             </div>
-            <div className="text-xl font-bold font-mono text-white">
+            <div className="text-lg font-bold font-mono text-[#1a1f2e]">
               {formatPercent(activePActual, 1)}
             </div>
-            <div className="text-[9px] text-slate-400">Model B (Full)</div>
+            <div className="text-[9px] text-[#5b6478] font-mono">Model B (Context)</div>
           </div>
 
           {/* P_rain */}
-          <div className="p-3 rounded-xl bg-[#141432] border border-[#7B68EE]/30 space-y-1">
-            <div className="text-[10px] text-slate-400 font-mono flex items-center justify-between">
-              <span>P_rain</span>
-              <CloudRain className="w-3 h-3 text-cyan-400" />
+          <div className="p-2.5 bg-[#ffffff] border border-[#d4dae3]">
+            <div className="text-[10px] text-[#5b6478] font-mono uppercase">
+              P_RAIN
             </div>
-            <div className="text-xl font-bold font-mono text-white">
+            <div className="text-lg font-bold font-mono text-[#1a1f2e]">
               {formatPercent(activePRain, 1)}
             </div>
-            <div className="text-[9px] text-slate-400">Model A (Rain)</div>
+            <div className="text-[9px] text-[#5b6478] font-mono">Model A (Rain)</div>
           </div>
 
           {/* Residual Delta */}
-          <div className="p-3 rounded-xl bg-[#141432] border border-[#7B68EE]/30 space-y-1">
-            <div className="text-[10px] text-slate-400 font-mono flex items-center justify-between">
-              <span>Δ Residual</span>
-              <TrendingUp className="w-3 h-3 text-amber-400" />
+          <div className="p-2.5 bg-[#ffffff] border border-[#d4dae3]">
+            <div className="text-[10px] text-[#5b6478] font-mono uppercase">
+              Δ RESIDUAL
             </div>
             <div
-              className={`text-xl font-bold font-mono ${
+              className={`text-lg font-bold font-mono ${
                 activeDelta && activeDelta > 0.1
-                  ? "text-amber-400"
+                  ? "text-[#b45309]"
                   : activeDelta && activeDelta > 0
-                  ? "text-slate-200"
-                  : "text-emerald-400"
+                  ? "text-[#1a1f2e]"
+                  : "text-[#166534]"
               }`}
             >
               {activeDelta !== null && activeDelta !== undefined
@@ -216,7 +187,7 @@ export function RiskPanel({ spot, onClose, onSpotUpdated }: RiskPanelProps) {
                   : activeDelta.toFixed(3)
                 : "—"}
             </div>
-            <div className="text-[9px] text-slate-400">Unexplained Risk</div>
+            <div className="text-[9px] text-[#5b6478] font-mono">Unexplained Risk</div>
           </div>
         </div>
 
@@ -236,61 +207,53 @@ export function RiskPanel({ spot, onClose, onSpotUpdated }: RiskPanelProps) {
           causeLabel={activeCauseLabel}
         />
 
-        {/* Live Predict & Historical Replay Simulator */}
-        <div className="p-3.5 rounded-xl bg-[#12122b] border border-[#7B68EE]/30 space-y-2.5">
-          <div className="flex items-center justify-between text-xs text-slate-200 font-semibold">
-            <div className="flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-[#b8a9ff]" />
-              <span>Model Execution & Simulation</span>
-            </div>
+        {/* Model Simulation Buttons */}
+        <div className="p-3 bg-[#f8fafc] border border-[#d4dae3] space-y-2">
+          <div className="text-[10px] uppercase font-mono tracking-wider font-semibold text-[#5b6478]">
+            MODEL INFERENCE & HISTORICAL REPLAY
           </div>
 
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-1.5">
             <button
               onClick={() => handleRunPrediction()}
               disabled={isPredicting}
-              className="w-full py-2 px-3 rounded-lg bg-gradient-to-r from-[#7B68EE] to-[#9d8df1] hover:from-[#6c58e8] hover:to-[#8c78eb] text-white font-medium text-xs flex items-center justify-center gap-2 shadow-lg shadow-[#7B68EE]/25 transition-all disabled:opacity-50"
+              className="w-full py-1.5 px-3 bg-[#1e40af] hover:bg-[#1d4ed8] text-white font-medium text-xs flex items-center justify-center gap-1.5 transition-colors disabled:opacity-50"
             >
-              <RefreshCw className={`w-3.5 h-3.5 ${isPredicting ? "animate-spin" : ""}`} />
-              <span>{isPredicting ? "Computing XGBoost & SHAP..." : "Predict Live for Spot"}</span>
+              <RefreshIcon className={`w-3.5 h-3.5 ${isPredicting ? "animate-spin" : ""}`} />
+              <span>{isPredicting ? "Computing XGBoost inference..." : "Run Live Model for Spot"}</span>
             </button>
 
-            {/* Historical Monsoon Demo shortcut */}
             <button
               onClick={() => handleRunPrediction("2025-07-15T10:30:00Z")}
               disabled={isPredicting}
-              className="w-full py-2 px-3 rounded-lg bg-[#1a1a3e] hover:bg-[#252554] border border-[#7B68EE]/40 text-[#b8a9ff] hover:text-white font-mono text-xs flex items-center justify-center gap-1.5 transition-colors disabled:opacity-50"
-              title="Test with extreme monsoon cloudburst recorded on 15 July 2025"
+              className="w-full py-1.5 px-3 bg-[#ffffff] hover:bg-[#f1f5f9] border border-[#d4dae3] text-[#1a1f2e] font-mono text-xs flex items-center justify-center gap-1.5 transition-colors disabled:opacity-50"
+              title="Replay extreme monsoon flood moment on 15 July 2025"
             >
-              <Calendar className="w-3.5 h-3.5 text-[#b8a9ff]" />
-              <span>Replay 2025 Monsoon Flood Event (15 Jul)</span>
+              <span>[SIMULATION] Replay 2025 Monsoon Cloudburst</span>
             </button>
           </div>
 
           {statusMessage && (
-            <div className="p-2 rounded bg-emerald-950/60 border border-emerald-800/60 text-[11px] text-emerald-300 font-mono">
-              ✓ {statusMessage}
+            <div className="p-2 bg-[#f0fdf4] border border-[#bbf7d0] text-[11px] text-[#166534] font-mono">
+              {statusMessage}
             </div>
           )}
         </div>
       </div>
 
-      {/* Footer Dispatch Actions */}
-      <div className="p-3 border-t border-[#7B68EE]/20 bg-[#12122b]/95 flex items-center gap-2">
+      {/* Footer Navigation */}
+      <div className="p-3 border-t border-[#d4dae3] bg-[#ffffff] flex items-center gap-2">
         <Link
           href={`/alerts?spot_id=${spot.spot_id}`}
-          className="flex-1 py-2 px-3 rounded-lg bg-[#7B68EE]/20 hover:bg-[#7B68EE]/30 border border-[#7B68EE]/40 text-[#b8a9ff] hover:text-white text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors"
+          className="flex-1 py-1.5 px-3 bg-[#1e40af] hover:bg-[#1d4ed8] text-white text-xs font-semibold text-center uppercase tracking-wider font-sans transition-colors"
         >
-          <Bell className="w-3.5 h-3.5" />
-          <span>Dispatch WhatsApp Alert</span>
+          Dispatch Alert
         </Link>
         <Link
           href={`/drain-health`}
-          className="py-2 px-3 rounded-lg bg-slate-800/80 hover:bg-slate-800 text-slate-300 hover:text-white text-xs font-mono flex items-center justify-center gap-1 transition-colors"
-          title="Inspect Drain Health Trend"
+          className="py-1.5 px-3 border border-[#d4dae3] bg-[#ffffff] hover:bg-[#f1f5f9] text-[#1a1f2e] text-xs font-mono text-center transition-colors"
         >
-          <TrendingUp className="w-3.5 h-3.5" />
-          <span>Drain Δ</span>
+          Drain Trend
         </Link>
       </div>
     </div>

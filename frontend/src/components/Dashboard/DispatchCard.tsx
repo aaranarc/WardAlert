@@ -2,8 +2,7 @@
 
 import React from "react";
 import { DispatchType, CauseLabel } from "@/lib/types";
-import { DISPATCH_DESCRIPTIONS, CAUSE_DESCRIPTIONS } from "@/lib/constants";
-import { Truck, AlertTriangle, Droplets, CheckCircle2, ShieldAlert } from "lucide-react";
+import { DISPATCH_DESCRIPTIONS } from "@/lib/constants";
 
 interface DispatchCardProps {
   dispatchType: DispatchType | null | undefined;
@@ -13,8 +12,8 @@ interface DispatchCardProps {
 export function DispatchCard({ dispatchType, causeLabel }: DispatchCardProps) {
   if (!dispatchType) {
     return (
-      <div className="p-3.5 rounded-xl bg-[#0e0e24] border border-[#7B68EE]/20 text-xs text-slate-400 font-mono text-center">
-        No active dispatch protocol generated
+      <div className="p-3 bg-[#f8fafc] border border-[#d4dae3] text-xs text-[#5b6478] font-mono text-center">
+        No active dispatch protocol assigned.
       </div>
     );
   }
@@ -24,63 +23,50 @@ export function DispatchCard({ dispatchType, causeLabel }: DispatchCardProps) {
 
   return (
     <div
-      className={`p-4 rounded-xl border transition-all ${
+      className={`p-3.5 border rounded-sm ${
         isDesilting
-          ? "bg-gradient-to-br from-[#1a163a] to-[#201538] border-amber-500/40 shadow-[0_4px_20px_rgba(245,158,11,0.15)]"
-          : "bg-gradient-to-br from-[#12163a] to-[#151c44] border-cyan-500/40 shadow-[0_4px_20px_rgba(56,189,248,0.15)]"
+          ? "bg-[#fffbeb] border-[#fde68a]"
+          : "bg-[#eff6ff] border-[#bfdbfe]"
       }`}
     >
-      <div className="flex items-start justify-between gap-3 mb-2.5">
-        <div className="flex items-center gap-2">
-          <div
-            className={`p-2 rounded-lg ${
-              isDesilting ? "bg-amber-500/20 text-amber-300" : "bg-cyan-500/20 text-cyan-300"
-            }`}
-          >
-            {isDesilting ? <Truck className="w-5 h-5" /> : <Droplets className="w-5 h-5" />}
+      <div className="flex items-start justify-between gap-2 mb-2">
+        <div>
+          <div className="text-[10px] uppercase font-mono tracking-widest text-[#5b6478]">
+            RECOMMENDED ACTION DIRECTIVE
           </div>
-          <div>
-            <div className="text-[10px] uppercase font-mono tracking-wider text-slate-400">
-              Recommended Protocol
-            </div>
-            <div className="text-sm font-bold text-white leading-tight">
-              {isDesilting ? "Desilting Crew Deployment" : "Pump & Traffic Marshals"}
-            </div>
+          <div className="text-sm font-bold text-[#1a1f2e] font-sans leading-tight mt-0.5">
+            {isDesilting ? "Dispatch Desilting Crew" : "Dispatch Pump Truck & Traffic Marshals"}
           </div>
         </div>
 
         <span
-          className={`text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded border ${
+          className={`text-[10px] font-mono font-bold uppercase px-2 py-0.5 border ${
             isDrainageFailure
-              ? "bg-rose-500/20 text-rose-300 border-rose-500/30"
-              : "bg-blue-500/20 text-blue-300 border-blue-500/30"
+              ? "bg-[#fef2f2] text-[#b91c1c] border-[#fecaca]"
+              : "bg-[#f0fdf4] text-[#166534] border-[#bbf7d0]"
           }`}
         >
-          {isDrainageFailure ? "Drainage Failure" : "Rainfall Driven"}
+          {isDrainageFailure ? "DRAINAGE FAILURE" : "RAINFALL DRIVEN"}
         </span>
       </div>
 
-      <p className="text-xs text-slate-300 leading-relaxed mb-3">
-        {DISPATCH_DESCRIPTIONS[dispatchType] || "Standard monitoring protocol."}
+      <p className="text-xs text-[#1a1f2e] leading-relaxed mb-3">
+        {DISPATCH_DESCRIPTIONS[dispatchType]}
       </p>
 
       {/* Operational action checklist */}
-      <div className="pt-2.5 border-t border-slate-700/50 space-y-1.5 text-xs text-slate-300">
+      <div className="pt-2 border-t border-[#d4dae3]/60 space-y-1 text-xs text-[#1a1f2e] font-sans">
         <div className="flex items-center gap-2 text-[11px]">
-          <CheckCircle2
-            className={`w-3.5 h-3.5 shrink-0 ${isDesilting ? "text-amber-400" : "text-cyan-400"}`}
-          />
+          <span className="w-1.5 h-1.5 bg-[#1e40af]" />
           <span>
             {isDesilting
-              ? "Inspect nearby SWD outfalls & clear silt accumulation"
-              : "Position mobile suction pumps & divert low-lying traffic"}
+              ? "Inspect nearby SWD outfalls and clear silt accumulation."
+              : "Position mobile suction pumps and divert traffic from low-lying points."}
           </span>
         </div>
         <div className="flex items-center gap-2 text-[11px]">
-          <CheckCircle2
-            className={`w-3.5 h-3.5 shrink-0 ${isDesilting ? "text-amber-400" : "text-cyan-400"}`}
-          />
-          <span>Issue automated localized WhatsApp alert to ward officer & citizens</span>
+          <span className="w-1.5 h-1.5 bg-[#1e40af]" />
+          <span>Issue automated localized alert to ward officer and active subscribers.</span>
         </div>
       </div>
     </div>

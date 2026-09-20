@@ -4,42 +4,42 @@ export const MAP_CENTER: [number, number] = [19.015, 72.825];
 export const DEFAULT_ZOOM = 14;
 
 export const RISK_COLORS: Record<RiskLevel | "unknown", string> = {
-  low: "#4ade80",
-  moderate: "#facc15",
-  high: "#fb923c",
-  critical: "#ef4444",
-  unknown: "#94a3b8",
+  low: "#166534",
+  moderate: "#d97706",
+  high: "#b45309",
+  critical: "#b91c1c",
+  unknown: "#64748b",
 };
 
 export const RISK_BG_COLORS: Record<RiskLevel | "unknown", string> = {
-  low: "rgba(74, 222, 128, 0.15)",
-  moderate: "rgba(250, 204, 21, 0.15)",
-  high: "rgba(251, 146, 60, 0.15)",
-  critical: "rgba(239, 68, 68, 0.15)",
-  unknown: "rgba(148, 163, 184, 0.15)",
+  low: "#f0fdf4",
+  moderate: "#fffbeb",
+  high: "#fff7ed",
+  critical: "#fef2f2",
+  unknown: "#f8fafc",
 };
 
 export const RISK_BORDER_COLORS: Record<RiskLevel | "unknown", string> = {
-  low: "rgba(74, 222, 128, 0.4)",
-  moderate: "rgba(250, 204, 21, 0.4)",
-  high: "rgba(251, 146, 60, 0.4)",
-  critical: "rgba(239, 68, 68, 0.4)",
-  unknown: "rgba(148, 163, 184, 0.4)",
+  low: "#bbf7d0",
+  moderate: "#fde68a",
+  high: "#fed7aa",
+  critical: "#fecaca",
+  unknown: "#e2e8f0",
 };
 
 export const CAUSE_DESCRIPTIONS: Record<CauseLabel, string> = {
-  rainfall_driven: "Heavy Rainfall Exceeding Infiltration",
-  drainage_failure: "Drainage Capacity Reduced / Silted / Backflow",
+  rainfall_driven: "Rainfall intensity exceeding local surface infiltration rate.",
+  drainage_failure: "Stormwater conduit capacity degraded by siltation, obstruction, or hydraulic backflow.",
 };
 
 export const DISPATCH_DESCRIPTIONS: Record<DispatchType, string> = {
-  pump_and_traffic: "Deploy dewatering pumps & dispatch traffic marshals to avoid waterlogged stretches.",
-  desilting_crew: "Deploy emergency drain desilting crew & clear local silt / blockages.",
+  pump_and_traffic: "Deploy dewatering suction pump units and position traffic marshals at low-lying access points.",
+  desilting_crew: "Deploy emergency drain desilting and excavation crew to clear local stormwater conduit blockages.",
 };
 
 export const DRAIN_STATUS_COLORS: Record<DrainStatus | string, string> = {
-  overdue: "#ef4444",
-  degrading: "#fb923c",
-  stable: "#38bdf8",
-  improving: "#4ade80",
+  overdue: "#b91c1c",
+  degrading: "#b45309",
+  stable: "#1e40af",
+  improving: "#166534",
 };
