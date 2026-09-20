@@ -26,63 +26,80 @@ export function RiskPanel({ spot, onClose, onSpotUpdated }: RiskPanelProps) {
   const { predict, isPredicting } = usePredict();
   const [livePrediction, setLivePrediction] = useState<PredictionResponse | null>(null);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [lastCalculatedTime, setLastCalculatedTime] = useState<string | null>(null);
 
   useEffect(() => {
     setLivePrediction(null);
     setStatusMessage(null);
+    setErrorMessage(null);
   }, [spot?.spot_id, spot?.p_actual, spot?.predicted_for]);
 
   if (!spot) return null;
 
-  const activePActual = livePrediction?.p_actual ?? spot.p_actual ?? 0.15;
-  const activePRain = livePrediction?.p_rain ?? spot.p_rain ?? 0.12;
-  const activeDelta = livePrediction?.delta ?? spot.delta ?? 0.03;
+  if (spot.p_actual == null && livePrediction?.p_actual == null) {
+    console.warn(`[RiskPanel] Spot #${spot.spot_id} (${spot.name}) missing p_actual from backend`);
+  }
+
+  const activePActual = livePrediction?.p_actual ?? spot.p_actual;
+  const activePRain = livePrediction?.p_rain ?? spot.p_rain;
+  const activeDelta = livePrediction?.delta ?? spot.delta;
   const activeRiskLevel = livePrediction?.risk_level ?? spot.risk_level ?? "low";
   const activeCauseLabel = livePrediction?.cause_label ?? spot.cause_label ?? "rainfall_driven";
   const activeDispatchType = livePrediction?.dispatch_type ?? spot.dispatch_type ?? "pump_and_traffic";
-  const activeConfidenceLower = livePrediction?.confidence_lower ?? spot.confidence_lower ?? 0.1;
-  const activeConfidenceUpper = livePrediction?.confidence_upper ?? spot.confidence_upper ?? 0.25;
+  const activeConfidenceLower = livePrediction?.confidence_lower ?? spot.confidence_lower;
+  const activeConfidenceUpper = livePrediction?.confidence_upper ?? spot.confidence_upper;
   const activeShap = livePrediction?.shap_top3 ?? spot.shap_top3 ?? [];
 
   const riskColor = RISK_COLORS[activeRiskLevel] || "#16a34a";
-  const riskPercentNum = Math.round(activePActual * 100);
+  const riskPercentNum = activePActual != null ? Math.round(activePActual * 100) : null;
 
   const handleRunPrediction = async (timestamp?: string) => {
     setStatusMessage(null);
-    const result = await predict(spot.spot_id, timestamp);
-    if (result) {
-      setLivePrediction(result);
-      setLastCalculatedTime(
-        new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })
-      );
-      setStatusMessage(
-        timestamp
-          ? `2025 Cloudburst Replay: Risk ${Math.round(result.p_actual * 100)}%`
-          : `Live Recalculated: ${Math.round(result.p_actual * 100)}% (Δ ${result.delta >= 0 ? "+" : ""}${Math.round(result.delta * 100)}%)`
-      );
-      if (onSpotUpdated) {
-        onSpotUpdated({
-          ...spot,
-          p_actual: result.p_actual,
-          p_rain: result.p_rain,
-          delta: result.delta,
-          risk_level: result.risk_level,
-          cause_label: result.cause_label,
-          dispatch_type: result.dispatch_type,
-          confidence_lower: result.confidence_lower,
-          confidence_upper: result.confidence_upper,
-          shap_top3: result.shap_top3,
-          predicted_for: result.predicted_for,
-        });
+    setErrorMessage(null);
+    const ts = timestamp || new Date().toISOString();
+    try {
+      const result = await predict(spot.spot_id, ts);
+      if (result) {
+        setLivePrediction(result);
+        setLastCalculatedTime(
+          new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })
+        );
+        setStatusMessage(
+          timestamp
+            ? `2025 Cloudburst Replay: Risk ${Math.round(result.p_actual * 100)}%`
+            : `Live Recalculated: ${Math.round(result.p_actual * 100)}% (Δ ${result.delta >= 0 ? "+" : ""}${Math.round(result.delta * 100)}%)`
+        );
+        if (onSpotUpdated) {
+          onSpotUpdated({
+            ...spot,
+            p_actual: result.p_actual,
+            p_rain: result.p_rain,
+            delta: result.delta,
+            risk_level: result.risk_level,
+            cause_label: result.cause_label,
+            dispatch_type: result.dispatch_type,
+            confidence_lower: result.confidence_lower,
+            confidence_upper: result.confidence_upper,
+            shap_top3: result.shap_top3,
+            predicted_for: result.predicted_for,
+          });
+        }
+      } else {
+        setErrorMessage("Failed to calculate prediction for this spot.");
       }
+    } catch (err: any) {
+      setErrorMessage(err?.message || "Prediction request failed.");
     }
   };
 
   // SVG Circular Meter calculations
   const radius = 38;
   const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = circumference - (riskPercentNum / 100) * circumference;
+  const strokeDashoffset =
+    riskPercentNum != null
+      ? circumference - (riskPercentNum / 100) * circumference
+      : circumference;
 
   return (
     <div className="w-full bg-white rounded-xl border border-slate-200 overflow-hidden flex flex-col shadow-xs">
@@ -168,7 +185,7 @@ export function RiskPanel({ spot, onClose, onSpotUpdated }: RiskPanelProps) {
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
             <span className="text-xl font-bold font-mono text-slate-900 leading-none">
-              {riskPercentNum}%
+              {riskPercentNum != null ? `${riskPercentNum}%` : "—"}
             </span>
             <span className="text-[10px] text-slate-500 mt-0.5 leading-none">
               Flood Risk
@@ -198,10 +215,12 @@ export function RiskPanel({ spot, onClose, onSpotUpdated }: RiskPanelProps) {
             <div className="text-[10px] text-slate-500">Δ Signal</div>
             <div
               className={`text-xs font-bold font-mono mt-0.5 ${
-                activeDelta > 0 ? "text-rose-600" : "text-emerald-600"
+                activeDelta != null && activeDelta > 0 ? "text-rose-600" : "text-emerald-600"
               }`}
             >
-              {activeDelta > 0 ? `+${(activeDelta * 100).toFixed(0)}%` : `${(activeDelta * 100).toFixed(0)}%`}
+              {activeDelta != null
+                ? (activeDelta > 0 ? `+${(activeDelta * 100).toFixed(0)}%` : `${(activeDelta * 100).toFixed(0)}%`)
+                : "—"}
             </div>
             <div className="text-[9px] text-slate-400">(Drainage Gap)</div>
           </div>
@@ -220,13 +239,15 @@ export function RiskPanel({ spot, onClose, onSpotUpdated }: RiskPanelProps) {
         <div className="p-2.5 rounded-lg bg-white border border-slate-200">
           <div className="text-[10px] text-slate-500 font-medium">Confidence Interval</div>
           <div className="text-xs font-bold font-mono text-slate-900 mt-0.5">
-            {formatPercent(activeConfidenceLower)} to {formatPercent(activeConfidenceUpper)}
+            {activeConfidenceLower != null && activeConfidenceUpper != null
+              ? `${formatPercent(activeConfidenceLower)} to ${formatPercent(activeConfidenceUpper)}`
+              : "—"}
           </div>
           <div className="w-full bg-slate-100 rounded-full h-1.5 mt-1.5 overflow-hidden">
             <div
               className="bg-[#0066cc] h-full rounded-full"
               style={{
-                width: `${Math.min(100, Math.max(10, activeConfidenceUpper * 100))}%`,
+                width: `${activeConfidenceUpper != null ? Math.min(100, Math.max(10, activeConfidenceUpper * 100)) : 0}%`,
               }}
             />
           </div>
@@ -322,14 +343,21 @@ export function RiskPanel({ spot, onClose, onSpotUpdated }: RiskPanelProps) {
           </div>
         )}
 
+        {errorMessage && (
+          <div className="p-2 rounded-lg bg-rose-50 border border-rose-200 text-[11px] text-rose-700 font-medium">
+            {errorMessage}
+          </div>
+        )}
+
         <div className="flex gap-2">
           <button
             onClick={() => handleRunPrediction("2025-07-15T10:30:00Z")}
             disabled={isPredicting}
-            className="flex-1 py-1.5 px-2.5 rounded-lg bg-white hover:bg-rose-50 text-rose-700 border border-rose-200 text-[11px] font-medium transition-colors disabled:opacity-50 text-center shadow-2xs"
+            className="flex-1 py-1.5 px-2.5 rounded-lg bg-white hover:bg-rose-50 text-rose-700 border border-rose-200 text-[11px] font-medium transition-colors disabled:opacity-50 text-center shadow-2xs flex items-center justify-center gap-1"
             title="Simulate 75mm/h cloudburst and 4.2m high tide for this spot"
           >
-            Replay 2025 Cloudburst
+            {isPredicting ? <IconRefresh className="w-3 h-3 animate-spin" /> : null}
+            <span>Replay 2025 Cloudburst</span>
           </button>
           <button
             onClick={() => handleRunPrediction()}

@@ -17,6 +17,15 @@ export default function RiskAnalysisPage() {
 
   const sortedSpots = [...spots].sort((a, b) => (b.p_actual || 0) - (a.p_actual || 0));
 
+  const criticalCount = spots.filter((s) => s.risk_level === "critical").length;
+  const highCount = spots.filter((s) => s.risk_level === "high").length;
+  const moderateCount = spots.filter((s) => s.risk_level === "moderate").length;
+  const validPActual = spots.filter((s) => s.p_actual != null);
+  const avgRisk =
+    validPActual.length > 0
+      ? validPActual.reduce((acc, s) => acc + (s.p_actual || 0), 0) / validPActual.length
+      : null;
+
   return (
     <div className="flex-1 bg-[#f8fafc] p-4 lg:p-6 space-y-5 max-w-[1600px] mx-auto w-full">
       {/* Header */}
@@ -32,25 +41,27 @@ export default function RiskAnalysisPage() {
       {/* Top 4 Summary Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div className="p-3.5 rounded-xl bg-white border border-slate-200">
-          <div className="text-2xl font-bold font-mono text-rose-600">5</div>
+          <div className="text-2xl font-bold font-mono text-rose-600">{criticalCount}</div>
           <div className="text-xs font-semibold text-slate-800 mt-1">Critical Spots</div>
           <div className="text-[10px] text-slate-400">Immediate action needed</div>
         </div>
 
         <div className="p-3.5 rounded-xl bg-white border border-slate-200">
-          <div className="text-2xl font-bold font-mono text-orange-600">8</div>
+          <div className="text-2xl font-bold font-mono text-orange-600">{highCount}</div>
           <div className="text-xs font-semibold text-slate-800 mt-1">High Risk Spots</div>
           <div className="text-[10px] text-slate-400">Drainage bottleneck zones</div>
         </div>
 
         <div className="p-3.5 rounded-xl bg-white border border-slate-200">
-          <div className="text-2xl font-bold font-mono text-amber-600">11</div>
+          <div className="text-2xl font-bold font-mono text-amber-600">{moderateCount}</div>
           <div className="text-xs font-semibold text-slate-800 mt-1">Moderate Risk Spots</div>
           <div className="text-[10px] text-slate-400">Watch on rainfall spikes</div>
         </div>
 
         <div className="p-3.5 rounded-xl bg-white border border-slate-200">
-          <div className="text-2xl font-bold font-mono text-[#0066cc]">42%</div>
+          <div className="text-2xl font-bold font-mono text-[#0066cc]">
+            {avgRisk != null ? formatPercent(avgRisk, 0) : "—"}
+          </div>
           <div className="text-xs font-semibold text-slate-800 mt-1">Ward Average Risk</div>
           <div className="text-[10px] text-slate-400">Composite dual model mean</div>
         </div>
