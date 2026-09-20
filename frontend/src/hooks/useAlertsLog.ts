@@ -1,7 +1,7 @@
 import useSWR from "swr";
 import { useState } from "react";
 import { api } from "@/lib/api";
-import { AlertLogEntry, BroadcastResponse } from "@/lib/types";
+import { AlertLogEntry, AlertRequest, AlertResponse, BroadcastResponse } from "@/lib/types";
 
 export function useAlertsLog(limit: number = 50) {
   const { data, error, isLoading, mutate } = useSWR<AlertLogEntry[]>(
@@ -15,6 +15,21 @@ export function useAlertsLog(limit: number = 50) {
 
   const [isSending, setIsSending] = useState(false);
   const [sendError, setSendError] = useState<unknown | null>(null);
+
+  const sendAlert = async (payload: AlertRequest): Promise<AlertResponse | null> => {
+    setIsSending(true);
+    setSendError(null);
+    try {
+      const res = await api.sendAlert(payload);
+      mutate();
+      return res;
+    } catch (err) {
+      setSendError(err);
+      return null;
+    } finally {
+      setIsSending(false);
+    }
+  };
 
   const broadcast = async (spotId: number): Promise<BroadcastResponse | null> => {
     setIsSending(true);
@@ -36,6 +51,7 @@ export function useAlertsLog(limit: number = 50) {
     isLoading,
     isError: !!error,
     error,
+    sendAlert,
     broadcast,
     isSending,
     sendError,
