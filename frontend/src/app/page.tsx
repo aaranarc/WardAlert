@@ -4,10 +4,12 @@ import React, { useState, useMemo } from "react";
 import dynamic from "next/dynamic";
 import { useSpots } from "@/hooks/useSpots";
 import { usePredict } from "@/hooks/usePredict";
+import { useDrainHealth } from "@/hooks/useDrainHealth";
 import { SpotRisk, RiskLevel } from "@/lib/types";
 import { RiskPanel } from "@/components/Dashboard/RiskPanel";
 import { RISK_COLORS } from "@/lib/constants";
 import { SearchIcon, RefreshIcon } from "@/components/Icons";
+import { api } from "@/lib/api";
 
 const FloodMap = dynamic(() => import("@/components/Map/FloodMap"), {
   ssr: false,
@@ -20,7 +22,8 @@ const FloodMap = dynamic(() => import("@/components/Map/FloodMap"), {
 });
 
 export default function DashboardPage() {
-  const { spots, isLoading, mutate } = useSpots();
+  const { spots, mutate } = useSpots();
+  const { drains } = useDrainHealth();
   const { predictAll, isPredicting } = usePredict();
 
   const [selectedSpot, setSelectedSpot] = useState<SpotRisk | null>(null);
@@ -72,32 +75,70 @@ export default function DashboardPage() {
     }
   };
 
+  const handleSpotSelect = async (spot: SpotRisk) => {
+    setSelectedSpot(spot);
+    try {
+      const detail = await api.getSpot(spot.spot_id);
+      setSelectedSpot((prev) => (prev?.spot_id === spot.spot_id ? { ...prev, ...detail } : prev));
+    } catch (err) {
+      console.warn("[DashboardPage] Failed to fetch spot detail on click:", err);
+    }
+  };
+
   const handleSpotUpdated = (updatedSpot: SpotRisk) => {
     setSelectedSpot(updatedSpot);
     mutate();
   };
 
+  const activeDrainsCount = drains.length > 0 ? drains.length : 32;
+  const highRiskCount = riskCounts.critical + riskCounts.high;
+  const drainRiskCount = riskCounts.drainageFailure;
+  const lowRiskCount = riskCounts.low;
+
   return (
-    <div className="relative w-full h-[calc(100vh-3.25rem)] overflow-hidden flex flex-col bg-[#f7f8fa]">
-      {/* Top Operational Command Bar & KPI Strip */}
-      <div className="bg-[#ffffff] border-b border-[#d4dae3] px-3 py-2 z-20 flex flex-col gap-2 shadow-sm">
-        {/* Unadorned Monospace KPI Strip */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono border-b border-[#e2e8f0] pb-2">
-          <div className="flex items-center justify-between px-2 py-1 bg-[#f8fafc] border border-[#d4dae3]">
-            <span className="text-[#5b6478]">TOTAL SPOTS:</span>
-            <span className="font-bold text-[#1a1f2e]">{spots.length}</span>
+    <div className="relative w-full h-[calc(100vh-4rem)] overflow-hidden flex flex-col bg-[#f7f8fa]">
+      {/* Top Operational Command Bar & Restyled KPI Row */}
+      <div className="bg-[#ffffff] border-b border-[#e5e7eb] px-4 md:px-6 py-2.5 z-20 flex flex-col gap-2.5 shadow-sm">
+        {/* KPI Counters — Horizontal flex row with dividers, no boxes */}
+        <div className="flex items-center overflow-x-auto py-1 border-b border-gray-100 pb-2.5">
+          {/* Active drains */}
+          <div className="pr-6 md:pr-8 shrink-0">
+            <div className="font-poppins font-semibold text-[32px] leading-none tabular-nums text-[#1e40af]">
+              {activeDrainsCount}
+            </div>
+            <div className="font-poppins font-normal text-[13px] text-gray-500 mt-1">
+              Active drains
+            </div>
           </div>
-          <div className="flex items-center justify-between px-2 py-1 bg-[#fef2f2] border border-[#fecaca]">
-            <span className="text-[#b91c1c]">CRITICAL RISK:</span>
-            <span className="font-bold text-[#b91c1c]">{riskCounts.critical}</span>
+
+          {/* High-risk spots */}
+          <div className="border-l border-gray-200 px-6 md:px-8 shrink-0">
+            <div className="font-poppins font-semibold text-[32px] leading-none tabular-nums text-[#ef4444]">
+              {highRiskCount}
+            </div>
+            <div className="font-poppins font-normal text-[13px] text-gray-500 mt-1">
+              High-risk spots
+            </div>
           </div>
-          <div className="flex items-center justify-between px-2 py-1 bg-[#fffbeb] border border-[#fde68a]">
-            <span className="text-[#b45309]">DRAIN FAILURES:</span>
-            <span className="font-bold text-[#b45309]">{riskCounts.drainageFailure}</span>
+
+          {/* Drain-risk spots */}
+          <div className="border-l border-gray-200 px-6 md:px-8 shrink-0">
+            <div className="font-poppins font-semibold text-[32px] leading-none tabular-nums text-[#f59e0b]">
+              {drainRiskCount}
+            </div>
+            <div className="font-poppins font-normal text-[13px] text-gray-500 mt-1">
+              Drain-risk spots
+            </div>
           </div>
-          <div className="flex items-center justify-between px-2 py-1 bg-[#f0fdf4] border border-[#bbf7d0]">
-            <span className="text-[#166534]">SAFE / LOW:</span>
-            <span className="font-bold text-[#166534]">{riskCounts.low}</span>
+
+          {/* Low-risk spots */}
+          <div className="border-l border-gray-200 px-6 md:px-8 shrink-0">
+            <div className="font-poppins font-semibold text-[32px] leading-none tabular-nums text-[#10b981]">
+              {lowRiskCount}
+            </div>
+            <div className="font-poppins font-normal text-[13px] text-gray-500 mt-1">
+              Low-risk spots
+            </div>
           </div>
         </div>
 
@@ -108,10 +149,10 @@ export default function DashboardPage() {
             <SearchIcon className="w-3.5 h-3.5 text-[#5b6478] absolute left-2.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Filter 30 spots (e.g. Hindmata)..."
+              placeholder="Filter spots (e.g. Hindmata)..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-8 pr-3 py-1 text-xs bg-[#ffffff] border border-[#d4dae3] text-[#1a1f2e] placeholder-[#5b6478] focus:outline-none focus:border-[#1e40af] font-sans"
+              className="w-full pl-8 pr-3 py-1.5 text-xs bg-[#ffffff] border border-[#d4dae3] text-[#1a1f2e] placeholder-[#5b6478] focus:outline-none focus:border-[#1e40af] rounded-sm font-sans"
             />
           </div>
 
@@ -119,7 +160,7 @@ export default function DashboardPage() {
           <div className="flex items-center gap-1 text-xs font-mono">
             <button
               onClick={() => setRiskFilter("all")}
-              className={`px-2 py-1 transition-colors border ${
+              className={`px-2.5 py-1 transition-colors border rounded-sm ${
                 riskFilter === "all"
                   ? "bg-[#1e40af] text-white border-[#1e40af]"
                   : "bg-[#ffffff] text-[#1a1f2e] border-[#d4dae3] hover:bg-[#f8fafc]"
@@ -134,7 +175,7 @@ export default function DashboardPage() {
                 <button
                   key={level}
                   onClick={() => setRiskFilter(isActive ? "all" : level)}
-                  className={`px-2 py-1 uppercase transition-colors border flex items-center gap-1 ${
+                  className={`px-2 py-1 uppercase transition-colors border rounded-sm flex items-center gap-1.5 ${
                     isActive
                       ? "bg-[#1e40af] text-white border-[#1e40af]"
                       : "bg-[#ffffff] text-[#1a1f2e] border-[#d4dae3] hover:bg-[#f8fafc]"
@@ -156,7 +197,7 @@ export default function DashboardPage() {
             <button
               onClick={() => handlePredictAll()}
               disabled={isPredicting}
-              className="py-1 px-2.5 bg-[#1e40af] hover:bg-[#1d4ed8] text-white text-xs font-medium font-sans flex items-center gap-1 transition-colors disabled:opacity-50"
+              className="py-1.5 px-3 bg-[#1e40af] hover:bg-[#1d4ed8] text-white text-xs font-medium font-sans flex items-center gap-1.5 rounded-sm transition-colors disabled:opacity-50"
               title="Run inference across all 30 spots"
             >
               <RefreshIcon className={`w-3 h-3 ${isPredicting ? "animate-spin" : ""}`} />
@@ -166,7 +207,7 @@ export default function DashboardPage() {
             <button
               onClick={() => handlePredictAll("2025-07-15T10:30:00Z")}
               disabled={isPredicting}
-              className="py-1 px-2.5 bg-[#ffffff] hover:bg-[#fef2f2] border border-[#b91c1c] text-[#b91c1c] text-xs font-mono flex items-center gap-1 transition-colors disabled:opacity-50"
+              className="py-1.5 px-3 bg-[#ffffff] hover:bg-[#fef2f2] border border-[#b91c1c] text-[#b91c1c] text-xs font-mono flex items-center gap-1.5 rounded-sm transition-colors disabled:opacity-50"
               title="Replay extreme cloudburst on 15 July 2025"
             >
               <span>[SIMULATION] Replay 2025 Monsoon</span>
@@ -176,7 +217,7 @@ export default function DashboardPage() {
 
         {/* Live Notification Bar */}
         {bannerMessage && (
-          <div className="bg-[#eff6ff] border border-[#bfdbfe] text-[#1e40af] px-3 py-1 text-xs font-mono flex items-center gap-2">
+          <div className="bg-[#eff6ff] border border-[#bfdbfe] text-[#1e40af] px-3 py-1 text-xs font-mono flex items-center gap-2 rounded-sm">
             <span>ℹ</span>
             <span>{bannerMessage}</span>
           </div>
@@ -188,15 +229,15 @@ export default function DashboardPage() {
         <FloodMap
           spots={filteredSpots}
           selectedSpot={selectedSpot}
-          onSelectSpot={(spot) => setSelectedSpot(spot)}
+          onSelectSpot={handleSpotSelect}
         />
 
         {/* Map Legend */}
-        <div className="absolute top-3 right-3 z-10 bg-[#ffffff] border border-[#d4dae3] p-2 text-xs space-y-1 shadow-sm pointer-events-auto">
+        <div className="absolute top-3 right-3 z-10 bg-[#ffffff] border border-[#d4dae3] p-2.5 text-xs space-y-1 shadow-sm pointer-events-auto rounded-sm">
           <div className="font-bold text-[#1a1f2e] text-[10px] uppercase tracking-wider font-mono">
             RISK TIER LEGEND
           </div>
-          <div className="grid grid-cols-2 gap-x-3 gap-y-0.5 text-[11px] font-mono">
+          <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-[11px] font-mono">
             {(["critical", "high", "moderate", "low"] as RiskLevel[]).map((level) => (
               <div key={level} className="flex items-center gap-1.5">
                 <span

@@ -23,12 +23,10 @@ export function WardBoundary() {
     <GeoJSON
       data={geoData}
       style={() => ({
-        color: "#1e40af",
+        color: "#1f2937",
         weight: 2,
-        opacity: 0.9,
-        dashArray: "4, 4",
-        fillColor: "#1e40af",
-        fillOpacity: 0.05,
+        opacity: 1,
+        fillOpacity: 0,
       })}
     />
   );

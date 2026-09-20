@@ -24,7 +24,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         />
         <main
           className={cn(
-            "flex-1 flex flex-col transition-all duration-200 min-h-[calc(100vh-3.25rem)]",
+            "flex-1 flex flex-col transition-all duration-200 min-h-[calc(100vh-4rem)]",
             collapsed ? "lg:pl-[60px]" : "lg:pl-[240px]"
           )}
         >

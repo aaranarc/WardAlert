@@ -1,8 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+@import "leaflet/dist/leaflet.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import "leaflet/dist/leaflet.css";
 
 :root {
   --canvas: #f7f8fa;
@@ -82,6 +83,34 @@ body {
 .leaflet-popup-tip {
   background: #ffffff !important;
   border: 1px solid #d4dae3 !important;
+}
+
+/* GIS Circle Marker */
+.gis-marker {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+  cursor: pointer;
+}
+
+/* Dark GIS Popup Styling (click only, dark theme, rounded-lg, 12px padding, small shadow) */
+.dark-gis-popup .leaflet-popup-content-wrapper {
+  background: #1f2937 !important;
+  color: #ffffff !important;
+  border-radius: 0.5rem !important; /* rounded-lg */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.25), 0 2px 4px -2px rgba(0, 0, 0, 0.2) !important;
+  padding: 12px !important;
+  border: 1px solid #374151 !important;
+}
+
+.dark-gis-popup .leaflet-popup-content {
+  margin: 0 !important;
+  padding: 0 !important;
+  color: #ffffff !important;
+  line-height: 1.4 !important;
+}
+
+.dark-gis-popup .leaflet-popup-tip {
+  background: #1f2937 !important;
+  border: 1px solid #374151 !important;
 }
 
 /* Motion Rules */
