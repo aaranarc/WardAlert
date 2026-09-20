@@ -6,7 +6,7 @@ import { useSpots } from "@/hooks/useSpots";
 import { useAlertsLog } from "@/hooks/useAlertsLog";
 import { useSubscriberCount } from "@/hooks/useSubscriberCount";
 import { AlertLog } from "@/components/Alerts/AlertLog";
-import { AlertResponse } from "@/lib/types";
+import { AlertResponse, BroadcastResponse } from "@/lib/types";
 import { RefreshIcon } from "@/components/Icons";
 
 function AlertsContent() {
@@ -14,12 +14,12 @@ function AlertsContent() {
   const urlSpotId = searchParams.get("spot_id");
 
   const { spots } = useSpots();
-  const { logs, isLoading, sendAlert, isSending, sendError, mutate } = useAlertsLog(100);
+  const { logs, isLoading, broadcast, isSending, sendError, mutate } = useAlertsLog(100);
 
   const [selectedSpotId, setSelectedSpotId] = useState<number | "">("");
+  const [broadcastMode, setBroadcastMode] = useState<"normal" | "critical">("normal");
   const [selectedLanguage, setSelectedLanguage] = useState<"en" | "hi" | "hinglish" | "mr">("en");
-  const [recipient, setRecipient] = useState<string>("whatsapp:+910000000000");
-  const [lastSentResponse, setLastSentResponse] = useState<AlertResponse | null>(null);
+  const [broadcastResult, setBroadcastResult] = useState<BroadcastResponse | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -38,21 +38,16 @@ function AlertsContent() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormError(null);
-    setLastSentResponse(null);
+    setBroadcastResult(null);
 
     if (!selectedSpotId) {
       setFormError("Please select a target flood location.");
       return;
     }
 
-    const response = await sendAlert({
-      spot_id: Number(selectedSpotId),
-      language: selectedLanguage,
-      recipient: recipient.trim() || undefined,
-    });
-
+    const response = await broadcast(Number(selectedSpotId), broadcastMode);
     if (response) {
-      setLastSentResponse(response);
+      setBroadcastResult(response);
     }
   };
 
@@ -65,7 +60,7 @@ function AlertsContent() {
             EMERGENCY BROADCAST & CITIZEN ALERT CENTER
           </h1>
           <p className="text-xs text-[#5b6478]">
-            Multilingual advisory dispatch generated from dual-model flood predictions. Messages deliver via Twilio WhatsApp with simulated fallback.
+            Multilingual advisory dispatch generated from dual-model flood predictions.
           </p>
         </div>
 
@@ -85,11 +80,47 @@ function AlertsContent() {
           <div className="p-3.5 bg-[#ffffff] border border-[#d4dae3] rounded-sm space-y-3">
             <div className="pb-2 border-b border-[#d4dae3] flex items-center justify-between">
               <h2 className="text-xs font-bold uppercase tracking-wider text-[#1a1f2e] font-mono">
-                DISPATCH TEST ADVISORY
+                DISPATCH BROADCAST
               </h2>
               <span className="text-[10px] font-mono text-[#5b6478] bg-[#f1f5f9] px-1.5 py-0.5 border border-[#d4dae3]">
-                {subscriberCount !== null ? `${subscriberCount} SUBSCRIBERS` : "SUBSCRIBERS: —"}
+                {subscriberCount !== null ? `${subscriberCount} SPOT SUBSCRIBERS` : "SUBSCRIBERS: —"}
               </span>
+            </div>
+
+            {/* Mode Toggle */}
+            <div className="space-y-1">
+              <label className="text-[11px] font-mono font-semibold uppercase text-[#5b6478] block">
+                BROADCAST PROTOCOL MODE:
+              </label>
+              <div className="grid grid-cols-2 gap-1.5 font-mono text-xs">
+                <button
+                  type="button"
+                  onClick={() => setBroadcastMode("normal")}
+                  className={`py-2 px-2.5 border text-center font-bold uppercase transition-colors ${
+                    broadcastMode === "normal"
+                      ? "bg-[#1e40af] text-white border-[#1e40af]"
+                      : "bg-[#ffffff] text-[#1a1f2e] border-[#d4dae3] hover:bg-[#f8fafc]"
+                  }`}
+                >
+                  NORMAL BROADCAST
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setBroadcastMode("critical")}
+                  className={`py-2 px-2.5 border text-center font-bold uppercase transition-colors ${
+                    broadcastMode === "critical"
+                      ? "bg-[#b91c1c] text-white border-[#b91c1c]"
+                      : "bg-[#ffffff] text-[#b91c1c] border-[#fecaca] hover:bg-[#fef2f2]"
+                  }`}
+                >
+                  CRITICAL EMERGENCY
+                </button>
+              </div>
+              <p className="text-[10px] text-[#5b6478] font-mono mt-0.5">
+                {broadcastMode === "normal"
+                  ? "NORMAL: WhatsApp only to subscribers of selected spot."
+                  : "CRITICAL: WhatsApp + SMS to all subscribers within 2km radius."}
+              </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-3 font-sans text-xs">
@@ -117,7 +148,7 @@ function AlertsContent() {
               {/* Language Selector */}
               <div className="space-y-1">
                 <label className="text-[11px] font-mono font-semibold uppercase text-[#5b6478] block">
-                  BROADCAST LANGUAGE:
+                  DEFAULT PREVIEW LANGUAGE:
                 </label>
                 <div className="grid grid-cols-2 gap-1 font-sans">
                   {[
@@ -134,7 +165,7 @@ function AlertsContent() {
                           lang.id as "en" | "hi" | "hinglish" | "mr"
                         )
                       }
-                      className={`py-1 px-2 text-xs font-medium border text-left transition-colors ${
+                      className={`py-1.5 px-2 text-xs font-medium border text-left transition-colors ${
                         selectedLanguage === lang.id
                           ? "bg-[#1e40af] text-white border-[#1e40af]"
                           : "bg-[#ffffff] text-[#1a1f2e] border-[#d4dae3] hover:bg-[#f8fafc]"
@@ -146,23 +177,6 @@ function AlertsContent() {
                 </div>
               </div>
 
-              {/* Recipient Phone */}
-              <div className="space-y-1">
-                <label className="text-[11px] font-mono font-semibold uppercase text-[#5b6478] block">
-                  RECIPIENT (E.164 / WHATSAPP):
-                </label>
-                <input
-                  type="text"
-                  value={recipient}
-                  onChange={(e) => setRecipient(e.target.value)}
-                  placeholder="whatsapp:+919876543210"
-                  className="w-full px-2.5 py-1.5 text-xs bg-[#ffffff] border border-[#d4dae3] text-[#1a1f2e] font-mono focus:outline-none focus:border-[#1e40af]"
-                />
-                <p className="text-[10px] text-[#5b6478] font-mono">
-                  Without active Twilio credentials, messages log safely with SIMULATED status.
-                </p>
-              </div>
-
               {formError && (
                 <div className="p-2 bg-[#fef2f2] border border-[#fecaca] text-[11px] font-mono text-[#b91c1c]">
                   {formError}
@@ -171,7 +185,7 @@ function AlertsContent() {
 
               {sendError ? (
                 <div className="p-2 bg-[#fef2f2] border border-[#fecaca] text-[11px] font-mono text-[#b91c1c]">
-                  Error dispatching alert. Verify backend is reachable.
+                  Error dispatching broadcast. Verify backend is reachable.
                 </div>
               ) : null}
 
@@ -179,32 +193,47 @@ function AlertsContent() {
               <button
                 type="submit"
                 disabled={isSending}
-                className="w-full py-2 px-3 bg-[#1e40af] hover:bg-[#1d4ed8] text-white font-semibold text-xs uppercase tracking-wider transition-colors disabled:opacity-50"
+                className={`w-full py-2.5 px-3 font-semibold text-xs uppercase tracking-wider transition-colors disabled:opacity-50 text-white font-mono ${
+                  broadcastMode === "critical"
+                    ? "bg-[#b91c1c] hover:bg-[#991b1b]"
+                    : "bg-[#1e40af] hover:bg-[#1d4ed8]"
+                }`}
               >
-                {isSending ? "PREDICTING & TRANSMITTING..." : "TRANSMIT TEST ADVISORY"}
+                {isSending
+                  ? "TRANSMITTING BROADCAST..."
+                  : broadcastMode === "critical"
+                  ? "SEND CRITICAL EMERGENCY BROADCAST"
+                  : "SEND NORMAL BROADCAST"}
               </button>
             </form>
           </div>
 
-          {/* Last Dispatched Message Card */}
-          {lastSentResponse && (
-            <div className="p-3 bg-[#ffffff] border border-[#166534] rounded-sm space-y-2">
+          {/* Broadcast Confirmation Card */}
+          {broadcastResult && (
+            <div className="p-3.5 bg-[#ffffff] border border-[#166534] rounded-sm space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-[#166534] uppercase font-mono">
-                  ADVISORY GENERATED
+                  TRANSMISSION CONFIRMED
                 </span>
-                <span className="text-[10px] font-mono px-1.5 py-0.2 bg-[#f0fdf4] text-[#166534] border border-[#bbf7d0] uppercase font-bold">
-                  {lastSentResponse.status}
+                <span className="text-[10px] font-mono px-1.5 py-0.5 bg-[#f0fdf4] text-[#166534] border border-[#bbf7d0] uppercase font-bold">
+                  {broadcastResult.mode || broadcastMode}
                 </span>
               </div>
 
-              <div className="bg-[#f8fafc] p-2.5 border border-[#d4dae3] text-xs font-mono text-[#1a1f2e] whitespace-pre-wrap leading-relaxed max-h-40 overflow-y-auto">
-                {lastSentResponse.body}
+              <div className="bg-[#f0fdf4] p-3 border border-[#bbf7d0] text-xs font-mono text-[#166534] font-semibold leading-relaxed">
+                {broadcastResult.message ||
+                  (broadcastResult.mode === "critical"
+                    ? `Broadcasted to ${broadcastResult.broadcast_count} subscribers via WhatsApp + SMS`
+                    : `Broadcasted to ${broadcastResult.broadcast_count} subscribers via WhatsApp`)}
               </div>
 
-              <div className="text-[10px] text-[#5b6478] font-mono flex items-center justify-between">
-                <span>Spot: #{lastSentResponse.spot_id}</span>
-                <span>Language: {lastSentResponse.language}</span>
+              <div className="text-[10px] text-[#5b6478] font-mono flex items-center justify-between pt-1">
+                <span>Spot ID: #{selectedSpotId}</span>
+                <span>
+                  Channels:{" "}
+                  {broadcastResult.channels?.join(", ").toUpperCase() ||
+                    (broadcastMode === "critical" ? "WHATSAPP, SMS" : "WHATSAPP")}
+                </span>
               </div>
             </div>
           )}

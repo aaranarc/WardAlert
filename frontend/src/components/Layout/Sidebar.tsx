@@ -30,22 +30,22 @@ export function Sidebar({
 
   const navItems = [
     {
-      label: "LIVE DISPATCH MAP",
+      label: "LIVE MAP",
       href: "/",
       icon: MapIcon,
     },
     {
-      label: "DRAIN HEALTH INDEX",
+      label: "DRAIN HEALTH",
       href: "/drain-health",
       icon: ActivityIcon,
     },
     {
-      label: "WHATSAPP DISPATCH",
+      label: "ALERTS",
       href: "/alerts",
       icon: BellIcon,
     },
     {
-      label: "ARCHITECTURE & STATUS",
+      label: "ARCHITECTURE",
       href: "/about",
       icon: InfoIcon,
     },

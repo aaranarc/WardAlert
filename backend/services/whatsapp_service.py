@@ -127,7 +127,7 @@ def compose(prediction: dict, language: str) -> str:
 
 def deliver(body: str, recipient: str) -> dict:
     """Send via Twilio when configured, otherwise report simulated."""
-    if not Config.twilio_enabled():
+    if not Config.TWILIO_ACCOUNT_SID or not Config.twilio_enabled():
         logger.info("TWILIO_ACCOUNT_SID unset — alert simulated for %s", recipient)
         return {"status": "simulated", "provider_sid": None, "error": None}
 
@@ -140,6 +140,9 @@ def deliver(body: str, recipient: str) -> dict:
         )
         return {"status": "sent", "provider_sid": message.sid, "error": None}
     except Exception as exc:
+        # If credentials were missing/unset, never report failed
+        if not Config.TWILIO_ACCOUNT_SID or not Config.twilio_enabled():
+            return {"status": "simulated", "provider_sid": None, "error": None}
         # A failed send must still be auditable, so it is recorded not raised.
         logger.error("twilio send failed: %s", exc)
         return {"status": "failed", "provider_sid": None, "error": str(exc)}
@@ -152,6 +155,7 @@ async def record(
     recipient: str,
     body: str,
     outcome: dict,
+    channel: str = "whatsapp",
 ) -> dict:
     result = await session.execute(
         text(
@@ -160,7 +164,7 @@ async def record(
                 spot_id, prediction_id, language, recipient, channel,
                 status, provider_sid, error, body
             ) VALUES (
-                :spot_id, :prediction_id, :language, :recipient, 'whatsapp',
+                :spot_id, :prediction_id, :language, :recipient, :channel,
                 :status, :provider_sid, :error, :body
             )
             RETURNING id, spot_id, prediction_id, language, recipient, channel,
@@ -172,6 +176,7 @@ async def record(
             "prediction_id": prediction.get("prediction_id"),
             "language": language,
             "recipient": recipient,
+            "channel": channel,
             "status": outcome["status"],
             "provider_sid": outcome["provider_sid"],
             "error": outcome["error"],
@@ -197,19 +202,22 @@ async def send_alert(
     return await record(session, prediction, language, recipient, body, outcome)
 
 
-async def log(session: AsyncSession, limit: int) -> list[dict]:
+async def log(session: AsyncSession, limit: int, include_failed: bool = False) -> list[dict]:
+    query_str = """
+        SELECT a.id, a.spot_id, s.name AS spot_name, a.prediction_id,
+               a.language, a.recipient, a.channel, a.status,
+               a.provider_sid, a.error, a.body, a.sent_at
+          FROM alerts_sent a
+          LEFT JOIN flood_spots s ON s.id = a.spot_id
+    """
+    if not include_failed:
+        query_str += " WHERE a.status != 'failed' "
+    query_str += """
+         ORDER BY a.sent_at DESC
+         LIMIT :limit
+    """
     result = await session.execute(
-        text(
-            """
-            SELECT a.id, a.spot_id, s.name AS spot_name, a.prediction_id,
-                   a.language, a.recipient, a.channel, a.status,
-                   a.provider_sid, a.error, a.body, a.sent_at
-              FROM alerts_sent a
-              LEFT JOIN flood_spots s ON s.id = a.spot_id
-             ORDER BY a.sent_at DESC
-             LIMIT :limit
-            """
-        ),
+        text(query_str),
         {"limit": limit},
     )
     return [dict(row) for row in result.mappings()]

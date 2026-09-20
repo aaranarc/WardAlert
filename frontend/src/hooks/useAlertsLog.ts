@@ -31,11 +31,14 @@ export function useAlertsLog(limit: number = 50) {
     }
   };
 
-  const broadcast = async (spotId: number): Promise<BroadcastResponse | null> => {
+  const broadcast = async (
+    spotId: number,
+    mode: "normal" | "critical" = "normal"
+  ): Promise<BroadcastResponse | null> => {
     setIsSending(true);
     setSendError(null);
     try {
-      const res = await api.broadcast(spotId);
+      const res = await api.broadcast(spotId, mode);
       mutate();
       return res;
     } catch (err) {

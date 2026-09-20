@@ -43,4 +43,7 @@ class AlertLogEntry(BaseModel):
 
 
 class BroadcastResponse(BaseModel):
-    broadcast_count: int = Field(description="active subscribers of the spot that were alerted")
+    broadcast_count: int = Field(description="active subscribers that were alerted")
+    mode: str = Field(default="normal", description="normal | critical")
+    channels: list[str] = Field(default_factory=lambda: ["whatsapp"], description="channels used for broadcast")
+    message: str = Field(default="", description="Broadcast confirmation message")

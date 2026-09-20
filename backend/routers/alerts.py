@@ -34,21 +34,28 @@ async def send_alert(
     )
 
 
+from config import Config
+
+
 @router.post("/api/alert/broadcast/{spot_id}", response_model=BroadcastResponse)
 async def broadcast(
     spot_id: int,
+    mode: str = Query("normal", regex="^(normal|critical)$"),
     session: AsyncSession = Depends(get_session),
     predictor: Predictor = Depends(get_predictor),
 ):
-    """Alert every active subscriber of one spot, in their own language.
-
-    Subscribers are known only by phone hash, which Twilio cannot deliver to, so
-    each message is rendered and recorded as 'simulated' — the audit trail shows
-    exactly what every subscriber would have received.
-    """
-    subscribers = await subscriber_service.active_for_spot(session, spot_id)
+    """Alert active subscribers of the spot (normal: WhatsApp) or within radius (critical: WhatsApp + SMS)."""
     prediction = await prediction_service.predict_one(predictor, spot_id, None)
     outcome = {"status": "simulated", "provider_sid": None, "error": None}
+
+    if mode == "critical":
+        subscribers = await subscriber_service.active_within_radius(
+            session, spot_id, Config.CRITICAL_RADIUS_KM
+        )
+        channels = ["whatsapp", "sms"]
+    else:
+        subscribers = await subscriber_service.active_for_spot(session, spot_id)
+        channels = ["whatsapp"]
 
     bodies: dict[str, str] = {}
     count = 0
@@ -56,16 +63,35 @@ async def broadcast(
         language = whatsapp_service.resolve_language(sub["language"])
         if language not in bodies:
             bodies[language] = whatsapp_service.compose(prediction, language)
-        await whatsapp_service.record(
-            session, prediction, language, sub["phone_hash"], bodies[language], outcome
-        )
+        for ch in channels:
+            await whatsapp_service.record(
+                session,
+                prediction,
+                language,
+                sub["phone_hash"],
+                bodies[language],
+                outcome,
+                channel=ch,
+            )
         count += 1
-    return {"broadcast_count": count}
+
+    if mode == "critical":
+        msg = f"Broadcasted to {count} subscribers via WhatsApp + SMS (within {Config.CRITICAL_RADIUS_KM}km radius)"
+    else:
+        msg = f"Broadcasted to {count} subscribers via WhatsApp"
+
+    return {
+        "broadcast_count": count,
+        "mode": mode,
+        "channels": channels,
+        "message": msg,
+    }
 
 
 @router.get("/api/alerts/log", response_model=list[AlertLogEntry])
 async def alert_log(
     limit: int = Query(50, ge=1, le=500),
+    include_failed: bool = Query(False),
     session: AsyncSession = Depends(get_session),
 ):
-    return await whatsapp_service.log(session, limit)
+    return await whatsapp_service.log(session, limit, include_failed=include_failed)

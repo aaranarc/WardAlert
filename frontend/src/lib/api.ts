@@ -93,6 +93,6 @@ export const api = {
     }),
   getSubscriberCount: (spotId: number) =>
     fetcher<SubscriberCount>(`/api/spots/${spotId}/subscriber-count`),
-  broadcast: (spotId: number) =>
-    fetcher<BroadcastResponse>(`/api/alert/broadcast/${spotId}`, { method: "POST" }),
+  broadcast: (spotId: number, mode: "normal" | "critical" = "normal") =>
+    fetcher<BroadcastResponse>(`/api/alert/broadcast/${spotId}?mode=${mode}`, { method: "POST" }),
 };

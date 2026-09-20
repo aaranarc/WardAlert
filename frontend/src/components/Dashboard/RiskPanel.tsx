@@ -66,7 +66,7 @@ export function RiskPanel({ spot, onClose, onSpotUpdated }: RiskPanelProps) {
   };
 
   return (
-    <div className="fixed top-13 right-0 bottom-0 w-full sm:w-[420px] bg-[#ffffff] border-l border-[#d4dae3] shadow-lg z-30 flex flex-col justify-between overflow-hidden">
+    <div className="fixed top-13 right-0 bottom-0 w-full sm:w-[480px] md:w-[720px] lg:w-[760px] bg-[#ffffff] border-l border-[#d4dae3] shadow-lg z-30 flex flex-col justify-between overflow-hidden">
       {/* Header */}
       <div className="p-3.5 border-b border-[#d4dae3] flex items-center justify-between bg-[#f8fafc]">
         <div className="overflow-hidden pr-2">
@@ -198,14 +198,14 @@ export function RiskPanel({ spot, onClose, onSpotUpdated }: RiskPanelProps) {
           actual={activePActual}
         />
 
-        {/* SHAP Explanation Chart */}
-        <ShapChart factors={activeShap} />
-
-        {/* Dispatch Action Protocol */}
-        <DispatchCard
-          dispatchType={activeDispatchType}
-          causeLabel={activeCauseLabel}
-        />
+        {/* Side-by-side SHAP Feature Attribution & Operational Guidance */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <ShapChart factors={activeShap} />
+          <DispatchCard
+            dispatchType={activeDispatchType}
+            causeLabel={activeCauseLabel}
+          />
+        </div>
 
         {/* Model Simulation Buttons */}
         <div className="p-3 bg-[#f8fafc] border border-[#d4dae3] space-y-2">
