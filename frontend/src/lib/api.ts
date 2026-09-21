@@ -99,10 +99,9 @@ export const api = {
       method: "POST",
       body: JSON.stringify(payload),
     }),
-  broadcast: (spotId: number, mode: "normal" | "critical" = "normal", langs?: string[]) =>
+  broadcast: (spotId: number, mode: "normal" | "critical" = "normal") =>
     fetcher<BroadcastResponse>(`/api/alert/broadcast/${spotId}?mode=${mode}`, {
       method: "POST",
-      body: JSON.stringify({ mode, langs }),
     }),
   getAlertPreview: (spotId: number, lang: string) =>
     fetcher<{ rendered_message: string }>(`/api/alert/preview/${spotId}?lang=${lang}`),

@@ -32,8 +32,6 @@ function AlertsContent() {
   // Spot selection
   const [selectedSpotId, setSelectedSpotId] = useState<number | "">("");
 
-  // Multi-select languages (default: English)
-  const [selectedLangs, setSelectedLangs] = useState<Array<"en" | "hi" | "hinglish" | "mr">>(["en"]);
   const [previewLang, setPreviewLang] = useState<"en" | "hi" | "hinglish" | "mr">("en");
 
   // Preview state
@@ -71,28 +69,9 @@ function AlertsContent() {
     }
   }, [urlSpotId, spots, selectedSpotId]);
 
-  // Keep previewLang in sync if selected languages change
-  useEffect(() => {
-    if (selectedLangs.length > 0 && !selectedLangs.includes(previewLang)) {
-      setPreviewLang(selectedLangs[0]);
-    }
-  }, [selectedLangs, previewLang]);
-
   const currentSpot = useMemo(() => {
     return spots.find((s) => s.spot_id === Number(selectedSpotId));
   }, [spots, selectedSpotId]);
-
-  // Language chip toggle
-  const toggleLanguage = (code: "en" | "hi" | "hinglish" | "mr") => {
-    setSelectedLangs((prev) => {
-      if (prev.includes(code)) {
-        if (prev.length === 1) return prev; // keep at least one
-        return prev.filter((l) => l !== code);
-      } else {
-        return [...prev, code];
-      }
-    });
-  };
 
   // Generate / Load Preview
   const handleGeneratePreview = async (langToPreview?: "en" | "hi" | "hinglish" | "mr") => {
@@ -124,12 +103,7 @@ function AlertsContent() {
       return;
     }
 
-    if (selectedLangs.length === 0) {
-      setFormError("Please select at least one language template.");
-      return;
-    }
-
-    const res = await broadcastAlert(Number(selectedSpotId), mode, selectedLangs);
+    const res = await broadcastAlert(Number(selectedSpotId), mode);
     if (res) {
       const channelSuffix = mode === "critical" ? "WhatsApp + SMS" : "WhatsApp";
       const message = `Broadcast sent to ${res.broadcast_count} subscribers via ${channelSuffix}`;
@@ -256,50 +230,10 @@ function AlertsContent() {
               </select>
             </div>
 
-            {/* Language Chips (Multi-select) */}
-            <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <label className="text-slate-700 font-medium">
-                  Language Templates (Multi-select)
-                </label>
-                <span className="text-[10px] text-slate-400">
-                  {selectedLangs.length} selected
-                </span>
-              </div>
-              <div className="grid grid-cols-2 gap-2">
-                {AVAILABLE_LANGUAGES.map((lang) => {
-                  const isSelected = selectedLangs.includes(lang.code);
-                  return (
-                    <button
-                      key={lang.code}
-                      type="button"
-                      onClick={() => toggleLanguage(lang.code)}
-                      className={`py-2 px-3 rounded-lg border text-left flex items-center justify-between transition-all ${
-                        isSelected
-                          ? "bg-[#e8f2fc] border-[#0066cc] text-[#0066cc] font-semibold"
-                          : "bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100"
-                      }`}
-                    >
-                      <div>
-                        <span className="block text-xs">{lang.label}</span>
-                        <span className="block text-[10px] opacity-75 font-normal">
-                          {lang.nativeLabel}
-                        </span>
-                      </div>
-                      <div
-                        className={`w-4 h-4 rounded flex items-center justify-center border text-[10px] ${
-                          isSelected
-                            ? "bg-[#0066cc] border-[#0066cc] text-white"
-                            : "border-slate-300 bg-white"
-                        }`}
-                      >
-                        {isSelected ? "✓" : ""}
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+            <p className="text-[11px] text-slate-600">
+              Broadcast delivered to each subscriber in their saved language (English, Hindi,
+              Hinglish, or Marathi).
+            </p>
 
             {/* Recipients Note — Replaces phone number input */}
             <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 text-[11px] text-slate-600 space-y-1">
@@ -359,7 +293,7 @@ function AlertsContent() {
                   Alert Message Preview
                 </span>
                 <div className="flex items-center gap-1">
-                  {selectedLangs.map((l) => (
+                  {AVAILABLE_LANGUAGES.map(({ code: l }) => (
                     <button
                       key={l}
                       type="button"
