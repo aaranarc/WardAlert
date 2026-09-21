@@ -44,6 +44,21 @@ function AlertsContent() {
   // Feedback toast
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleRefreshLedger = async () => {
+    setIsRefreshing(true);
+    try {
+      const fresh = await mutate();
+      const message = `Ledger refreshed · ${fresh?.length ?? 0} entries`;
+      setToastMessage(message);
+      setTimeout(() => setToastMessage((prev) => (prev === message ? null : prev)), 4000);
+    } catch {
+      setFormError("Could not refresh the audit ledger.");
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
 
   // Initialize selected spot
   useEffect(() => {
@@ -172,11 +187,12 @@ function AlertsContent() {
         </div>
 
         <button
-          onClick={() => mutate()}
-          className="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-medium transition-colors flex items-center gap-1.5 w-fit"
+          onClick={handleRefreshLedger}
+          disabled={isRefreshing}
+          className="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-medium transition-colors flex items-center gap-1.5 w-fit disabled:opacity-60 disabled:cursor-not-allowed"
           aria-label="Refresh audit ledger"
         >
-          <IconRefresh className="w-3.5 h-3.5 text-[#0066cc]" />
+          <IconRefresh className={`w-3.5 h-3.5 text-[#0066cc] ${isRefreshing ? "animate-spin" : ""}`} />
           <span>Refresh Ledger</span>
         </button>
       </div>
