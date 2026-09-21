@@ -98,3 +98,38 @@ async def detail(session: AsyncSession, spot_id: int, critical_delta: float) -> 
         "status": classify_status(row["trend_slope"], row["predicted_failure_date"]),
         "weekly": weekly,
     }
+
+
+async def desilt(session: AsyncSession, spot_id: int) -> dict | None:
+    """Simulate maintenance desilting of a blocked drain, restoring capacity."""
+    spot_res = await session.execute(
+        text("SELECT name FROM flood_spots WHERE id = :spot_id"),
+        {"spot_id": spot_id},
+    )
+    spot_row = spot_res.first()
+    if spot_row is None:
+        return None
+    spot_name = spot_row[0]
+
+    # Improve drain health score and lower deltas for the recent weeks of this spot
+    await session.execute(
+        text(
+            """
+            UPDATE drain_health_weekly
+               SET health_score = LEAST(100.0, GREATEST(health_score + 45.0, 94.5)),
+                   avg_delta = GREATEST(0.01, avg_delta * 0.2),
+                   max_delta = GREATEST(0.02, max_delta * 0.2),
+                   trend_slope = -0.01,
+                   predicted_failure_date = NULL,
+                   updated_at = NOW()
+             WHERE spot_id = :spot_id
+            """
+        ),
+        {"spot_id": spot_id},
+    )
+    await session.commit()
+
+    updated_detail = await detail(session, spot_id, Config.DRAIN_CRITICAL_DELTA)
+    if updated_detail:
+        updated_detail["message"] = f"Successfully desilted {spot_name}. Hydraulic capacity restored to {updated_detail["health_score"]}%. Desilting crew logged."
+    return updated_detail

@@ -40,3 +40,17 @@ async def get_detail(
             ),
         )
     return result
+
+
+@router.post("/{spot_id}/desilt", response_model=DrainHealthDetail)
+async def desilt_drain(
+    spot_id: int,
+    session: AsyncSession = Depends(get_session),
+):
+    result = await drain_health_service.desilt(session, spot_id)
+    if result is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"spot {spot_id} not found in drain health records",
+        )
+    return result
