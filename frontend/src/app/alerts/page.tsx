@@ -6,7 +6,6 @@ import { useSpots } from "@/hooks/useSpots";
 import { useAlertsLog } from "@/hooks/useAlertsLog";
 import { AlertLog } from "@/components/Alerts/AlertLog";
 import { api } from "@/lib/api";
-import { renderClientPreview } from "@/lib/templates";
 import { IconSend, IconRefresh, IconWarning, IconCheck } from "@/components/Common/Icons";
 
 const AVAILABLE_LANGUAGES: Array<{
@@ -105,21 +104,9 @@ function AlertsContent() {
     setFormError(null);
 
     try {
-      // Try GET /api/alert/preview/{spot_id}?lang=X first
       const previewRes = await api.getAlertPreview(currentSpot.spot_id, targetLang);
-      if (previewRes && previewRes.body) {
-        setPreviewText(previewRes.body);
-        return;
-      }
+      setPreviewText(previewRes.rendered_message);
     } catch {
-      // Endpoint missing or failed: fallback to client-side template rendering
-    }
-
-    // Client-side render from templates with spot prediction data
-    try {
-      const rendered = renderClientPreview(targetLang, currentSpot);
-      setPreviewText(rendered);
-    } catch (err) {
       setFormError("Could not generate alert preview.");
     } finally {
       setIsPreviewLoading(false);

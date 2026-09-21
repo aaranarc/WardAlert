@@ -70,8 +70,8 @@ export default function DashboardPage() {
     setIsMonsoonMode(isMonsoon);
     setBannerMessage(
       isMonsoon
-        ? "Simulating 2025 Monsoon cloudburst (75mm/h rain + 4.2m Arabian Sea high tide)..."
-        : "Re-evaluating live dual models and sensor telemetry across all spots..."
+        ? "Replaying the 2025-07-15 monsoon event across all spots..."
+        : "Re-running both models across all spots..."
     );
 
     const ts = timestamp || HERO_TIMESTAMP;
@@ -109,7 +109,7 @@ export default function DashboardPage() {
       setBannerMessage(
         isMonsoon
           ? `2025 Monsoon Cloudburst replayed: Severe waterlogging risk across ${results.length} spots.`
-          : `Fresh dual-model predictions calculated with live telemetry for ${results.length} spots.`
+          : `Fresh dual-model predictions calculated for ${results.length} spots.`
       );
       setTimeout(() => setBannerMessage(null), 6000);
     } else {
@@ -172,7 +172,7 @@ export default function DashboardPage() {
               onClick={() => handlePredictAll(new Date().toISOString())}
               disabled={isPredicting}
               className="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium transition-colors disabled:opacity-50 flex items-center gap-1.5 shadow-xs"
-              title="Reset models back to live sensor conditions"
+              title="Predict all spots at the current time"
             >
               <IconRefresh className={`w-3.5 h-3.5 ${isPredicting ? "animate-spin" : ""}`} />
               <span>{isPredicting ? "Resetting..." : "Reset to Live Conditions"}</span>
@@ -193,7 +193,7 @@ export default function DashboardPage() {
             onClick={() => handlePredictAll(new Date().toISOString())}
             disabled={isPredicting}
             className="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-medium transition-colors disabled:opacity-50 flex items-center gap-1.5 shadow-2xs"
-            title="Recalculate dual models for all spots with fresh telemetry"
+            title="Recalculate both models for all spots"
           >
             <IconRefresh className={`w-3.5 h-3.5 ${isPredicting ? "animate-spin text-[#0066cc]" : ""}`} />
             <span>{isPredicting ? "Calculating..." : "Recalculate All"}</span>

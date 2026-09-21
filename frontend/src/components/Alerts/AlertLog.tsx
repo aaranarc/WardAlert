@@ -21,7 +21,7 @@ export function maskRecipient(recipient: string | null | undefined): string {
   if (digits.length >= 4) {
     return `+91 ••••• ${digits.slice(-4)}`;
   }
-  return "+91 ••••• 4325";
+  return "—";
 }
 
 export function AlertLog({ logs, isLoading }: AlertLogProps) {

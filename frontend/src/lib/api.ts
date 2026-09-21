@@ -104,7 +104,6 @@ export const api = {
       method: "POST",
       body: JSON.stringify({ mode, langs }),
     }),
-  getAlertPreview: async (spotId: number, lang: string) => {
-    return fetcher<{ body: string }>(`/api/alert/preview/${spotId}?lang=${lang}`);
-  },
+  getAlertPreview: (spotId: number, lang: string) =>
+    fetcher<{ rendered_message: string }>(`/api/alert/preview/${spotId}?lang=${lang}`),
 };
