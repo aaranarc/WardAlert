@@ -40,6 +40,7 @@ class AlertLogEntry(BaseModel):
     error: str | None = None
     body: str
     sent_at: datetime
+    recipient_count: int = 1
 
 
 class BroadcastResponse(BaseModel):

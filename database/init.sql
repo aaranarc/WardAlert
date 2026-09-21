@@ -196,9 +196,12 @@ CREATE TABLE IF NOT EXISTS alerts_sent (
     provider_sid  TEXT,
     error         TEXT,
     body          TEXT NOT NULL,
-    sent_at       TIMESTAMPTZ NOT NULL DEFAULT now()
+    sent_at       TIMESTAMPTZ NOT NULL DEFAULT now(),
+    recipient_count INTEGER DEFAULT 1   -- 1 for a direct send, fan-out size for a broadcast
 );
 CREATE INDEX IF NOT EXISTS idx_alerts_sent_time ON alerts_sent (sent_at DESC);
+-- Databases created before recipient_count existed.
+ALTER TABLE alerts_sent ADD COLUMN IF NOT EXISTS recipient_count INTEGER DEFAULT 1;
 
 -- --------------------------------------------------------------------------
 -- v_latest_risk — one row per spot carrying its most recent prediction.

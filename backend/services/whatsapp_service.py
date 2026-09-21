@@ -156,19 +156,20 @@ async def record(
     body: str,
     outcome: dict,
     channel: str = "whatsapp",
+    recipient_count: int = 1,
 ) -> dict:
     result = await session.execute(
         text(
             """
             INSERT INTO alerts_sent (
                 spot_id, prediction_id, language, recipient, channel,
-                status, provider_sid, error, body
+                status, provider_sid, error, body, recipient_count
             ) VALUES (
                 :spot_id, :prediction_id, :language, :recipient, :channel,
-                :status, :provider_sid, :error, :body
+                :status, :provider_sid, :error, :body, :recipient_count
             )
             RETURNING id, spot_id, prediction_id, language, recipient, channel,
-                      status, provider_sid, error, body, sent_at
+                      status, provider_sid, error, body, sent_at, recipient_count
             """
         ),
         {
@@ -181,6 +182,7 @@ async def record(
             "provider_sid": outcome["provider_sid"],
             "error": outcome["error"],
             "body": body,
+            "recipient_count": recipient_count,
         },
     )
     row = dict(result.mappings().one())
@@ -206,7 +208,8 @@ async def log(session: AsyncSession, limit: int, include_failed: bool = False) -
     query_str = """
         SELECT a.id, a.spot_id, s.name AS spot_name, a.prediction_id,
                a.language, a.recipient, a.channel, a.status,
-               a.provider_sid, a.error, a.body, a.sent_at
+               a.provider_sid, a.error, a.body, a.sent_at,
+               COALESCE(a.recipient_count, 1) AS recipient_count
           FROM alerts_sent a
           LEFT JOIN flood_spots s ON s.id = a.spot_id
     """

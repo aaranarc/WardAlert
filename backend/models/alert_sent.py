@@ -22,3 +22,4 @@ class AlertSent(Base):
     error: Mapped[str | None] = mapped_column(Text)
     body: Mapped[str] = mapped_column(Text, nullable=False)
     sent_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    recipient_count: Mapped[int] = mapped_column(Integer, default=1)
