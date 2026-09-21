@@ -11,7 +11,11 @@ const listeners = new Set<() => void>();
 
 if (typeof window !== "undefined") {
   const saved = sessionStorage.getItem("wardalert_display_date");
-  if (saved) {
+  // Clean up any stale "3 July 2023" saved in sessionStorage from the previous fixed-date bug
+  if (saved === "2023-07-03T09:00:00Z") {
+    sessionStorage.removeItem("wardalert_display_date");
+    currentDisplayDate = DEFAULT_DISPLAY_DATE;
+  } else if (saved) {
     currentDisplayDate = saved;
   }
 }
