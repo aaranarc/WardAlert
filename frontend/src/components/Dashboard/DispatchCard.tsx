@@ -2,8 +2,8 @@
 
 import React from "react";
 import { DispatchType, CauseLabel } from "@/lib/types";
-import { DISPATCH_DESCRIPTIONS, CAUSE_DESCRIPTIONS } from "@/lib/constants";
-import { Truck, AlertTriangle, Droplets, CheckCircle2, ShieldAlert } from "lucide-react";
+import { DISPATCH_DESCRIPTIONS } from "@/lib/constants";
+import { IconTruck, IconWarning, IconCheck } from "@/components/Common/Icons";
 
 interface DispatchCardProps {
   dispatchType: DispatchType | null | undefined;
@@ -13,7 +13,7 @@ interface DispatchCardProps {
 export function DispatchCard({ dispatchType, causeLabel }: DispatchCardProps) {
   if (!dispatchType) {
     return (
-      <div className="p-3.5 rounded-xl bg-[#0e0e24] border border-[#7B68EE]/20 text-xs text-slate-400 font-mono text-center">
+      <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-500 font-mono text-center">
         No active dispatch protocol generated
       </div>
     );
@@ -26,24 +26,24 @@ export function DispatchCard({ dispatchType, causeLabel }: DispatchCardProps) {
     <div
       className={`p-4 rounded-xl border transition-all ${
         isDesilting
-          ? "bg-gradient-to-br from-[#1a163a] to-[#201538] border-amber-500/40 shadow-[0_4px_20px_rgba(245,158,11,0.15)]"
-          : "bg-gradient-to-br from-[#12163a] to-[#151c44] border-cyan-500/40 shadow-[0_4px_20px_rgba(56,189,248,0.15)]"
+          ? "bg-amber-50/50 border-amber-200 shadow-xs"
+          : "bg-sky-50/50 border-sky-200 shadow-xs"
       }`}
     >
       <div className="flex items-start justify-between gap-3 mb-2.5">
         <div className="flex items-center gap-2">
           <div
             className={`p-2 rounded-lg ${
-              isDesilting ? "bg-amber-500/20 text-amber-300" : "bg-cyan-500/20 text-cyan-300"
+              isDesilting ? "bg-amber-100 text-amber-700" : "bg-sky-100 text-sky-700"
             }`}
           >
-            {isDesilting ? <Truck className="w-5 h-5" /> : <Droplets className="w-5 h-5" />}
+            {isDesilting ? <IconTruck className="w-5 h-5" /> : <IconWarning className="w-5 h-5" />}
           </div>
           <div>
-            <div className="text-[10px] uppercase font-mono tracking-wider text-slate-400">
+            <div className="text-[10px] uppercase font-mono tracking-wider text-slate-500">
               Recommended Protocol
             </div>
-            <div className="text-sm font-bold text-white leading-tight">
+            <div className="text-sm font-bold text-slate-900 leading-tight">
               {isDesilting ? "Desilting Crew Deployment" : "Pump & Traffic Marshals"}
             </div>
           </div>
@@ -52,35 +52,35 @@ export function DispatchCard({ dispatchType, causeLabel }: DispatchCardProps) {
         <span
           className={`text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded border ${
             isDrainageFailure
-              ? "bg-rose-500/20 text-rose-300 border-rose-500/30"
-              : "bg-blue-500/20 text-blue-300 border-blue-500/30"
+              ? "bg-rose-50 text-rose-700 border-rose-200"
+              : "bg-blue-50 text-blue-700 border-blue-200"
           }`}
         >
           {isDrainageFailure ? "Drainage Failure" : "Rainfall Driven"}
         </span>
       </div>
 
-      <p className="text-xs text-slate-300 leading-relaxed mb-3">
+      <p className="text-xs text-slate-600 leading-relaxed mb-3">
         {DISPATCH_DESCRIPTIONS[dispatchType] || "Standard monitoring protocol."}
       </p>
 
       {/* Operational action checklist */}
-      <div className="pt-2.5 border-t border-slate-700/50 space-y-1.5 text-xs text-slate-300">
+      <div className="pt-2.5 border-t border-slate-200/80 space-y-1.5 text-xs text-slate-700">
         <div className="flex items-center gap-2 text-[11px]">
-          <CheckCircle2
-            className={`w-3.5 h-3.5 shrink-0 ${isDesilting ? "text-amber-400" : "text-cyan-400"}`}
+          <IconCheck
+            className={`w-3.5 h-3.5 shrink-0 ${isDesilting ? "text-amber-600" : "text-sky-600"}`}
           />
           <span>
             {isDesilting
-              ? "Inspect nearby SWD outfalls & clear silt accumulation"
-              : "Position mobile suction pumps & divert low-lying traffic"}
+              ? "Inspect nearby SWD outfalls and clear silt accumulation"
+              : "Position mobile suction pumps and divert low-lying traffic"}
           </span>
         </div>
         <div className="flex items-center gap-2 text-[11px]">
-          <CheckCircle2
-            className={`w-3.5 h-3.5 shrink-0 ${isDesilting ? "text-amber-400" : "text-cyan-400"}`}
+          <IconCheck
+            className={`w-3.5 h-3.5 shrink-0 ${isDesilting ? "text-amber-600" : "text-sky-600"}`}
           />
-          <span>Issue automated localized WhatsApp alert to ward officer & citizens</span>
+          <span>Issue automated localized WhatsApp alert to ward officer and citizens</span>
         </div>
       </div>
     </div>

@@ -1,32 +1,63 @@
 "use client";
 
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect, Suspense, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import { useSpots } from "@/hooks/useSpots";
 import { useAlertsLog } from "@/hooks/useAlertsLog";
-import { useSubscriberCount } from "@/hooks/useSubscriberCount";
 import { AlertLog } from "@/components/Alerts/AlertLog";
-import { Send, MapPin, Users, CheckCircle2, AlertCircle, RefreshCw } from "lucide-react";
+import { api } from "@/lib/api";
+import { IconSend, IconRefresh, IconWarning, IconCheck } from "@/components/Common/Icons";
+
+const AVAILABLE_LANGUAGES: Array<{
+  code: "en" | "hi" | "hinglish" | "mr";
+  label: string;
+  nativeLabel: string;
+}> = [
+  { code: "en", label: "English", nativeLabel: "English" },
+  { code: "hi", label: "Hindi", nativeLabel: "हिन्दी" },
+  { code: "hinglish", label: "Hinglish", nativeLabel: "Hinglish" },
+  { code: "mr", label: "Marathi", nativeLabel: "मराठी" },
+];
 
 function AlertsContent() {
   const searchParams = useSearchParams();
   const urlSpotId = searchParams.get("spot_id");
 
   const { spots } = useSpots();
-  const { logs, isLoading, broadcast, isSending, sendError, mutate } = useAlertsLog(100);
+  const { logs, isLoading, broadcastAlert, isSending, mutate } = useAlertsLog(100);
 
+  // Mode: Normal broadcast (default) vs Critical emergency
+  const [mode, setMode] = useState<"normal" | "critical">("normal");
+
+  // Spot selection
   const [selectedSpotId, setSelectedSpotId] = useState<number | "">("");
-  const [lastBroadcast, setLastBroadcast] = useState<{ spotName: string; count: number } | null>(
-    null
-  );
+
+  const [previewLang, setPreviewLang] = useState<"en" | "hi" | "hinglish" | "mr">("en");
+
+  // Preview state
+  const [previewText, setPreviewText] = useState<string | null>(null);
+  const [isPreviewLoading, setIsPreviewLoading] = useState<boolean>(false);
+
+  // Feedback toast
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const { count: subscriberCount, mutate: refetchCount } = useSubscriberCount(
-    selectedSpotId === "" ? null : selectedSpotId
-  );
-  const selectedSpot = spots.find((s) => s.spot_id === selectedSpotId);
+  const handleRefreshLedger = async () => {
+    setIsRefreshing(true);
+    try {
+      const fresh = await mutate();
+      const message = `Ledger refreshed · ${fresh?.length ?? 0} entries`;
+      setToastMessage(message);
+      setTimeout(() => setToastMessage((prev) => (prev === message ? null : prev)), 4000);
+    } catch {
+      setFormError("Could not refresh the audit ledger.");
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
 
-  // Auto-select spot from query param if provided, otherwise default to first spot
+  // Initialize selected spot
   useEffect(() => {
     if (urlSpotId) {
       const parsed = parseInt(urlSpotId, 10);
@@ -38,154 +69,267 @@ function AlertsContent() {
     }
   }, [urlSpotId, spots, selectedSpotId]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const currentSpot = useMemo(() => {
+    return spots.find((s) => s.spot_id === Number(selectedSpotId));
+  }, [spots, selectedSpotId]);
+
+  // Generate / Load Preview
+  const handleGeneratePreview = async (langToPreview?: "en" | "hi" | "hinglish" | "mr") => {
+    const targetLang = langToPreview || previewLang;
+    setPreviewLang(targetLang);
+    if (!currentSpot) return;
+
+    setIsPreviewLoading(true);
+    setFormError(null);
+
+    try {
+      const previewRes = await api.getAlertPreview(currentSpot.spot_id, targetLang);
+      setPreviewText(previewRes.rendered_message);
+    } catch {
+      setFormError("Could not generate alert preview.");
+    } finally {
+      setIsPreviewLoading(false);
+    }
+  };
+
+  // Broadcast submit handler
+  const handleBroadcast = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormError(null);
-    setLastBroadcast(null);
+    setToastMessage(null);
 
     if (!selectedSpotId) {
       setFormError("Please select a target flood spot.");
       return;
     }
 
-    const response = await broadcast(Number(selectedSpotId));
+    const res = await broadcastAlert(Number(selectedSpotId), mode);
+    if (res) {
+      const channelSuffix = mode === "critical" ? "WhatsApp + SMS" : "WhatsApp";
+      const message = `Broadcast sent to ${res.broadcast_count} subscribers via ${channelSuffix}`;
+      setToastMessage(message);
 
-    if (response) {
-      setLastBroadcast({
-        spotName: selectedSpot?.name ?? `#${selectedSpotId}`,
-        count: response.broadcast_count,
-      });
-      refetchCount();
+      // Auto dismiss toast after 6 seconds
+      setTimeout(() => {
+        setToastMessage((prev) => (prev === message ? null : prev));
+      }, 6000);
+    } else {
+      setFormError("Broadcast failed. Please check network connection or server status.");
     }
   };
 
   return (
-    <div className="p-4 lg:p-6 space-y-6 max-w-[1600px] mx-auto w-full min-h-[calc(100vh-3.5rem)] flex flex-col">
-      {/* Page Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-xl lg:text-2xl font-bold text-white tracking-tight">
-              Emergency Broadcast & Alert Dispatch
-            </h1>
-            <span className="text-xs font-mono font-semibold px-2.5 py-0.5 rounded-full bg-[#7B68EE]/20 text-[#b8a9ff] border border-[#7B68EE]/30">
-              Multilingual WhatsApp
-            </span>
+    <div className="flex-1 bg-[#f8fafc] p-4 lg:p-6 space-y-5 max-w-[1600px] mx-auto w-full">
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div className="fixed top-5 right-5 z-50 bg-emerald-700 text-white px-4 py-3 rounded-xl shadow-lg flex items-center gap-3 animate-in fade-in slide-in-from-top-4 duration-300 max-w-md">
+          <div className="p-1 bg-emerald-800 rounded-full shrink-0">
+            <IconCheck className="w-4 h-4 text-white" />
           </div>
-          <p className="text-xs lg:text-sm text-slate-400 mt-1 max-w-2xl">
-            Broadcast the live XGBoost risk to every citizen subscribed to a spot over WhatsApp, each in their own language. Subscriptions lapse 7 days after the citizen shares a location unless they reply EXTEND.
+          <div className="text-xs font-medium leading-snug">{toastMessage}</div>
+          <button
+            onClick={() => setToastMessage(null)}
+            className="text-emerald-200 hover:text-white text-xs ml-auto font-bold pl-2"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h1 className="text-xl font-bold tracking-tight text-slate-900">
+            Civic Alert Dispatch Console
+          </h1>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Ward G-South multilingual emergency dispatch & public notification gateway.
           </p>
         </div>
 
         <button
-          onClick={() => mutate()}
-          className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#12122b] hover:bg-[#1a1a3e] border border-[#7B68EE]/30 text-slate-300 hover:text-white text-xs font-mono transition-colors"
+          onClick={handleRefreshLedger}
+          disabled={isRefreshing}
+          className="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-medium transition-colors flex items-center gap-1.5 w-fit disabled:opacity-60 disabled:cursor-not-allowed"
+          aria-label="Refresh audit ledger"
         >
-          <RefreshCw className="w-3.5 h-3.5 text-[#b8a9ff]" />
-          <span>Refresh Log</span>
+          <IconRefresh className={`w-3.5 h-3.5 text-[#0066cc] ${isRefreshing ? "animate-spin" : ""}`} />
+          <span>Refresh Ledger</span>
         </button>
       </div>
 
-      {/* Main Grid: Left Form / Right Log Table */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 items-stretch">
-        {/* Left Col: Broadcast Form (4 cols on lg) */}
-        <div className="lg:col-span-4 flex flex-col gap-4">
-          <div className="p-5 rounded-2xl bg-[#12122b] border border-[#7B68EE]/30 shadow-xl space-y-4">
-            <div className="flex items-center gap-2 pb-3 border-b border-[#7B68EE]/20">
-              <div className="p-2 rounded-xl bg-gradient-to-tr from-[#7B68EE] to-[#b8a9ff] text-white">
-                <Send className="w-4 h-4" />
-              </div>
-              <div>
-                <h2 className="text-sm font-bold text-white leading-tight">
-                  Broadcast to Subscribers
-                </h2>
-                <p className="text-[11px] text-slate-400 font-mono">
-                  Runs live model & alerts every active subscriber
-                </p>
-              </div>
+      {/* Main Split Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+        {/* Broadcast Form (5 of 12) */}
+        <div className="lg:col-span-5 bg-white rounded-xl border border-slate-200 p-5 space-y-5 shadow-xs">
+          {/* Segmented Control at Top */}
+          <div>
+            <label className="block text-[11px] font-semibold uppercase text-slate-500 mb-2">
+              Broadcast Dispatch Mode
+            </label>
+            <div className="grid grid-cols-2 p-1 bg-slate-100 rounded-lg border border-slate-200">
+              <button
+                type="button"
+                onClick={() => setMode("normal")}
+                className={`py-2 px-3 rounded-md text-xs font-semibold transition-all ${
+                  mode === "normal"
+                    ? "bg-white text-slate-900 shadow-xs border border-slate-200"
+                    : "text-slate-600 hover:text-slate-900"
+                }`}
+              >
+                Normal broadcast
+              </button>
+              <button
+                type="button"
+                onClick={() => setMode("critical")}
+                className={`py-2 px-3 rounded-md text-xs font-semibold transition-all flex items-center justify-center gap-1.5 ${
+                  mode === "critical"
+                    ? "bg-rose-600 text-white shadow-xs"
+                    : "text-rose-700 hover:bg-rose-50"
+                }`}
+              >
+                <span
+                  className={`w-2 h-2 rounded-full ${
+                    mode === "critical" ? "bg-white animate-ping" : "bg-rose-500"
+                  }`}
+                />
+                Critical emergency
+              </button>
+            </div>
+            <p className="text-[11px] text-slate-500 mt-2">
+              {mode === "normal"
+                ? "Dispatches alert via WhatsApp exclusively to verified subscribers registered for this spot."
+                : "Priority Emergency: Dispatches alerts via WhatsApp + SMS to all citizens in 2.0 km radius."}
+            </p>
+          </div>
+
+          <form onSubmit={handleBroadcast} className="space-y-4 text-xs">
+            {/* Target Flood Spot Dropdown */}
+            <div>
+              <label htmlFor="target-spot" className="block text-slate-700 font-medium mb-1">
+                Target Flood Spot
+              </label>
+              <select
+                id="target-spot"
+                value={selectedSpotId}
+                onChange={(e) => {
+                  setSelectedSpotId(Number(e.target.value));
+                  setPreviewText(null);
+                }}
+                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 font-medium focus:outline-none focus:border-[#0066cc]"
+              >
+                {spots.map((spot) => (
+                  <option key={spot.spot_id} value={spot.spot_id}>
+                    #{spot.spot_id} {spot.name} — {spot.risk_level?.toUpperCase() || "LOW"} (
+                    {spot.p_actual !== undefined && spot.p_actual !== null
+                      ? `${Math.round(spot.p_actual * 100)}%`
+                      : "—"}
+                    )
+                  </option>
+                ))}
+              </select>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Spot Selector */}
-              <div className="space-y-1.5">
-                <label className="text-xs font-mono text-slate-300 flex items-center gap-1.5">
-                  <MapPin className="w-3.5 h-3.5 text-[#b8a9ff]" />
-                  <span>Target Flood Spot</span>
-                </label>
-                <select
-                  value={selectedSpotId}
-                  onChange={(e) => setSelectedSpotId(Number(e.target.value))}
-                  className="w-full px-3 py-2 text-xs rounded-xl bg-[#0d0d1a] border border-slate-700/80 text-white focus:outline-none focus:border-[#7B68EE] font-sans"
-                >
-                  <option value="" disabled>
-                    Select a flood location...
-                  </option>
-                  {spots.map((s) => (
-                    <option key={s.spot_id} value={s.spot_id}>
-                      #{s.spot_id} {s.name} ({s.risk_level || "unknown"} risk)
-                    </option>
-                  ))}
-                </select>
-              </div>
+            <p className="text-[11px] text-slate-600">
+              Broadcast delivered to each subscriber in their saved language (English, Hindi,
+              Hinglish, or Marathi).
+            </p>
 
-              <div className="p-2.5 rounded-lg bg-[#0d0d1a] border border-slate-800 text-xs font-mono text-slate-300 flex items-center gap-1.5">
-                <Users className="w-3.5 h-3.5 text-[#b8a9ff] shrink-0" />
-                <span>
-                  {subscriberCount === null
-                    ? "Counting active subscribers..."
-                    : `${subscriberCount} active subscriber${subscriberCount === 1 ? "" : "s"} at this spot`}
+            {/* Recipients Note — Replaces phone number input */}
+            <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 text-[11px] text-slate-600 space-y-1">
+              <div className="font-semibold text-slate-800 flex items-center gap-1.5">
+                <span>Recipients Source</span>
+                <span className="text-[10px] font-mono px-1.5 py-0.2 bg-slate-200 rounded text-slate-700">
+                  Subscribers Table
                 </span>
               </div>
-              <p className="text-[10px] text-slate-400">
-                Subscribers are stored as phone hashes only, so each message is rendered and
-                logged as simulated in the audit trail.
+              <p>
+                {mode === "critical"
+                  ? "Radius geo-query targets all active citizen subscribers within 2.0 km of the hazard zone."
+                  : "Targeted dispatch to registered citizens subscribed to updates for this chronic waterlogging spot."}
               </p>
+            </div>
+
+            {/* Preview and Send Action Row */}
+            <div className="space-y-2 pt-1">
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => handleGeneratePreview()}
+                  disabled={isPreviewLoading || !currentSpot}
+                  className="w-1/2 py-2 px-3 rounded-lg border border-slate-300 hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-colors flex items-center justify-center gap-1.5 disabled:opacity-50"
+                >
+                  <span>{isPreviewLoading ? "Loading..." : "Preview Alert"}</span>
+                </button>
+
+                <button
+                  type="submit"
+                  disabled={isSending || !currentSpot}
+                  className={`w-1/2 py-2 px-3 rounded-lg font-semibold text-xs text-white transition-colors flex items-center justify-center gap-1.5 disabled:opacity-50 shadow-xs ${
+                    mode === "critical"
+                      ? "bg-rose-600 hover:bg-rose-700"
+                      : "bg-[#0066cc] hover:bg-[#0055b3]"
+                  }`}
+                >
+                  <IconSend className={`w-3.5 h-3.5 ${isSending ? "animate-spin" : ""}`} />
+                  <span>{isSending ? "Broadcasting..." : "Send broadcast"}</span>
+                </button>
+              </div>
 
               {formError && (
-                <div className="p-2.5 rounded-lg bg-rose-950/60 border border-rose-800/60 text-xs font-mono text-rose-300 flex items-center gap-1.5">
-                  <AlertCircle className="w-4 h-4 shrink-0" />
+                <div className="p-2.5 bg-rose-50 border border-rose-200 rounded-lg text-xs text-rose-700 flex items-center gap-1.5">
+                  <IconWarning className="w-3.5 h-3.5 shrink-0" />
                   <span>{formError}</span>
                 </div>
               )}
+            </div>
+          </form>
 
-              {sendError ? (
-                <div className="p-2.5 rounded-lg bg-rose-950/60 border border-rose-800/60 text-xs font-mono text-rose-300">
-                  Error broadcasting alert. Ensure backend is running.
+          {/* Template Preview Section */}
+          {previewText && (
+            <div className="space-y-2 pt-2 border-t border-slate-100">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-bold text-slate-900 uppercase">
+                  Alert Message Preview
+                </span>
+                <div className="flex items-center gap-1">
+                  {AVAILABLE_LANGUAGES.map(({ code: l }) => (
+                    <button
+                      key={l}
+                      type="button"
+                      onClick={() => handleGeneratePreview(l)}
+                      className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-medium transition-colors ${
+                        previewLang === l
+                          ? "bg-slate-900 text-white"
+                          : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                      }`}
+                    >
+                      {l.toUpperCase()}
+                    </button>
+                  ))}
                 </div>
-              ) : null}
+              </div>
 
-              {/* Submit Button */}
-              <button
-                type="submit"
-                disabled={isSending || !subscriberCount}
-                className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#7B68EE] to-[#9d8df1] hover:from-[#6c58e8] hover:to-[#8c78eb] text-white font-semibold text-xs flex items-center justify-center gap-2 shadow-lg shadow-[#7B68EE]/25 transition-all disabled:opacity-50"
-              >
-                <Send className={`w-4 h-4 ${isSending ? "animate-spin" : ""}`} />
-                <span>
-                  {isSending
-                    ? "Predicting & Broadcasting..."
-                    : `Broadcast to ${subscriberCount ?? "…"} subscriber${subscriberCount === 1 ? "" : "s"}`}
-                </span>
-              </button>
-            </form>
-          </div>
-
-          {/* Last Broadcast Result Card */}
-          {lastBroadcast && (
-            <div className="p-4 rounded-2xl bg-[#0e1726] border border-emerald-500/40 shadow-xl animate-in fade-in zoom-in-95 duration-200">
-              <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-300">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                <span>
-                  Broadcast {lastBroadcast.count} alert{lastBroadcast.count === 1 ? "" : "s"} for{" "}
-                  {lastBroadcast.spotName}
-                </span>
+              {/* WhatsApp Chat Bubble Mockup */}
+              <div className="p-3.5 bg-[#efeae2] rounded-lg border border-slate-300/70 shadow-inner">
+                <div className="bg-white rounded-lg p-3 shadow-xs border border-emerald-600/20 max-w-sm space-y-1 relative">
+                  <div className="text-[10px] font-semibold text-emerald-800 uppercase tracking-wide">
+                    WhatsApp Message Preview ({previewLang.toUpperCase()})
+                  </div>
+                  <pre className="font-sans text-xs text-slate-800 whitespace-pre-wrap leading-relaxed">
+                    {previewText}
+                  </pre>
+                  <div className="text-[9px] text-slate-400 text-right font-mono mt-1">
+                    {new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })} ✓✓
+                  </div>
+                </div>
               </div>
             </div>
           )}
         </div>
 
-        {/* Right Col: Alert Audit Log Table (8 cols on lg) */}
-        <div className="lg:col-span-8 flex flex-col min-h-[550px]">
+        {/* Audit Log Table (7 of 12) */}
+        <div className="lg:col-span-7">
           <AlertLog logs={logs} isLoading={isLoading} />
         </div>
       </div>
@@ -197,8 +341,8 @@ export default function AlertsPage() {
   return (
     <Suspense
       fallback={
-        <div className="flex items-center justify-center h-full min-h-[500px] text-slate-400 font-mono text-sm">
-          Loading alerts center...
+        <div className="p-8 text-center text-xs text-slate-400">
+          Loading civic alerts console...
         </div>
       }
     >

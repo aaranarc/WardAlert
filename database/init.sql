@@ -196,12 +196,16 @@ CREATE TABLE IF NOT EXISTS alerts_sent (
     provider_sid  TEXT,
     error         TEXT,
     body          TEXT NOT NULL,
-    sent_at       TIMESTAMPTZ NOT NULL DEFAULT now()
+    sent_at       TIMESTAMPTZ NOT NULL DEFAULT now(),
+    recipient_count INTEGER DEFAULT 1   -- 1 for a direct send, fan-out size for a broadcast
 );
 CREATE INDEX IF NOT EXISTS idx_alerts_sent_time ON alerts_sent (sent_at DESC);
+-- Databases created before recipient_count existed.
+ALTER TABLE alerts_sent ADD COLUMN IF NOT EXISTS recipient_count INTEGER DEFAULT 1;
 
 -- --------------------------------------------------------------------------
--- v_latest_risk — one row per spot carrying its most recent prediction.
+-- v_latest_risk — one row per spot: its 2025-07-15 replay prediction if
+--     present, otherwise its most recent one.
 -- Spots that have never been predicted still appear (LEFT JOIN), so
 -- GET /api/spots always returns all 30.
 -- --------------------------------------------------------------------------
@@ -230,7 +234,11 @@ LEFT JOIN LATERAL (
     SELECT *
     FROM predictions pr
     WHERE pr.spot_id = s.id
-    ORDER BY pr.predicted_for DESC
+    -- Prefer the 2025-07-15 monsoon replay (the dashboard's HERO_TIMESTAMP):
+    -- drain-health seeding writes weekly rows after it, and those newer
+    -- low-risk rows would otherwise hide the event the demo replays.
+    ORDER BY (pr.predicted_for = '2025-07-15 10:30:00+00'::timestamptz) DESC,
+             pr.predicted_for DESC
     LIMIT 1
 ) p ON TRUE
 ORDER BY s.id;

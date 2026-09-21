@@ -4,17 +4,15 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  Map,
-  Activity,
-  Bell,
-  Info,
-  ChevronLeft,
-  ChevronRight,
-  Shield,
-  Layers,
-  BarChart3,
-  Flame,
-} from "lucide-react";
+  IconDashboard,
+  IconMap,
+  IconRisk,
+  IconDrain,
+  IconAlert,
+  IconReport,
+  IconChevronLeft,
+  IconChevronRight,
+} from "@/components/Common/Icons";
 import { cn } from "@/lib/utils";
 
 interface SidebarProps {
@@ -34,51 +32,55 @@ export function Sidebar({
 
   const navItems = [
     {
-      label: "Flood Map",
-      description: "Live 30-Spot Residual Risk",
+      label: "Dashboard",
       href: "/",
-      icon: Map,
+      icon: IconDashboard,
+    },
+    {
+      label: "Live Map",
+      href: "/map",
+      icon: IconMap,
+    },
+    {
+      label: "Risk Analysis",
+      href: "/risk-analysis",
+      icon: IconRisk,
     },
     {
       label: "Drain Health",
-      description: "Maintenance Leaderboard & Δ",
       href: "/drain-health",
-      icon: Activity,
+      icon: IconDrain,
     },
     {
-      label: "Alerts Log",
-      description: "WhatsApp Broadcast & Audit",
+      label: "Alerts & Dispatches",
       href: "/alerts",
-      icon: Bell,
+      icon: IconAlert,
     },
     {
-      label: "About & Docs",
-      description: "Model Status & Architecture",
+      label: "System & Architecture",
       href: "/about",
-      icon: Info,
+      icon: IconReport,
     },
   ];
 
   return (
     <>
-      {/* Mobile backdrop */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
+          className="fixed inset-0 bg-slate-900/20 backdrop-blur-xs z-40 lg:hidden"
           onClick={() => setMobileOpen(false)}
         />
       )}
 
       <aside
         className={cn(
-          "fixed top-14 bottom-0 left-0 z-40 bg-[#0d0d1a]/95 backdrop-blur-md border-r border-[#7B68EE]/20 transition-all duration-300 flex flex-col justify-between select-none",
-          collapsed ? "w-[72px]" : "w-[240px]",
+          "fixed top-16 bottom-0 left-0 z-40 bg-white border-r border-slate-200 transition-all duration-200 flex flex-col justify-between select-none",
+          collapsed ? "w-[68px]" : "w-[220px]",
           mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         )}
       >
-        <div className="p-3 space-y-4">
-          {/* Navigation Links */}
-          <nav className="space-y-1.5">
+        <div className="p-3">
+          <nav className="space-y-1">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = pathname === item.href;
@@ -88,69 +90,56 @@ export function Sidebar({
                   href={item.href}
                   onClick={() => setMobileOpen(false)}
                   className={cn(
-                    "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all group relative",
+                    "flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-colors group",
                     isActive
-                      ? "bg-gradient-to-r from-[#7B68EE]/30 to-[#b8a9ff]/10 text-white border border-[#7B68EE]/50 shadow-[0_0_15px_rgba(123,104,238,0.25)]"
-                      : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40"
+                      ? "bg-[#e8f2fc] text-[#0066cc]"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
                   )}
                   title={collapsed ? item.label : undefined}
                 >
                   <Icon
                     className={cn(
-                      "w-5 h-5 shrink-0 transition-colors",
-                      isActive ? "text-[#b8a9ff]" : "text-slate-400 group-hover:text-slate-200"
+                      "w-4 h-4 shrink-0 transition-colors",
+                      isActive ? "text-[#0066cc]" : "text-slate-400 group-hover:text-slate-600"
                     )}
                   />
-                  {!collapsed && (
-                    <div className="flex flex-col truncate">
-                      <span className="truncate leading-tight font-semibold">
-                        {item.label}
-                      </span>
-                      <span className="text-[11px] text-slate-400 truncate mt-0.5">
-                        {item.description}
-                      </span>
-                    </div>
-                  )}
-
-                  {isActive && (
-                    <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-[#b8a9ff] rounded-r-full" />
-                  )}
+                  {!collapsed && <span className="truncate">{item.label}</span>}
                 </Link>
               );
             })}
           </nav>
         </div>
 
-        {/* Bottom Section */}
-        <div className="p-3 border-t border-[#7B68EE]/15 space-y-3">
+        {/* Footer Area with Version & Uptime */}
+        <div className="p-3 border-t border-slate-100 space-y-2">
           {!collapsed ? (
-            <div className="p-2.5 rounded-lg bg-[#12122b]/80 border border-[#7B68EE]/20 text-xs">
-              <div className="flex items-center justify-between text-slate-400 font-mono mb-1">
-                <span className="text-[10px] uppercase tracking-wider">Model Status</span>
-                <span className="text-emerald-400 font-bold text-[10px]">ACTIVE</span>
+            <div className="px-2 py-1 text-center font-mono">
+              <div className="text-[10px] text-slate-500 font-medium">
+                v0.1.0 · Uptime: 99.9%
               </div>
-              <p className="text-slate-300 text-[11px] leading-snug">
-                Dual XGBoost residual <span className="text-[#b8a9ff] font-mono">P_act − P_rain</span>
-              </p>
+              <div className="text-[9px] text-slate-400 mt-0.5">
+                Ward G-South · Dual XGBoost
+              </div>
             </div>
           ) : (
-            <div className="flex justify-center">
-              <Shield className="w-5 h-5 text-[#b8a9ff]/60" />
+            <div className="text-[9px] font-mono text-slate-400 text-center">
+              v0.1
             </div>
           )}
 
-          {/* Desktop Collapse Toggle */}
+          {/* Desktop Collapse Button */}
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="hidden lg:flex w-full items-center justify-center py-1.5 px-2 rounded-lg bg-slate-800/40 hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition-colors text-xs font-mono"
+            className="hidden lg:flex w-full items-center justify-center py-1.5 px-2 rounded-md hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-colors text-xs"
             title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            aria-label={collapsed ? "Expand navigation sidebar" : "Collapse navigation sidebar"}
           >
             {collapsed ? (
-              <ChevronRight className="w-4 h-4" />
+              <IconChevronRight className="w-3.5 h-3.5" />
             ) : (
-              <div className="flex items-center gap-2">
-                <ChevronLeft className="w-4 h-4" />
-                <span>Collapse</span>
+              <div className="flex items-center gap-1.5">
+                <IconChevronLeft className="w-3.5 h-3.5" />
+                <span className="text-[11px]">Collapse</span>
               </div>
             )}
           </button>

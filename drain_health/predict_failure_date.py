@@ -15,7 +15,6 @@ from datetime import date, timedelta
 
 from config import Config
 from data_loader.db import cursor
-from ml.learn_thresholds import load_thresholds
 
 # Do not forecast further out than this; a linear fit on weekly Δ says nothing
 # useful a decade ahead.
@@ -35,8 +34,7 @@ def _week_to_date(absolute_week: float, base_year: int) -> date | None:
 
 
 def compute() -> dict:
-    thresholds = load_thresholds()
-    critical_delta = float(thresholds["critical_delta"])
+    critical_delta = Config.DRAIN_CRITICAL_DELTA
 
     with cursor() as cur:
         cur.execute("SELECT MIN(year) FROM drain_health_weekly")

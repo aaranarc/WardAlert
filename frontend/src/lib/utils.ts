@@ -6,17 +6,17 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatPercent(val: number | null | undefined, digits: number = 1): string {
-  if (val === null || val === undefined || isNaN(val)) return "—";
+  if (val === null || val === undefined || isNaN(val)) return "-";
   return `${(val * 100).toFixed(digits)}%`;
 }
 
 export function formatNumber(val: number | null | undefined, digits: number = 2): string {
-  if (val === null || val === undefined || isNaN(val)) return "—";
+  if (val === null || val === undefined || isNaN(val)) return "-";
   return val.toFixed(digits);
 }
 
 export function formatDate(dateStr: string | null | undefined): string {
-  if (!dateStr) return "—";
+  if (!dateStr) return "-";
   try {
     const d = new Date(dateStr);
     if (isNaN(d.getTime())) return dateStr;
@@ -31,7 +31,7 @@ export function formatDate(dateStr: string | null | undefined): string {
 }
 
 export function formatDateTime(dateStr: string | null | undefined): string {
-  if (!dateStr) return "—";
+  if (!dateStr) return "-";
   try {
     const d = new Date(dateStr);
     if (isNaN(d.getTime())) return dateStr;
@@ -43,6 +43,41 @@ export function formatDateTime(dateStr: string | null | undefined): string {
       second: "2-digit",
       hour12: false,
     });
+  } catch {
+    return dateStr;
+  }
+}
+
+export function formatHistoricalDate(dateStr: string | null | undefined): string {
+  if (!dateStr) return "-";
+  try {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return dateStr;
+    const day = d.toLocaleDateString("en-GB", { day: "numeric", timeZone: "Asia/Kolkata" });
+    const month = d.toLocaleDateString("en-GB", { month: "long", timeZone: "Asia/Kolkata" });
+    const year = d.toLocaleDateString("en-GB", { year: "numeric", timeZone: "Asia/Kolkata" });
+    const time = d.toLocaleTimeString("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+      timeZone: "Asia/Kolkata",
+    });
+    return `${day} ${month} ${year}, ${time} IST`;
+  } catch {
+    return dateStr;
+  }
+}
+
+
+export function formatDateDMY(dateStr: string | null | undefined): string {
+  if (!dateStr) return "-";
+  try {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return dateStr;
+    const day = d.toLocaleDateString("en-GB", { day: "numeric", timeZone: "Asia/Kolkata" });
+    const month = d.toLocaleDateString("en-GB", { month: "long", timeZone: "Asia/Kolkata" });
+    const year = d.toLocaleDateString("en-GB", { year: "numeric", timeZone: "Asia/Kolkata" });
+    return `${day} ${month} ${year}`;
   } catch {
     return dateStr;
   }

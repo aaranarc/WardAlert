@@ -18,7 +18,6 @@ from datetime import date, datetime, timedelta, timezone
 from config import Config
 from data_loader.db import cursor, wait_for_db
 from drain_health import compute_weekly_delta, fit_trend, predict_failure_date
-from ml import learn_thresholds
 from ml.feature_engineering import IST
 from ml.predict import get_predictor
 
@@ -81,29 +80,16 @@ def main() -> int:
     written = bootstrap_predictions()
     print(f"   {written} predictions written")
 
-    # critical_delta is a percentile of Δ, so it has to be measured over the
-    # population it is applied to. Before this step that population did not
-    # exist, and the cold-start value (p90 of the 48-row test set) marked every
-    # spot overdue. Re-learning here closes that loop and keeps a cold clone
-    # reproducible in one command.
-    print("\n2. recalibrating thresholds on the prediction population")
-    thresholds = learn_thresholds.learn()
-    print(f"   critical_delta = {thresholds['critical_delta']:.4f} "
-          f"(p{thresholds['critical_delta_percentile']:.0f} of Δ over "
-          f"{thresholds['critical_delta_n']} rows from "
-          f"{thresholds['critical_delta_source']})")
-    get_predictor().thresholds = thresholds
-
-    print("\n3. weekly Δ aggregation")
+    print("\n2. weekly Δ aggregation")
     weekly = compute_weekly_delta.compute()
     print(f"   {weekly} drain_health_weekly rows")
 
-    print("\n4. trend fit (min "
+    print("\n3. trend fit (min "
           f"{Config.DRAIN_HEALTH_MIN_WEEKS} weeks per spot)")
     trend = fit_trend.fit()
     print(f"   {trend['fitted']} spots fitted, {trend['skipped']} skipped")
 
-    print("\n5. failure dates + health scores")
+    print("\n4. failure dates + health scores")
     failure = predict_failure_date.compute()
     print(f"   critical_delta = {failure['critical_delta']:.4f}")
     print(f"   {failure['scored']} rows scored, {failure['dated']} with a crossing date "

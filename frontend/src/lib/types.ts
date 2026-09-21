@@ -66,6 +66,20 @@ export interface PredictionResponse {
   prediction_id?: number | null;
 }
 
+export interface HistoricalPrediction {
+  spot_id?: number | null;
+  predicted_for: string;
+  p_rain: number;
+  p_actual: number;
+  delta: number;
+  risk_level: RiskLevel;
+  cause_label: CauseLabel;
+  dispatch_type: DispatchType;
+  confidence_lower?: number | null;
+  confidence_upper?: number | null;
+  shap_top3?: ShapFactor[] | null;
+}
+
 export interface DrainHealthEntry {
   spot_id: number;
   name: string;
@@ -141,6 +155,15 @@ export interface AlertLogEntry {
   error: string | null;
   body: string;
   sent_at: string;
+  recipient_count?: number;
+}
+
+export interface BroadcastResponse {
+  broadcast_count: number;
+  mode: string;
+  channels: string[];
+  message: string;
+  sample_payload?: string;
 }
 
 export interface HealthResponse {
@@ -149,12 +172,4 @@ export interface HealthResponse {
   models_loaded: boolean;
   version: string;
   detail: string | null;
-}
-
-export interface BroadcastResponse {
-  broadcast_count: number;
-}
-
-export interface SubscriberCount {
-  count: number;
 }

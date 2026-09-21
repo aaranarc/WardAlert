@@ -20,15 +20,16 @@ export function WardBoundary() {
   if (!geoData) return null;
 
   return (
+    // Non-interactive: the boundary loads after the markers and sits above them
+    // in the same SVG, so an interactive fill would swallow every marker click.
     <GeoJSON
       data={geoData}
+      interactive={false}
       style={() => ({
-        color: "#9d8df1",
-        weight: 2.5,
-        opacity: 0.85,
-        dashArray: "6, 6",
-        fillColor: "#7B68EE",
-        fillOpacity: 0.12,
+        color: "#1f2937",
+        weight: 2,
+        opacity: 1,
+        fillOpacity: 0,
       })}
     />
   );

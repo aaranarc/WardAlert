@@ -7,19 +7,19 @@ id,name,lat,lng,notes,elevation_m
 6,Currey Road,18.995,72.836,Between Byculla and Parel,5.0
 7,Parel TT,19.003,72.837,Chronic,13.0
 8,Love Grove Junction,19.014,72.822,Drainage bottleneck,12.0
-9,Worli Sea Face,19.018,72.812,Tidal,8.0
+9,Worli Sea Face,19.018257,72.816652,Tidal,9.0
 10,Dr Ambedkar Road Prabhadevi,19.019,72.83,Arterial,14.0
 11,Sane Guruji Marg,19.001,72.834,Low-lying,9.0
 12,Senapati Bapat Marg,19.01,72.828,Corporate area,4.0
 13,NM Joshi Marg,18.998,72.833,Chronic,8.0
 14,Delisle Road,19.006,72.831,Rail crossing,7.0
 15,Prabhadevi Chowpatty,19.021,72.822,Coastal,8.0
-16,Worli Village,19.021,72.815,Historic settlement,8.0
+16,Worli Village,19.021082,72.81648,Historic settlement,10.0
 17,Century Bazaar Prabhadevi,19.017,72.827,Market area,14.0
 18,Peninsula Corporate Park,19.008,72.829,Business hub,19.0
 19,Pandurang Budhkar Marg,19.009,72.821,Coastal road,18.0
 20,Annie Besant Road Worli,19.01,72.816,Arterial,20.0
-21,Jamshedji Tata Road,19.023,72.825,Central Prabhadevi,8.0
+21,Jamshedji Tata Road,19.018154,72.826512,Central Prabhadevi,8.0
 22,Curry Road Bridge Approach,18.997,72.837,Bridge area,11.0
 23,Ganpatrao Kadam Marg,19.001,72.828,Lower Parel,9.0
 24,Tulsi Pipe Road,19.001,72.836,Chronic,13.0
@@ -27,5 +27,5 @@ id,name,lat,lng,notes,elevation_m
 26,Veer Savarkar Marg,19.017,72.816,Coastal,8.0
 27,Mahalaxmi Racecourse Rd,18.983,72.814,Adjacent flood spot,31.0
 28,Haji Ali Junction,18.984,72.812,Near-ward,10.0
-29,Worli Dairy,19.02,72.813,Coastal,8.0
+29,Worli Dairy,19.020195,72.816534,Coastal,5.0
 30,Elphinstone Bridge East,19.005,72.833,Rail bridge approach,10.0
