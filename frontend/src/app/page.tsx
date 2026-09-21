@@ -91,7 +91,7 @@ export default function DashboardPage() {
       const res = await replayCloudburst();
       if (res && res.length > 0) {
         setIsMonsoonMode(true);
-        setBannerMessage("2025 Cloudburst replayed (15 July 2025): Severe waterlogging risk across all 30 spots.");
+        setBannerMessage("2025 Cloudburst replayed (14 July 2025): Severe waterlogging risk across all 30 spots.");
         setTimeout(() => setBannerMessage(null), 6000);
       }
     } finally {
@@ -162,7 +162,7 @@ export default function DashboardPage() {
             onClick={handleReplayCloudburst}
             disabled={isActing}
             className="px-3 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-medium transition-colors disabled:opacity-50 flex items-center gap-1.5 shadow-2xs"
-            title="Replay 2025 Cloudburst event across all spots (15 July 2025)"
+            title="Replay 2025 Cloudburst event across all spots (14 July 2025)"
           >
             <IconRefresh className={`w-3.5 h-3.5 ${isActing && activeAction === "cloudburst" ? "animate-spin" : ""}`} />
             <span>{isActing && activeAction === "cloudburst" ? "Replaying..." : "Replay 2025 Cloudburst"}</span>
