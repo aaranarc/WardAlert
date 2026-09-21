@@ -51,14 +51,14 @@ export function RiskPanel({ spot, onClose, onSpotUpdated }: RiskPanelProps) {
   const activePActual = livePrediction?.p_actual ?? spot.p_actual;
   const activePRain = livePrediction?.p_rain ?? spot.p_rain;
   const activeDelta = livePrediction?.delta ?? spot.delta;
-  const activeRiskLevel = livePrediction?.risk_level ?? spot.risk_level ?? "low";
-  const activeCauseLabel = livePrediction?.cause_label ?? spot.cause_label ?? "rainfall_driven";
-  const activeDispatchType = livePrediction?.dispatch_type ?? spot.dispatch_type ?? "pump_and_traffic";
+  const activeRiskLevel = livePrediction?.risk_level ?? spot.risk_level;
+  const activeCauseLabel = livePrediction?.cause_label ?? spot.cause_label;
+  const activeDispatchType = livePrediction?.dispatch_type ?? spot.dispatch_type;
   const activeConfidenceLower = livePrediction?.confidence_lower ?? spot.confidence_lower;
   const activeConfidenceUpper = livePrediction?.confidence_upper ?? spot.confidence_upper;
   const activeShap = livePrediction?.shap_top3 ?? spot.shap_top3 ?? [];
 
-  const riskColor = RISK_COLORS[activeRiskLevel] || "#16a34a";
+  const riskColor = (activeRiskLevel && RISK_COLORS[activeRiskLevel]) || "#94a3b8";
   const riskPercentNum = activePActual != null ? Math.round(activePActual * 100) : null;
 
   const handleRunPrediction = async (timestamp?: string) => {
@@ -155,7 +155,7 @@ export function RiskPanel({ spot, onClose, onSpotUpdated }: RiskPanelProps) {
             className="text-[10px] font-semibold uppercase px-2 py-0.5 rounded-full tracking-wide"
             style={{ backgroundColor: `${riskColor}18`, color: riskColor }}
           >
-            {activeRiskLevel}
+            {activeRiskLevel ?? "—"}
           </span>
           <div className="flex items-center gap-1 text-[10px] text-emerald-600 font-medium">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
@@ -239,7 +239,11 @@ export function RiskPanel({ spot, onClose, onSpotUpdated }: RiskPanelProps) {
         <div className="p-2.5 rounded-lg bg-white border border-slate-200">
           <div className="text-[10px] text-slate-500 font-medium">Likely Cause</div>
           <div className="text-xs font-bold text-slate-900 mt-0.5 capitalize">
-            {activeCauseLabel === "drainage_failure" ? "Drainage Failure" : "Rainfall Driven"}
+            {activeCauseLabel === "drainage_failure"
+              ? "Drainage Failure"
+              : activeCauseLabel === "rainfall_driven"
+                ? "Rainfall Driven"
+                : "—"}
           </div>
         </div>
 
@@ -280,8 +284,11 @@ export function RiskPanel({ spot, onClose, onSpotUpdated }: RiskPanelProps) {
               return (
                 <div key={i} className="space-y-1">
                   <div className="flex items-center justify-between text-[11px]">
-                    <span className="text-slate-700 font-medium truncate max-w-[180px]">
-                      {factor.label}
+                    <span
+                      className="text-slate-700 font-mono font-medium truncate max-w-[180px]"
+                      title={factor.label}
+                    >
+                      {factor.feature}
                     </span>
                     <span className={`font-mono text-[10px] font-semibold ${isPositive ? "text-rose-600" : "text-emerald-600"}`}>
                       {isPositive ? `+${val.toFixed(2)}` : `-${val.toFixed(2)}`}
@@ -318,7 +325,9 @@ export function RiskPanel({ spot, onClose, onSpotUpdated }: RiskPanelProps) {
               <div className="text-xs font-bold text-slate-900">
                 {activeDispatchType === "desilting_crew"
                   ? "Desilting Crew + Traffic Marshals"
-                  : "Deploy Dewatering Pumps"}
+                  : activeDispatchType === "pump_and_traffic"
+                    ? "Deploy Dewatering Pumps"
+                    : "—"}
               </div>
             </div>
           </div>
@@ -358,10 +367,10 @@ export function RiskPanel({ spot, onClose, onSpotUpdated }: RiskPanelProps) {
 
         <div className="flex gap-2">
           <button
-            onClick={() => handleRunPrediction("2025-07-15T10:30:00Z")}
+            onClick={() => handleRunPrediction(HERO_TIMESTAMP)}
             disabled={isPredicting}
             className="flex-1 py-1.5 px-2.5 rounded-lg bg-white hover:bg-rose-50 text-rose-700 border border-rose-200 text-[11px] font-medium transition-colors disabled:opacity-50 text-center shadow-2xs flex items-center justify-center gap-1"
-            title="Simulate 75mm/h cloudburst and 4.2m high tide for this spot"
+            title="Re-run both models for this spot at the 2025-07-15 monsoon event"
           >
             {isPredicting ? <IconRefresh className="w-3 h-3 animate-spin" /> : null}
             <span>Replay 2025 Cloudburst</span>
@@ -370,7 +379,7 @@ export function RiskPanel({ spot, onClose, onSpotUpdated }: RiskPanelProps) {
             onClick={() => handleRunPrediction()}
             disabled={isPredicting}
             className="py-1.5 px-3 rounded-lg bg-[#0066cc] hover:bg-[#0055b3] text-white text-[11px] font-medium transition-colors disabled:opacity-50 flex items-center gap-1 shadow-2xs"
-            title="Recalculate dual models with live telemetry"
+            title="Recalculate both models for this spot"
           >
             <IconRefresh className={`w-3 h-3 ${isPredicting ? "animate-spin" : ""}`} />
             <span>{isPredicting ? "Computing..." : "Recalculate"}</span>
