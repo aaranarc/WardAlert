@@ -17,6 +17,7 @@ const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL?.replace(/\/+$/, "") || "http://localhost:8000";
 
 export const HERO_TIMESTAMP = "2025-07-15T10:30:00Z";
+export const REFRESH_TIMESTAMP = "2023-07-03T09:00:00Z";
 
 export class ApiError extends Error {
   status: number;
@@ -70,7 +71,8 @@ export async function fetcher<T>(endpoint: string, options?: RequestInit): Promi
 // API methods
 export const api = {
   getHealth: () => fetcher<HealthResponse>("/api/health"),
-  getSpots: () => fetcher<SpotRisk[]>("/api/spots"),
+  getSpots: (timestamp?: string) =>
+    fetcher<SpotRisk[]>(timestamp ? `/api/spots?timestamp=${encodeURIComponent(timestamp)}` : "/api/spots"),
   getSpot: (id: number, historyHours: number = 24) =>
     fetcher<SpotDetail>(`/api/spots/${id}?history_hours=${historyHours}`),
   getRandomHistorical: (spotId: number) =>

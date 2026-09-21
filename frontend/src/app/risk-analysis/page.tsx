@@ -3,16 +3,17 @@
 import React, { useState } from "react";
 import { useSpots } from "@/hooks/useSpots";
 import { RISK_COLORS } from "@/lib/constants";
-import { formatPercent } from "@/lib/utils";
+import { formatPercent, formatDateDMY } from "@/lib/utils";
 import {
   IconRisk,
   IconWarning,
   IconLayers,
   IconCheck,
+  IconClock,
 } from "@/components/Common/Icons";
 
 export default function RiskAnalysisPage() {
-  const { spots } = useSpots();
+  const { spots, activeDate } = useSpots();
   const [selectedDriver, setSelectedDriver] = useState<string>("all");
 
   const sortedSpots = [...spots].sort((a, b) => (b.p_actual || 0) - (a.p_actual || 0));
@@ -54,13 +55,23 @@ export default function RiskAnalysisPage() {
   return (
     <div className="flex-1 bg-[#f8fafc] p-4 lg:p-6 space-y-5 max-w-[1600px] mx-auto w-full">
       {/* Header */}
-      <div>
-        <h1 className="text-xl font-bold tracking-tight text-slate-900">
-          Risk Analysis
-        </h1>
-        <p className="text-xs text-slate-500 mt-0.5">
-          Dual model evaluation, drainage failure attribution, and spot rankings across Ward G/South.
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <div className="flex items-center gap-2.5 flex-wrap">
+            <h1 className="text-xl font-bold tracking-tight text-slate-900">
+              Risk Analysis
+            </h1>
+            {activeDate && (
+              <span className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#e8f2fc] text-[#0066cc] border border-[#0066cc]/25 flex items-center gap-1.5 shadow-2xs">
+                <IconClock className="w-3.5 h-3.5" />
+                <span>Displaying Date: <strong className="font-semibold text-slate-900">{formatDateDMY(activeDate)}</strong></span>
+              </span>
+            )}
+          </div>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Dual model evaluation, drainage failure attribution, and spot rankings across Ward G/South {activeDate ? `for ${formatDateDMY(activeDate)}` : ""}.
+          </p>
+        </div>
       </div>
 
       {/* Top 4 Summary Cards */}
@@ -144,7 +155,14 @@ export default function RiskAnalysisPage() {
         {/* Left: Location Ranking Table (7 of 12 columns) */}
         <div className="lg:col-span-7 bg-white rounded-xl border border-slate-200 overflow-hidden shadow-xs">
           <div className="p-3.5 border-b border-slate-100 flex items-center justify-between bg-slate-50/60">
-            <h2 className="text-xs font-bold text-slate-900">Risk Ranking by Spot</h2>
+            <div className="flex items-center gap-2">
+              <h2 className="text-xs font-bold text-slate-900">Risk Ranking by Spot</h2>
+              {activeDate && (
+                <span className="text-[11px] text-[#0066cc] font-medium bg-[#e8f2fc] px-2 py-0.5 rounded-md border border-[#0066cc]/20">
+                  {formatDateDMY(activeDate)}
+                </span>
+              )}
+            </div>
             <span className="text-[11px] text-slate-400 font-mono">
               {spots.length > 0 ? `${spots.length} Locations Monitored` : "—"}
             </span>
@@ -162,7 +180,7 @@ export default function RiskAnalysisPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {sortedSpots.slice(0, 15).map((spot) => {
+                {sortedSpots.map((spot) => {
                   const risk = spot.risk_level || "low";
                   const color = RISK_COLORS[risk] || "#16a34a";
                   const deltaVal = spot.delta ?? 0;
