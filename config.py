@@ -160,6 +160,17 @@ class Config:
     # cutoff. 50 splits the ward into its drain-served and drain-starved halves.
     DRAIN_PROXIMITY_PERCENTILE = _float("DRAIN_PROXIMITY_PERCENTILE", 50.0)
     CRITICAL_DELTA_PERCENTILE = _float("CRITICAL_DELTA_PERCENTILE", 90.0)
+
+    # ------------------------------------------------- operating thresholds --
+    # Fixed cuts, not learned: quartiles of mostly-dry test days put every spot
+    # in "critical" as soon as it rained.  ml.learn_thresholds no longer writes
+    # these, so re-running the pipeline cannot overwrite them.
+    RISK_TIER_LOW_MAX = _float("RISK_TIER_LOW_MAX", 0.4)
+    RISK_TIER_MODERATE_MAX = _float("RISK_TIER_MODERATE_MAX", 0.6)
+    RISK_TIER_HIGH_MAX = _float("RISK_TIER_HIGH_MAX", 0.8)
+    CAUSE_DELTA_THRESHOLD = _float("CAUSE_DELTA_THRESHOLD", 0.15)  # Δ ≥ this → drainage_failure
+    DRAIN_SLOPE_MIN = _float("DRAIN_SLOPE_MIN", 0.0005)  # weekly Δ slope above this → degrading
+    DRAIN_CRITICAL_DELTA = _float("DRAIN_CRITICAL_DELTA", 0.30)  # health score hits 0 here
     CONFIDENCE_PRIOR_ALPHA = _float("CONFIDENCE_PRIOR_ALPHA", 1.0)
     CONFIDENCE_PRIOR_BETA = _float("CONFIDENCE_PRIOR_BETA", 1.0)
     CONFIDENCE_LEVEL = _float("CONFIDENCE_LEVEL", 0.90)

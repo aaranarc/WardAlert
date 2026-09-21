@@ -6,22 +6,15 @@ trend says it is silting up now.
 """
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.db import get_session
 from backend.schemas.drain_health import DrainHealthDetail, DrainHealthEntry
 from backend.services import drain_health_service
+from config import Config
 
 router = APIRouter(prefix="/api/drain-health", tags=["drain-health"])
-
-
-def _critical_delta(request: Request) -> float:
-    """The learned Δ level, from the thresholds loaded at startup."""
-    predictor = getattr(request.app.state, "predictor", None)
-    if predictor is None:
-        return 0.0
-    return float(predictor.thresholds.get("critical_delta", 0.0))
 
 
 @router.get("", response_model=list[DrainHealthEntry])
@@ -35,10 +28,9 @@ async def get_leaderboard(
 @router.get("/{spot_id}", response_model=DrainHealthDetail)
 async def get_detail(
     spot_id: int,
-    request: Request,
     session: AsyncSession = Depends(get_session),
 ):
-    result = await drain_health_service.detail(session, spot_id, _critical_delta(request))
+    result = await drain_health_service.detail(session, spot_id, Config.DRAIN_CRITICAL_DELTA)
     if result is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

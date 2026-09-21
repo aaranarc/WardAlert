@@ -12,9 +12,8 @@ from datetime import date
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
-# Positive-but-tiny slopes are noise, not degradation. A drain must be gaining
-# at least this much Δ per week before it is called degrading.
-SLOPE_EPSILON = 1e-5
+from config import Config
+
 
 LEADERBOARD_SQL = """
 SELECT w.spot_id,
@@ -39,9 +38,9 @@ def classify_status(slope: float | None, failure_date: date | None) -> str:
         return "overdue"
     if slope is None:
         return "stable"
-    if slope > SLOPE_EPSILON:
+    if slope > Config.DRAIN_SLOPE_MIN:
         return "degrading"
-    if slope < -SLOPE_EPSILON:
+    if slope < -Config.DRAIN_SLOPE_MIN:
         return "improving"
     return "stable"
 
