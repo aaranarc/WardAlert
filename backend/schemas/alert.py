@@ -44,7 +44,12 @@ class AlertLogEntry(BaseModel):
 
 
 class BroadcastResponse(BaseModel):
+    broadcast_id: int = Field(description="alerts_sent row recording the whole fan-out")
     broadcast_count: int = Field(description="active subscribers that were alerted")
     mode: str = Field(default="normal", description="normal | critical")
     channels: list[str] = Field(default_factory=lambda: ["whatsapp"], description="channels used for broadcast")
     message: str = Field(default="", description="Broadcast confirmation message")
+
+
+class PreviewResponse(BaseModel):
+    rendered_message: str
