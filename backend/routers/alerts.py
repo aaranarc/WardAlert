@@ -1,11 +1,14 @@
 """POST /api/alert/send, POST /api/alert/broadcast/{spot_id} and GET /api/alerts/log.
 
-Sending an alert predicts first, so the message always carries the current
-risk rather than whatever was last written to the predictions table.
+A direct send predicts first, so the message carries the current risk.
+Broadcast and preview only read the latest stored prediction: writing a fresh
+"now" row would override the replayed risk shown on the map.
 """
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from datetime import datetime, timezone
+
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.db import get_session
@@ -38,6 +41,19 @@ async def send_alert(
 from config import Config
 
 
+# Replay instant used when a spot has no stored prediction yet; live rainfall
+# data ends Dec 2025, so "now" would predict against zeros.
+HERO_TIMESTAMP = datetime(2025, 7, 15, 10, 30, tzinfo=timezone.utc)
+
+
+async def _latest_or_hero(session: AsyncSession, predictor: Predictor, spot_id: int) -> dict:
+    """The spot's newest stored prediction; alerts read it rather than writing a new one."""
+    latest = await whatsapp_service.latest_prediction(session, spot_id)
+    if latest is None:
+        latest = await prediction_service.predict_one(predictor, spot_id, HERO_TIMESTAMP)
+    return latest
+
+
 @router.post("/api/alert/broadcast/{spot_id}", response_model=BroadcastResponse)
 async def broadcast(
     spot_id: int,
@@ -46,7 +62,7 @@ async def broadcast(
     predictor: Predictor = Depends(get_predictor),
 ):
     """Alert active subscribers of the spot (normal: WhatsApp) or within radius (critical: WhatsApp + SMS)."""
-    prediction = await prediction_service.predict_one(predictor, spot_id, None)
+    prediction = await _latest_or_hero(session, predictor, spot_id)
     outcome = {"status": "simulated", "provider_sid": None, "error": None}
 
     if mode == "critical":
@@ -101,14 +117,10 @@ async def preview(
     spot_id: int,
     lang: str = Query(Config.DEFAULT_LANGUAGE),
     session: AsyncSession = Depends(get_session),
+    predictor: Predictor = Depends(get_predictor),
 ):
     """Render the alert template against the spot's latest stored prediction."""
-    prediction = await whatsapp_service.latest_prediction(session, spot_id)
-    if prediction is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"no prediction stored for spot {spot_id} — POST /api/predict first",
-        )
+    prediction = await _latest_or_hero(session, predictor, spot_id)
     return {"rendered_message": whatsapp_service.compose(prediction, lang)}
 
 
