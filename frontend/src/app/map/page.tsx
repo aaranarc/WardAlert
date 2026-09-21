@@ -120,7 +120,7 @@ export default function MapPage() {
       {selectedSpot && (
         <div className="absolute top-4 right-4 bottom-4 w-full sm:w-[380px] z-20 overflow-y-auto">
           <RiskPanel
-            spot={selectedSpot}
+            spotId={selectedSpot.spot_id}
             onClose={() => setSelectedSpot(null)}
           />
         </div>

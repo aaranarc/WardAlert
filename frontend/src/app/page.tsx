@@ -462,7 +462,7 @@ export default function DashboardPage() {
         {/* Right Section: Risk Details Panel (5 of 12 columns) */}
         <div className="lg:col-span-5 sticky top-20">
           <RiskPanel
-            spot={selectedSpot}
+            spotId={selectedSpotId}
             onClose={() => setSelectedSpotId(null)}
             onSpotUpdated={handleSpotUpdated}
           />

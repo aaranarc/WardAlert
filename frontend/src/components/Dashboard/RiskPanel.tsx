@@ -7,6 +7,7 @@ import { HERO_TIMESTAMP } from "@/lib/api";
 import { RISK_COLORS } from "@/lib/constants";
 import { formatPercent } from "@/lib/utils";
 import { usePredict } from "@/hooks/usePredict";
+import { useSpot } from "@/hooks/useSpot";
 import {
   IconClose,
   IconWarning,
@@ -18,12 +19,13 @@ import {
 } from "@/components/Common/Icons";
 
 interface RiskPanelProps {
-  spot: SpotRisk | null;
+  spotId: number | null;
   onClose: () => void;
   onSpotUpdated?: (updatedSpot: SpotRisk) => void;
 }
 
-export function RiskPanel({ spot, onClose, onSpotUpdated }: RiskPanelProps) {
+export function RiskPanel({ spotId, onClose, onSpotUpdated }: RiskPanelProps) {
+  const { spot, isLoading, isError, mutate: mutateSpot } = useSpot(spotId);
   const { predict, isPredicting } = usePredict();
   const [livePrediction, setLivePrediction] = useState<PredictionResponse | null>(null);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
@@ -36,10 +38,29 @@ export function RiskPanel({ spot, onClose, onSpotUpdated }: RiskPanelProps) {
     setErrorMessage(null);
   }, [spot?.spot_id, spot?.p_actual, spot?.predicted_for]);
 
-  if (!spot) {
+  if (spotId === null) {
     return (
       <div className="bg-white rounded-xl border border-slate-200 p-6 text-center text-sm text-slate-500">
         Click a spot to see details
+      </div>
+    );
+  }
+
+  if (!spot) {
+    if (isError) {
+      return (
+        <div className="bg-white rounded-xl border border-rose-200 p-6 text-center text-sm text-rose-600">
+          Could not load spot #{spotId} from /api/spots/{spotId}
+        </div>
+      );
+    }
+    return (
+      <div className="bg-white rounded-xl border border-slate-200 p-5 space-y-3 animate-pulse" aria-busy={isLoading}>
+        <div className="h-4 w-2/3 rounded bg-slate-200" />
+        <div className="h-24 rounded-lg bg-slate-100" />
+        <div className="h-3 w-full rounded bg-slate-100" />
+        <div className="h-3 w-5/6 rounded bg-slate-100" />
+        <div className="h-3 w-4/6 rounded bg-slate-100" />
       </div>
     );
   }
@@ -69,6 +90,7 @@ export function RiskPanel({ spot, onClose, onSpotUpdated }: RiskPanelProps) {
       const result = await predict(spot.spot_id, ts);
       if (result) {
         setLivePrediction(result);
+        mutateSpot();
         setLastCalculatedTime(
           new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })
         );
