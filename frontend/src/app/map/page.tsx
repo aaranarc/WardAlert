@@ -4,12 +4,15 @@ import React, { useState } from "react";
 import dynamic from "next/dynamic";
 import { useSpots } from "@/hooks/useSpots";
 import { SpotRisk, RiskLevel } from "@/lib/types";
+import { formatDateDMY } from "@/lib/utils";
 import { RISK_COLORS } from "@/lib/constants";
 import { RiskPanel } from "@/components/Dashboard/RiskPanel";
 import {
   IconFilter,
   IconLayers,
   IconCheck,
+  IconClock,
+  IconRefresh,
 } from "@/components/Common/Icons";
 
 const FloodMap = dynamic(() => import("@/components/Map/FloodMap"), {
@@ -23,7 +26,31 @@ const FloodMap = dynamic(() => import("@/components/Map/FloodMap"), {
 });
 
 export default function MapPage() {
-  const { spots, isLoading } = useSpots();
+  const { spots, isLoading, activeDate, refreshPredictions, replayCloudburst } = useSpots();
+  const [isActing, setIsActing] = useState<boolean>(false);
+  const [activeAction, setActiveAction] = useState<"refresh" | "cloudburst" | null>(null);
+
+  const handleRefreshPredictions = async () => {
+    setIsActing(true);
+    setActiveAction("refresh");
+    try {
+      await refreshPredictions();
+    } finally {
+      setIsActing(false);
+      setActiveAction(null);
+    }
+  };
+
+  const handleReplayCloudburst = async () => {
+    setIsActing(true);
+    setActiveAction("cloudburst");
+    try {
+      await replayCloudburst();
+    } finally {
+      setIsActing(false);
+      setActiveAction(null);
+    }
+  };
   const [selectedSpot, setSelectedSpot] = useState<SpotRisk | null>(null);
   const [riskFilter, setRiskFilter] = useState<string>("all");
 
@@ -73,6 +100,36 @@ export default function MapPage() {
               </button>
             ))}
           </div>
+        </div>
+
+        {/* Replay / Refresh Controls */}
+        <div className="bg-white/95 backdrop-blur-md p-1.5 rounded-xl border border-slate-200 shadow-xs pointer-events-auto flex items-center gap-2 flex-wrap">
+          <div className="px-2.5 py-1 rounded-lg bg-[#e8f2fc] border border-[#0066cc]/25 text-[#0066cc] text-xs font-medium flex items-center gap-1.5">
+            <IconClock className="w-3.5 h-3.5 shrink-0" />
+            <span>
+              Displaying Date: <strong className="font-semibold text-slate-900">{formatDateDMY(activeDate)}</strong>
+            </span>
+          </div>
+
+          <button
+            onClick={handleReplayCloudburst}
+            disabled={isActing}
+            className="px-2.5 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-medium transition-colors disabled:opacity-50 flex items-center gap-1.5 shadow-2xs"
+            title="Replay 2025 Cloudburst event across all spots (15 July 2025)"
+          >
+            <IconRefresh className={`w-3 h-3 ${isActing && activeAction === "cloudburst" ? "animate-spin" : ""}`} />
+            <span>{isActing && activeAction === "cloudburst" ? "Replaying..." : "Replay 2025 Cloudburst"}</span>
+          </button>
+
+          <button
+            onClick={handleRefreshPredictions}
+            disabled={isActing}
+            className="px-2.5 py-1 rounded-lg bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-medium transition-colors disabled:opacity-50 flex items-center gap-1.5 shadow-2xs"
+            title="Refresh moderate monsoon predictions across all 30 spots for 3 July 2023"
+          >
+            <IconRefresh className={`w-3 h-3 ${isActing && activeAction === "refresh" ? "animate-spin text-[#0066cc]" : ""}`} />
+            <span>{isActing && activeAction === "refresh" ? "Refreshing..." : "Refresh Predictions"}</span>
+          </button>
         </div>
 
         {/* Layer Info Pill */}

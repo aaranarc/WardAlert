@@ -68,3 +68,17 @@ export function formatHistoricalDate(dateStr: string | null | undefined): string
   }
 }
 
+
+export function formatDateDMY(dateStr: string | null | undefined): string {
+  if (!dateStr) return "-";
+  try {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return dateStr;
+    const day = d.toLocaleDateString("en-GB", { day: "numeric", timeZone: "Asia/Kolkata" });
+    const month = d.toLocaleDateString("en-GB", { month: "long", timeZone: "Asia/Kolkata" });
+    const year = d.toLocaleDateString("en-GB", { year: "numeric", timeZone: "Asia/Kolkata" });
+    return `${day} ${month} ${year}`;
+  } catch {
+    return dateStr;
+  }
+}

@@ -5,6 +5,8 @@ spot, so all 30 spots are returned even before anything has been predicted.
 """
 from __future__ import annotations
 
+from datetime import datetime
+
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -28,7 +30,62 @@ LATEST_RISK_COLUMNS = """
 
 
 @router.get("", response_model=list[SpotRisk])
-async def list_spots(session: AsyncSession = Depends(get_session)):
+async def list_spots(
+    timestamp: str | None = Query(None, description="ISO timestamp, 'random', or None for latest"),
+    session: AsyncSession = Depends(get_session),
+):
+    if timestamp == "random":
+        res_ts = await session.execute(
+            text(
+                """
+                SELECT predicted_for 
+                FROM predictions 
+                WHERE predicted_for < NOW() AND p_actual IS NOT NULL 
+                GROUP BY predicted_for 
+                HAVING count(*) >= 30 
+                ORDER BY RANDOM() 
+                LIMIT 1
+                """
+            )
+        )
+        chosen_ts = res_ts.scalar()
+        if chosen_ts is not None:
+            q = text(
+                f"""
+                SELECT 
+                    s.id AS spot_id, s.name, s.lat, s.lng, s.elevation_m, s.depression_depth_m, s.nearest_drain_m, s.notes,
+                    p.predicted_for, p.p_rain, p.p_actual, p.delta, p.risk_level, p.cause_label,
+                    p.dispatch_type, p.confidence_lower, p.confidence_upper, p.shap_top3
+                FROM flood_spots s
+                LEFT JOIN predictions p ON p.spot_id = s.id AND p.predicted_for = :ts
+                ORDER BY s.id
+                """
+            )
+            result = await session.execute(q, {"ts": chosen_ts})
+            return [SpotRisk(**dict(row)) for row in result.mappings()]
+
+    elif timestamp:
+        try:
+            parsed_ts = datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
+        except Exception:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid ISO timestamp format",
+            )
+        q = text(
+            f"""
+            SELECT 
+                s.id AS spot_id, s.name, s.lat, s.lng, s.elevation_m, s.depression_depth_m, s.nearest_drain_m, s.notes,
+                p.predicted_for, p.p_rain, p.p_actual, p.delta, p.risk_level, p.cause_label,
+                p.dispatch_type, p.confidence_lower, p.confidence_upper, p.shap_top3
+            FROM flood_spots s
+            LEFT JOIN predictions p ON p.spot_id = s.id AND p.predicted_for = :ts
+            ORDER BY s.id
+            """
+        )
+        result = await session.execute(q, {"ts": parsed_ts})
+        return [SpotRisk(**dict(row)) for row in result.mappings()]
+
     result = await session.execute(text(f"SELECT {LATEST_RISK_COLUMNS} FROM v_latest_risk"))
     return [SpotRisk(**dict(row)) for row in result.mappings()]
 

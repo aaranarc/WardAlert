@@ -150,21 +150,7 @@ export function RiskPanel({ spotId, onClose, onSpotUpdated }: RiskPanelProps) {
         setStatusMessage(
           `${formatHistoricalDate(res.predicted_for)}: Risk ${Math.round(res.p_actual * 100)}% (${res.risk_level.toUpperCase()})`
         );
-        if (onSpotUpdated) {
-          onSpotUpdated({
-            ...spot,
-            p_actual: res.p_actual,
-            p_rain: res.p_rain,
-            delta: res.delta,
-            risk_level: res.risk_level,
-            cause_label: res.cause_label,
-            dispatch_type: res.dispatch_type,
-            confidence_lower: res.confidence_lower ?? null,
-            confidence_upper: res.confidence_upper ?? null,
-            shap_top3: res.shap_top3 ?? null,
-            predicted_for: res.predicted_for,
-          });
-        }
+
       } else {
         setErrorMessage("Failed to load historical prediction for this spot.");
       }

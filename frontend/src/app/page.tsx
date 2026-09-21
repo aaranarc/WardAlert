@@ -7,6 +7,7 @@ import { useSpots } from "@/hooks/useSpots";
 import { usePredict } from "@/hooks/usePredict";
 import { SpotRisk, RiskLevel } from "@/lib/types";
 import { HERO_TIMESTAMP } from "@/lib/api";
+import { formatDateDMY } from "@/lib/utils";
 import { RiskPanel } from "@/components/Dashboard/RiskPanel";
 import {
   IconWarning,
@@ -30,7 +31,7 @@ const FloodMap = dynamic(() => import("@/components/Map/FloodMap"), {
 });
 
 export default function DashboardPage() {
-  const { spots, isLoading, isError, mutate } = useSpots();
+  const { spots, isLoading, isError, mutate, activeDate, refreshPredictions, replayCloudburst } = useSpots();
   const { predictAll, isPredicting } = usePredict();
 
   const [selectedSpotId, setSelectedSpotId] = useState<number | null>(null);
@@ -62,68 +63,39 @@ export default function DashboardPage() {
     });
   }, [spots, riskFilter]);
 
-  const [isMonsoonMode, setIsMonsoonMode] = useState<boolean>(false);
+  const [isMonsoonMode, setIsMonsoonMode] = useState<boolean>(true);
+  const [isActing, setIsActing] = useState<boolean>(false);
+  const [activeAction, setActiveAction] = useState<"refresh" | "cloudburst" | null>(null);
 
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const handleRefresh = async () => {
-    setIsRefreshing(true);
+  const handleRefreshPredictions = async () => {
+    setIsActing(true);
+    setActiveAction("refresh");
     try {
-      await mutate();
+      const res = await refreshPredictions();
+      if (res && res.length > 0) {
+        setIsMonsoonMode(false);
+        setBannerMessage("Loaded moderate monsoon predictions for 3 July 2023 across all 30 spots.");
+        setTimeout(() => setBannerMessage(null), 6000);
+      }
     } finally {
-      setIsRefreshing(false);
+      setIsActing(false);
+      setActiveAction(null);
     }
   };
 
-  // Handle batch prediction replay
-  const handlePredictAll = async (timestamp?: string) => {
-    const isMonsoon = Boolean(timestamp && timestamp.includes("2025"));
-    setIsMonsoonMode(isMonsoon);
-    setBannerMessage(
-      isMonsoon
-        ? "Replaying the 2025-07-15 monsoon event across all spots..."
-        : "Re-running both models across all spots..."
-    );
-
-    const ts = timestamp || HERO_TIMESTAMP;
-    const results = await predictAll(ts);
-    if (results && results.length > 0) {
-      // Optimistically update SWR cache with the results so the 4 KPI cards and map markers update instantly
-      await mutate(
-        (current) => {
-          if (!current) return current;
-          return current.map((spot) => {
-            const match = results.find((r) => r.spot_id === spot.spot_id);
-            return match
-              ? {
-                  ...spot,
-                  p_rain: match.p_rain,
-                  p_actual: match.p_actual,
-                  delta: match.delta,
-                  risk_level: match.risk_level,
-                  cause_label: match.cause_label,
-                  dispatch_type: match.dispatch_type,
-                  confidence_lower: match.confidence_lower,
-                  confidence_upper: match.confidence_upper,
-                  shap_top3: match.shap_top3,
-                  predicted_for: match.predicted_for,
-                }
-              : spot;
-          });
-        },
-        false
-      );
-
-      // Revalidate from server
-      await mutate();
-
-      setBannerMessage(
-        isMonsoon
-          ? `2025 Monsoon Cloudburst replayed: Severe waterlogging risk across ${results.length} spots.`
-          : `Fresh dual-model predictions calculated for ${results.length} spots.`
-      );
-      setTimeout(() => setBannerMessage(null), 6000);
-    } else {
-      setBannerMessage("Failed to calculate predictions. Please verify backend connection.");
+  const handleReplayCloudburst = async () => {
+    setIsActing(true);
+    setActiveAction("cloudburst");
+    try {
+      const res = await replayCloudburst();
+      if (res && res.length > 0) {
+        setIsMonsoonMode(true);
+        setBannerMessage("2025 Cloudburst replayed (15 July 2025): Severe waterlogging risk across all 30 spots.");
+        setTimeout(() => setBannerMessage(null), 6000);
+      }
+    } finally {
+      setIsActing(false);
+      setActiveAction(null);
     }
   };
 
@@ -177,24 +149,32 @@ export default function DashboardPage() {
 
         {/* Replay Controls */}
         <div className="flex items-center gap-2 flex-wrap">
+          {activeDate && (
+            <div className="px-3 py-1.5 rounded-lg bg-[#e8f2fc] border border-[#0066cc]/25 text-[#0066cc] text-xs font-medium flex items-center gap-1.5 shadow-2xs">
+              <IconClock className="w-3.5 h-3.5 shrink-0" />
+              <span>
+                Displaying Date: <strong className="font-semibold text-slate-900">{formatDateDMY(activeDate)}</strong>
+              </span>
+            </div>
+          )}
           <button
-            onClick={() => handlePredictAll(HERO_TIMESTAMP)}
-            disabled={isPredicting}
+            onClick={handleReplayCloudburst}
+            disabled={isActing}
             className="px-3 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-medium transition-colors disabled:opacity-50 flex items-center gap-1.5 shadow-2xs"
-            title="Re-run both models for all spots at the 2025-07-15 monsoon event"
+            title="Replay 2025 Cloudburst event across all spots (15 July 2025)"
           >
-            <IconRefresh className={`w-3.5 h-3.5 ${isPredicting ? "animate-spin" : ""}`} />
-            <span>{isPredicting ? "Replaying..." : "Replay 2025 Monsoon"}</span>
+            <IconRefresh className={`w-3.5 h-3.5 ${isActing && activeAction === "cloudburst" ? "animate-spin" : ""}`} />
+            <span>{isActing && activeAction === "cloudburst" ? "Replaying..." : "Replay 2025 Cloudburst"}</span>
           </button>
 
           <button
-            onClick={handleRefresh}
-            disabled={isRefreshing}
+            onClick={handleRefreshPredictions}
+            disabled={isActing}
             className="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-medium transition-colors disabled:opacity-50 flex items-center gap-1.5 shadow-2xs"
-            title="Reload the stored predictions from the backend"
+            title="Refresh moderate monsoon predictions across all 30 spots for 3 July 2023"
           >
-            <IconRefresh className={`w-3.5 h-3.5 ${isRefreshing ? "animate-spin text-[#0066cc]" : ""}`} />
-            <span>{isRefreshing ? "Refreshing..." : "Refresh Predictions"}</span>
+            <IconRefresh className={`w-3.5 h-3.5 ${isActing && activeAction === "refresh" ? "animate-spin text-[#0066cc]" : ""}`} />
+            <span>{isActing && activeAction === "refresh" ? "Refreshing..." : "Refresh Predictions"}</span>
           </button>
         </div>
       </div>
