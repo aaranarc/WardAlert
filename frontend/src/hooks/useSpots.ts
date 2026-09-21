@@ -1,31 +1,40 @@
-import { useRef, useState, useEffect } from "react";
 import useSWR from "swr";
-import { api, HERO_TIMESTAMP, REFRESH_TIMESTAMP } from "@/lib/api";
+import { api } from "@/lib/api";
 import { SpotRisk } from "@/lib/types";
+import {
+  useDisplayDate,
+  DEFAULT_DISPLAY_DATE,
+  CLOUDBURST_DATE,
+  REFRESH_DATE,
+} from "@/lib/displayDate";
 
-export { HERO_TIMESTAMP, REFRESH_TIMESTAMP };
+export { DEFAULT_DISPLAY_DATE, CLOUDBURST_DATE, REFRESH_DATE };
 
-export function useSpots() {
-  const seededRef = useRef(false);
+export function useSpots(overrideDate?: string) {
+  const [sharedDisplayDate, setSharedDisplayDate] = useDisplayDate();
+  const currentDisplayDate = overrideDate || sharedDisplayDate || DEFAULT_DISPLAY_DATE;
 
-  const fetchSpotsWithSeed = async (): Promise<SpotRisk[]> => {
-    if (typeof window !== "undefined") {
-      const activeTimestamp = sessionStorage.getItem("wardalert_active_timestamp") || HERO_TIMESTAMP;
-      try {
-        const storedSpots = await api.getSpots(activeTimestamp);
-        if (storedSpots && storedSpots.length > 0 && storedSpots[0].predicted_for) {
-          return storedSpots;
-        }
-      } catch (err) {
-        console.warn("[useSpots] Error fetching spots for active timestamp:", err);
+  const fetchSpots = async (): Promise<SpotRisk[]> => {
+    try {
+      const data = await api.getSpots(currentDisplayDate);
+      if (data && data.length > 0) {
+        return data;
       }
+    } catch (err) {
+      console.warn(`[useSpots] Error fetching /api/spots?at=${currentDisplayDate}:`, err);
     }
-    return api.getSpots(HERO_TIMESTAMP);
+    try {
+      await api.predictAll(currentDisplayDate);
+      return await api.getSpots(currentDisplayDate);
+    } catch (err) {
+      console.warn("[useSpots] Fallback predictAll error:", err);
+      return api.getSpots();
+    }
   };
 
   const { data, error, isLoading, mutate } = useSWR<SpotRisk[]>(
-    "/api/spots",
-    fetchSpotsWithSeed,
+    ["/api/spots", currentDisplayDate],
+    fetchSpots,
     {
       refreshInterval: 60000,
       revalidateOnFocus: false,
@@ -33,66 +42,26 @@ export function useSpots() {
     }
   );
 
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const activeDate = !mounted
-    ? HERO_TIMESTAMP
-    : data && data.length > 0 && data[0].predicted_for
-    ? data[0].predicted_for
-    : (typeof window !== "undefined" && sessionStorage.getItem("wardalert_active_timestamp")) || HERO_TIMESTAMP;
-
-  const refreshPredictions = async (): Promise<SpotRisk[] | null> => {
-    try {
-      const currentTs =
-        data && data.length > 0 && data[0].predicted_for
-          ? data[0].predicted_for
-          : typeof window !== "undefined"
-          ? sessionStorage.getItem("wardalert_active_timestamp")
-          : null;
-
-      // Always pick a DIFFERENT real random historical timestamp from the DB
-      const freshSpots = await api.getSpots("random", currentTs || undefined);
-      if (freshSpots && freshSpots.length > 0) {
-        const chosenTs = freshSpots[0].predicted_for;
-        if (typeof window !== "undefined" && chosenTs) {
-          sessionStorage.setItem("wardalert_active_timestamp", chosenTs);
-        }
-        await mutate(freshSpots, false);
-        return freshSpots;
-      }
-    } catch (err) {
-      console.error("[useSpots] Error refreshing random historical predictions:", err);
-    }
-    return null;
+  const refreshPredictions = async (): Promise<SpotRisk[] | undefined> => {
+    setSharedDisplayDate(REFRESH_DATE);
+    return await mutate();
   };
 
-  const replayCloudburst = async (): Promise<SpotRisk[] | null> => {
-    try {
-      const spots2025 = await api.getSpots(HERO_TIMESTAMP);
-      if (spots2025 && spots2025.length > 0) {
-        if (typeof window !== "undefined") {
-          sessionStorage.setItem("wardalert_active_timestamp", HERO_TIMESTAMP);
-        }
-        await mutate(spots2025, false);
-        return spots2025;
-      }
-    } catch (err) {
-      console.error("[useSpots] Error replaying 2025 cloudburst:", err);
-    }
-    return null;
+  const replayCloudburst = async (): Promise<SpotRisk[] | undefined> => {
+    setSharedDisplayDate(CLOUDBURST_DATE);
+    return await mutate();
   };
 
   return {
     spots: data || [],
-    activeDate,
+    currentDisplayDate,
+    activeDate: currentDisplayDate,
+    setDisplayDate: setSharedDisplayDate,
+    refreshPredictions,
+    replayCloudburst,
     isLoading,
     isError: !!error,
     error,
     mutate,
-    refreshPredictions,
-    replayCloudburst,
   };
 }

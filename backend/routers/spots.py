@@ -31,11 +31,13 @@ LATEST_RISK_COLUMNS = """
 
 @router.get("", response_model=list[SpotRisk])
 async def list_spots(
+    at: str | None = Query(None, description="ISO timestamp filter"),
     timestamp: str | None = Query(None, description="ISO timestamp, 'random', or None for latest"),
     exclude: str | None = Query(None, description="ISO timestamp to exclude when picking random"),
     session: AsyncSession = Depends(get_session),
 ):
-    if timestamp == "random":
+    effective_ts = at or timestamp
+    if effective_ts == "random":
         exclude_ts = None
         if exclude:
             try:
@@ -89,9 +91,9 @@ async def list_spots(
             result = await session.execute(q, {"ts": chosen_ts})
             return [SpotRisk(**dict(row)) for row in result.mappings()]
 
-    elif timestamp:
+    elif effective_ts:
         try:
-            parsed_ts = datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
+            parsed_ts = datetime.fromisoformat(effective_ts.replace("Z", "+00:00"))
         except Exception:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
