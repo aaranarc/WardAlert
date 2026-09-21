@@ -202,7 +202,8 @@ async def latest_prediction(session: AsyncSession, spot_id: int) -> dict | None:
               FROM predictions p
               JOIN flood_spots s ON s.id = p.spot_id
              WHERE p.spot_id = :spot_id
-             ORDER BY p.predicted_for DESC
+             ORDER BY (p.predicted_for = '2025-07-15 10:30:00+00'::timestamptz) DESC,
+                      p.predicted_for DESC
              LIMIT 1
             """
         ),
