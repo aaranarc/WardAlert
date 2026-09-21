@@ -141,8 +141,7 @@ export interface AlertLogEntry {
   error: string | null;
   body: string;
   sent_at: string;
-  dispatched_at?: string;
-  recipient_count?: number | string;
+  recipient_count?: number;
 }
 
 export interface BroadcastResponse {

@@ -62,7 +62,11 @@ export function AlertLog({ logs, isLoading }: AlertLogProps) {
     );
   };
 
-  const getLanguageLabel = (lang: string) => {
+  // Broadcast rows carry every language rendered, comma-separated.
+  const getLanguageLabel = (lang: string) =>
+    lang.split(",").map(getSingleLanguageLabel).join(", ");
+
+  const getSingleLanguageLabel = (lang: string) => {
     switch (lang.toLowerCase()) {
       case "en":
         return "English";
@@ -124,6 +128,7 @@ export function AlertLog({ logs, isLoading }: AlertLogProps) {
                 <th className="py-2.5 px-3">Language</th>
                 <th className="py-2.5 px-3">Channel</th>
                 <th className="py-2.5 px-3">Recipient</th>
+                <th className="py-2.5 px-3 text-right">Recipients</th>
                 <th className="py-2.5 px-3 text-center">Status</th>
                 <th className="py-2.5 px-3 text-right">Dispatched</th>
                 <th className="py-2.5 px-3 text-center">Action</th>
@@ -146,11 +151,14 @@ export function AlertLog({ logs, isLoading }: AlertLogProps) {
                   <td className="py-2.5 px-3 font-mono text-[11px] text-slate-600">
                     {maskRecipient(log.recipient)}
                   </td>
+                  <td className="py-2.5 px-3 text-right font-mono text-[11px] text-slate-700">
+                    {log.recipient_count ?? "—"}
+                  </td>
                   <td className="py-2.5 px-3 text-center">
                     {getStatusBadge(log.status)}
                   </td>
                   <td className="py-2.5 px-3 text-right font-mono text-[10px] text-slate-400">
-                    {formatDateTime(log.dispatched_at || log.sent_at)}
+                    {formatDateTime(log.sent_at)}
                   </td>
                   <td className="py-2.5 px-3 text-center">
                     <button
