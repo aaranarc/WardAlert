@@ -191,6 +191,27 @@ async def record(
     return row
 
 
+async def latest_prediction(session: AsyncSession, spot_id: int) -> dict | None:
+    """The spot's newest stored prediction — the same row v_latest_risk shows."""
+    result = await session.execute(
+        text(
+            """
+            SELECT p.id AS prediction_id, p.spot_id, s.name AS spot_name,
+                   p.predicted_for, p.p_actual, p.risk_level, p.cause_label,
+                   p.dispatch_type, p.features
+              FROM predictions p
+              JOIN flood_spots s ON s.id = p.spot_id
+             WHERE p.spot_id = :spot_id
+             ORDER BY p.predicted_for DESC
+             LIMIT 1
+            """
+        ),
+        {"spot_id": spot_id},
+    )
+    row = result.mappings().first()
+    return dict(row) if row else None
+
+
 async def send_alert(
     session: AsyncSession,
     prediction: dict,
