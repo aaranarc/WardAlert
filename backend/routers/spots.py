@@ -32,22 +32,47 @@ LATEST_RISK_COLUMNS = """
 @router.get("", response_model=list[SpotRisk])
 async def list_spots(
     timestamp: str | None = Query(None, description="ISO timestamp, 'random', or None for latest"),
+    exclude: str | None = Query(None, description="ISO timestamp to exclude when picking random"),
     session: AsyncSession = Depends(get_session),
 ):
     if timestamp == "random":
-        res_ts = await session.execute(
-            text(
-                """
-                SELECT predicted_for 
-                FROM predictions 
-                WHERE predicted_for < NOW() AND p_actual IS NOT NULL 
-                GROUP BY predicted_for 
-                HAVING count(*) >= 30 
-                ORDER BY RANDOM() 
-                LIMIT 1
-                """
+        exclude_ts = None
+        if exclude:
+            try:
+                exclude_ts = datetime.fromisoformat(exclude.replace("Z", "+00:00"))
+            except Exception:
+                pass
+
+        if exclude_ts is not None:
+            res_ts = await session.execute(
+                text(
+                    """
+                    SELECT predicted_for 
+                    FROM predictions 
+                    WHERE predicted_for < NOW() AND p_actual IS NOT NULL 
+                      AND predicted_for != :exclude_ts
+                    GROUP BY predicted_for 
+                    HAVING count(*) >= 30 
+                    ORDER BY RANDOM() 
+                    LIMIT 1
+                    """
+                ),
+                {"exclude_ts": exclude_ts}
             )
-        )
+        else:
+            res_ts = await session.execute(
+                text(
+                    """
+                    SELECT predicted_for 
+                    FROM predictions 
+                    WHERE predicted_for < NOW() AND p_actual IS NOT NULL 
+                    GROUP BY predicted_for 
+                    HAVING count(*) >= 30 
+                    ORDER BY RANDOM() 
+                    LIMIT 1
+                    """
+                )
+            )
         chosen_ts = res_ts.scalar()
         if chosen_ts is not None:
             q = text(
