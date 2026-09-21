@@ -33,7 +33,7 @@ export default function DashboardPage() {
   const { spots, isLoading, isError, mutate } = useSpots();
   const { predictAll, isPredicting } = usePredict();
 
-  const [selectedSpotId, setSelectedSpotId] = useState<number | null>(1); // Default to Hindmata Junction (#1)
+  const [selectedSpotId, setSelectedSpotId] = useState<number | null>(null);
   const [riskFilter, setRiskFilter] = useState<string>("all");
   const [bannerMessage, setBannerMessage] = useState<string | null>(null);
 
@@ -50,14 +50,10 @@ export default function DashboardPage() {
   }, [spots]);
 
   // Selected spot
-  const selectedSpot = useMemo(() => {
-    if (!spots.length) return null;
-    if (selectedSpotId !== null) {
-      const found = spots.find((s) => s.spot_id === selectedSpotId);
-      if (found) return found;
-    }
-    return spots[0];
-  }, [spots, selectedSpotId]);
+  const selectedSpot = useMemo(
+    () => spots.find((s) => s.spot_id === selectedSpotId) ?? null,
+    [spots, selectedSpotId]
+  );
 
   // Filtered spots for map
   const filteredSpots = useMemo(() => {

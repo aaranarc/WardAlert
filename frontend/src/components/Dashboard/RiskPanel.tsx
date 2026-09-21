@@ -36,7 +36,13 @@ export function RiskPanel({ spot, onClose, onSpotUpdated }: RiskPanelProps) {
     setErrorMessage(null);
   }, [spot?.spot_id, spot?.p_actual, spot?.predicted_for]);
 
-  if (!spot) return null;
+  if (!spot) {
+    return (
+      <div className="bg-white rounded-xl border border-slate-200 p-6 text-center text-sm text-slate-500">
+        Click a spot to see details
+      </div>
+    );
+  }
 
   if (spot.p_actual == null && livePrediction?.p_actual == null) {
     console.warn(`[RiskPanel] Spot #${spot.spot_id} (${spot.name}) missing p_actual from backend`);
