@@ -71,8 +71,13 @@ export async function fetcher<T>(endpoint: string, options?: RequestInit): Promi
 // API methods
 export const api = {
   getHealth: () => fetcher<HealthResponse>("/api/health"),
-  getSpots: (timestamp?: string) =>
-    fetcher<SpotRisk[]>(timestamp ? `/api/spots?timestamp=${encodeURIComponent(timestamp)}` : "/api/spots"),
+  getSpots: (timestamp?: string, exclude?: string) => {
+    const params = new URLSearchParams();
+    if (timestamp) params.append("timestamp", timestamp);
+    if (exclude) params.append("exclude", exclude);
+    const qs = params.toString();
+    return fetcher<SpotRisk[]>(qs ? `/api/spots?${qs}` : "/api/spots");
+  },
   getSpot: (id: number, historyHours: number = 24) =>
     fetcher<SpotDetail>(`/api/spots/${id}?history_hours=${historyHours}`),
   getRandomHistorical: (spotId: number) =>

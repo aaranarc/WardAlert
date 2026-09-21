@@ -74,7 +74,8 @@ export default function DashboardPage() {
       const res = await refreshPredictions();
       if (res && res.length > 0) {
         setIsMonsoonMode(false);
-        setBannerMessage("Loaded moderate monsoon predictions for 3 July 2023 across all 30 spots.");
+        const formatted = formatDateDMY(res[0].predicted_for);
+        setBannerMessage(`Loaded historical prediction data for ${formatted} across all ${res.length} spots.`);
         setTimeout(() => setBannerMessage(null), 6000);
       }
     } finally {

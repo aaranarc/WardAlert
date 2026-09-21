@@ -11,20 +11,6 @@ export function useSpots() {
   const fetchSpotsWithSeed = async (): Promise<SpotRisk[]> => {
     if (typeof window !== "undefined") {
       const activeTimestamp = sessionStorage.getItem("wardalert_active_timestamp") || HERO_TIMESTAMP;
-
-      const alreadySeeded = sessionStorage.getItem("wardalert_seeded_predictions_ready");
-      if (!alreadySeeded && !seededRef.current) {
-        seededRef.current = true;
-        try {
-          // Pre-seed both dates so they are instantly ready in DB
-          await api.predictAll(HERO_TIMESTAMP);
-          await api.predictAll(REFRESH_TIMESTAMP);
-          sessionStorage.setItem("wardalert_seeded_predictions_ready", "true");
-        } catch (err) {
-          console.warn("[useSpots] Error seeding initial predictions:", err);
-        }
-      }
-
       try {
         const storedSpots = await api.getSpots(activeTimestamp);
         if (storedSpots && storedSpots.length > 0 && storedSpots[0].predicted_for) {
@@ -43,7 +29,7 @@ export function useSpots() {
     {
       refreshInterval: 60000,
       revalidateOnFocus: false,
-      dedupingInterval: 10000,
+      dedupingInterval: 5000,
     }
   );
 
@@ -56,85 +42,38 @@ export function useSpots() {
 
   const refreshPredictions = async (): Promise<SpotRisk[] | null> => {
     try {
-      const results = await api.predictAll(REFRESH_TIMESTAMP);
-      if (results && results.length > 0) {
-        if (typeof window !== "undefined") {
-          sessionStorage.setItem("wardalert_active_timestamp", REFRESH_TIMESTAMP);
-        }
-        let updatedSpots: SpotRisk[] = [];
-        await mutate((current) => {
-          const baseList = current && current.length > 0 ? current : results.map((r) => ({
-            spot_id: r.spot_id,
-            name: r.spot_name,
-            lat: 18.99,
-            lng: 72.82,
-          } as SpotRisk));
+      const currentTs =
+        data && data.length > 0 && data[0].predicted_for
+          ? data[0].predicted_for
+          : typeof window !== "undefined"
+          ? sessionStorage.getItem("wardalert_active_timestamp")
+          : null;
 
-          updatedSpots = baseList.map((spot) => {
-            const match = results.find((r) => r.spot_id === spot.spot_id);
-            return match
-              ? {
-                  ...spot,
-                  p_rain: match.p_rain,
-                  p_actual: match.p_actual,
-                  delta: match.delta,
-                  risk_level: match.risk_level,
-                  cause_label: match.cause_label,
-                  dispatch_type: match.dispatch_type,
-                  confidence_lower: match.confidence_lower,
-                  confidence_upper: match.confidence_upper,
-                  shap_top3: match.shap_top3,
-                  predicted_for: match.predicted_for,
-                }
-              : spot;
-          });
-          return updatedSpots;
-        }, false);
-        return updatedSpots;
+      // Always pick a DIFFERENT real random historical timestamp from the DB
+      const freshSpots = await api.getSpots("random", currentTs || undefined);
+      if (freshSpots && freshSpots.length > 0) {
+        const chosenTs = freshSpots[0].predicted_for;
+        if (typeof window !== "undefined" && chosenTs) {
+          sessionStorage.setItem("wardalert_active_timestamp", chosenTs);
+        }
+        await mutate(freshSpots, false);
+        return freshSpots;
       }
     } catch (err) {
-      console.error("[useSpots] Error refreshing predictions for 2023-07-03:", err);
+      console.error("[useSpots] Error refreshing random historical predictions:", err);
     }
     return null;
   };
 
   const replayCloudburst = async (): Promise<SpotRisk[] | null> => {
     try {
-      const results = await api.predictAll(HERO_TIMESTAMP);
-      if (results && results.length > 0) {
+      const spots2025 = await api.getSpots(HERO_TIMESTAMP);
+      if (spots2025 && spots2025.length > 0) {
         if (typeof window !== "undefined") {
           sessionStorage.setItem("wardalert_active_timestamp", HERO_TIMESTAMP);
         }
-        let updatedSpots: SpotRisk[] = [];
-        await mutate((current) => {
-          const baseList = current && current.length > 0 ? current : results.map((r) => ({
-            spot_id: r.spot_id,
-            name: r.spot_name,
-            lat: 18.99,
-            lng: 72.82,
-          } as SpotRisk));
-
-          updatedSpots = baseList.map((spot) => {
-            const match = results.find((r) => r.spot_id === spot.spot_id);
-            return match
-              ? {
-                  ...spot,
-                  p_rain: match.p_rain,
-                  p_actual: match.p_actual,
-                  delta: match.delta,
-                  risk_level: match.risk_level,
-                  cause_label: match.cause_label,
-                  dispatch_type: match.dispatch_type,
-                  confidence_lower: match.confidence_lower,
-                  confidence_upper: match.confidence_upper,
-                  shap_top3: match.shap_top3,
-                  predicted_for: match.predicted_for,
-                }
-              : spot;
-          });
-          return updatedSpots;
-        }, false);
-        return updatedSpots;
+        await mutate(spots2025, false);
+        return spots2025;
       }
     } catch (err) {
       console.error("[useSpots] Error replaying 2025 cloudburst:", err);
