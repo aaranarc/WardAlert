@@ -42,9 +42,11 @@ export default function FloodMap({ spots, selectedSpot, onSelectSpot }: FloodMap
         scrollWheelZoom={true}
         className="w-full h-full z-0"
       >
+        {/* CARTO now stamps "API KEY REQUIRED" into keyless tiles; OSM's
+            standard tiles need no key, only this attribution. */}
         <TileLayer
-          attribution="&copy; OpenStreetMap &copy; CARTO"
-          url="https://basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
           maxZoom={19}
         />
         <WardBoundary />
