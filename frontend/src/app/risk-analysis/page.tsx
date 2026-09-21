@@ -10,11 +10,36 @@ import {
   IconLayers,
   IconCheck,
   IconClock,
+  IconRefresh,
 } from "@/components/Common/Icons";
 
 export default function RiskAnalysisPage() {
-  const { spots, activeDate } = useSpots();
+  const { spots, activeDate, refreshPredictions, replayCloudburst } = useSpots();
   const [selectedDriver, setSelectedDriver] = useState<string>("all");
+  const [isActing, setIsActing] = useState<boolean>(false);
+  const [activeAction, setActiveAction] = useState<"refresh" | "cloudburst" | null>(null);
+
+  const handleRefreshPredictions = async () => {
+    setIsActing(true);
+    setActiveAction("refresh");
+    try {
+      await refreshPredictions();
+    } finally {
+      setIsActing(false);
+      setActiveAction(null);
+    }
+  };
+
+  const handleReplayCloudburst = async () => {
+    setIsActing(true);
+    setActiveAction("cloudburst");
+    try {
+      await replayCloudburst();
+    } finally {
+      setIsActing(false);
+      setActiveAction(null);
+    }
+  };
 
   const sortedSpots = [...spots].sort((a, b) => (b.p_actual || 0) - (a.p_actual || 0));
 
@@ -61,16 +86,41 @@ export default function RiskAnalysisPage() {
             <h1 className="text-xl font-bold tracking-tight text-slate-900">
               Risk Analysis
             </h1>
-            {activeDate && (
-              <span suppressHydrationWarning className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#e8f2fc] text-[#0066cc] border border-[#0066cc]/25 flex items-center gap-1.5 shadow-2xs">
-                <IconClock className="w-3.5 h-3.5" />
-                <span suppressHydrationWarning>Displaying Date: <strong suppressHydrationWarning className="font-semibold text-slate-900">{formatDateDMY(activeDate)}</strong></span>
-              </span>
-            )}
           </div>
           <p className="text-xs text-slate-500 mt-0.5">
-            Dual model evaluation, drainage failure attribution, and spot rankings across Ward G/South {activeDate ? `for ${formatDateDMY(activeDate)}` : ""}.
+            Dual model evaluation, drainage failure attribution, and spot rankings across Ward G/South.
           </p>
+        </div>
+
+        {/* Replay Controls */}
+        <div className="flex items-center gap-2 flex-wrap">
+          {activeDate && (
+            <div suppressHydrationWarning className="px-3 py-1.5 rounded-lg bg-[#e8f2fc] border border-[#0066cc]/25 text-[#0066cc] text-xs font-medium flex items-center gap-1.5 shadow-2xs">
+              <IconClock className="w-3.5 h-3.5 shrink-0" />
+              <span suppressHydrationWarning>
+                Displaying Date: <strong suppressHydrationWarning className="font-semibold text-slate-900">{formatDateDMY(activeDate)}</strong>
+              </span>
+            </div>
+          )}
+          <button
+            onClick={handleReplayCloudburst}
+            disabled={isActing}
+            className="px-3 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-medium transition-colors disabled:opacity-50 flex items-center gap-1.5 shadow-2xs"
+            title="Replay 2025 Cloudburst event across all spots (14 July 2025)"
+          >
+            <IconRefresh className={`w-3.5 h-3.5 ${isActing && activeAction === "cloudburst" ? "animate-spin" : ""}`} />
+            <span>{isActing && activeAction === "cloudburst" ? "Replaying..." : "Replay 2025 Cloudburst"}</span>
+          </button>
+
+          <button
+            onClick={handleRefreshPredictions}
+            disabled={isActing}
+            className="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-medium transition-colors disabled:opacity-50 flex items-center gap-1.5 shadow-2xs"
+            title="Refresh moderate monsoon predictions across all 30 spots for 3 July 2023"
+          >
+            <IconRefresh className={`w-3.5 h-3.5 ${isActing && activeAction === "refresh" ? "animate-spin text-[#0066cc]" : ""}`} />
+            <span>{isActing && activeAction === "refresh" ? "Refreshing..." : "Refresh Predictions"}</span>
+          </button>
         </div>
       </div>
 
@@ -78,32 +128,32 @@ export default function RiskAnalysisPage() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div className="p-3.5 rounded-xl bg-white border border-slate-200">
           <div className="text-2xl font-bold font-mono text-rose-600">{criticalCount}</div>
-          <div className="text-xs font-semibold text-slate-800 mt-1">Critical Spots</div>
-          <div className="text-[10px] text-slate-400">Immediate action needed</div>
+          <div className="text-xs font-semibold text-slate-900 mt-0.5">Critical Risk Spots</div>
+          <div className="text-[10px] text-slate-400">P_actual &gt; 80%</div>
         </div>
 
         <div className="p-3.5 rounded-xl bg-white border border-slate-200">
           <div className="text-2xl font-bold font-mono text-orange-600">{highCount}</div>
-          <div className="text-xs font-semibold text-slate-800 mt-1">High Risk Spots</div>
-          <div className="text-[10px] text-slate-400">Drainage bottleneck zones</div>
+          <div className="text-xs font-semibold text-slate-900 mt-0.5">High Risk Spots</div>
+          <div className="text-[10px] text-slate-400">P_actual 60% – 80%</div>
         </div>
 
         <div className="p-3.5 rounded-xl bg-white border border-slate-200">
           <div className="text-2xl font-bold font-mono text-amber-600">{moderateCount}</div>
-          <div className="text-xs font-semibold text-slate-800 mt-1">Moderate Risk Spots</div>
-          <div className="text-[10px] text-slate-400">Watch on rainfall spikes</div>
+          <div className="text-xs font-semibold text-slate-900 mt-0.5">Moderate Risk Spots</div>
+          <div className="text-[10px] text-slate-400">P_actual 40% – 60%</div>
         </div>
 
         <div className="p-3.5 rounded-xl bg-white border border-slate-200">
-          <div className="text-2xl font-bold font-mono text-[#0066cc]">
-            {avgRisk != null ? formatPercent(avgRisk, 0) : "—"}
+          <div className="text-2xl font-bold font-mono text-slate-900">
+            {avgRisk != null ? `${Math.round(avgRisk * 100)}%` : "—"}
           </div>
-          <div className="text-xs font-semibold text-slate-800 mt-1">Ward Average Risk</div>
-          <div className="text-[10px] text-slate-400">Composite dual model mean</div>
+          <div className="text-xs font-semibold text-slate-900 mt-0.5">Ward Mean Risk</div>
+          <div className="text-[10px] text-slate-400">Overall exposure index</div>
         </div>
       </div>
 
-      {/* Dual Model Validation Proof Banner */}
+      {/* Model Lift Summary Gate */}
       <div className="p-4 rounded-xl bg-white border border-slate-200 space-y-3 shadow-xs">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
           <div>

@@ -115,7 +115,7 @@ export default function MapPage() {
             onClick={handleReplayCloudburst}
             disabled={isActing}
             className="px-2.5 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-medium transition-colors disabled:opacity-50 flex items-center gap-1.5 shadow-2xs"
-            title="Replay 2025 Cloudburst event across all spots (15 July 2025)"
+            title="Replay 2025 Cloudburst event across all spots (14 July 2025)"
           >
             <IconRefresh className={`w-3 h-3 ${isActing && activeAction === "cloudburst" ? "animate-spin" : ""}`} />
             <span>{isActing && activeAction === "cloudburst" ? "Replaying..." : "Replay 2025 Cloudburst"}</span>
