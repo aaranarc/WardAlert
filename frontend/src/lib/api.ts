@@ -92,14 +92,8 @@ export const api = {
   getDrainHealth: () => fetcher<DrainHealthEntry[]>("/api/drain-health"),
   getDrainHealthDetail: (spotId: number) =>
     fetcher<DrainHealthDetail>(`/api/drain-health/${spotId}`),
-  getAlertsLog: async (limit: number = 50) => {
-    const raw = await fetcher<AlertLogEntry[]>(`/api/alerts/log?limit=${limit}`);
-    return (raw || []).map((entry) => ({
-      ...entry,
-      dispatched_at: entry.sent_at || entry.dispatched_at,
-      recipient_count: entry.recipient_count ?? (entry.recipient ? 1 : "—"),
-    }));
-  },
+  getAlertsLog: (limit: number = 50) =>
+    fetcher<AlertLogEntry[]>(`/api/alerts/log?limit=${limit}`),
   sendAlert: (payload: AlertRequest) =>
     fetcher<AlertResponse>("/api/alert/send", {
       method: "POST",
