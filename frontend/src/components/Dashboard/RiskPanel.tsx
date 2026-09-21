@@ -1,19 +1,18 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import { SpotRisk, PredictionResponse } from "@/lib/types";
+import { SpotRisk } from "@/lib/types";
 import { api, HERO_TIMESTAMP } from "@/lib/api";
 import { RISK_COLORS } from "@/lib/constants";
-import { formatPercent, formatHistoricalDate } from "@/lib/utils";
+import { formatPercent } from "@/lib/utils";
+import { useSpots } from "@/hooks/useSpots";
 import { usePredict } from "@/hooks/usePredict";
-import { useSpot } from "@/hooks/useSpot";
 import {
   IconClose,
   IconWarning,
   IconTruck,
   IconRefresh,
-  IconAlert,
   IconChevronRight,
   IconClock,
 } from "@/components/Common/Icons";
@@ -24,21 +23,33 @@ interface RiskPanelProps {
   onSpotUpdated?: (updatedSpot: SpotRisk) => void;
 }
 
+function formatDisplayDate(dateStr: string | null | undefined): string {
+  if (!dateStr) return "—";
+  try {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return dateStr;
+    const day = d.getUTCDate();
+    const months = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+    const month = months[d.getUTCMonth()];
+    const year = d.getUTCFullYear();
+    const hours = String(d.getUTCHours()).padStart(2, "0");
+    const minutes = String(d.getUTCMinutes()).padStart(2, "0");
+    return `${day} ${month} ${year}, ${hours}:${minutes}`;
+  } catch {
+    return dateStr;
+  }
+}
+
 export function RiskPanel({ spotId, onClose, onSpotUpdated }: RiskPanelProps) {
-  const { spot, isLoading, isError, mutate: mutateSpot } = useSpot(spotId);
+  const { spots, isLoading, isError, mutate } = useSpots();
   const { predict, isPredicting } = usePredict();
-  const [livePrediction, setLivePrediction] = useState<PredictionResponse | null>(null);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [lastCalculatedTime, setLastCalculatedTime] = useState<string | null>(null);
   const [isRecalculating, setIsRecalculating] = useState(false);
-
-  useEffect(() => {
-    setLivePrediction(null);
-    setStatusMessage(null);
-    setErrorMessage(null);
-    setIsRecalculating(false);
-  }, [spot?.spot_id, spot?.p_actual, spot?.predicted_for]);
 
   if (spotId === null) {
     return (
@@ -48,11 +59,13 @@ export function RiskPanel({ spotId, onClose, onSpotUpdated }: RiskPanelProps) {
     );
   }
 
+  const spot = spots.find((s) => s.spot_id === spotId) ?? null;
+
   if (!spot) {
     if (isError) {
       return (
         <div className="bg-white rounded-xl border border-rose-200 p-6 text-center text-sm text-rose-600">
-          Could not load spot #{spotId} from /api/spots/{spotId}
+          Could not load spot #{spotId}
         </div>
       );
     }
@@ -67,19 +80,15 @@ export function RiskPanel({ spotId, onClose, onSpotUpdated }: RiskPanelProps) {
     );
   }
 
-  if (spot.p_actual == null && livePrediction?.p_actual == null) {
-    console.warn(`[RiskPanel] Spot #${spot.spot_id} (${spot.name}) missing p_actual from backend`);
-  }
-
-  const activePActual = livePrediction?.p_actual ?? spot.p_actual;
-  const activePRain = livePrediction?.p_rain ?? spot.p_rain;
-  const activeDelta = livePrediction?.delta ?? spot.delta;
-  const activeRiskLevel = livePrediction?.risk_level ?? spot.risk_level;
-  const activeCauseLabel = livePrediction?.cause_label ?? spot.cause_label;
-  const activeDispatchType = livePrediction?.dispatch_type ?? spot.dispatch_type;
-  const activeConfidenceLower = livePrediction?.confidence_lower ?? spot.confidence_lower;
-  const activeConfidenceUpper = livePrediction?.confidence_upper ?? spot.confidence_upper;
-  const activeShap = livePrediction?.shap_top3 ?? spot.shap_top3 ?? [];
+  const activePActual = spot.p_actual;
+  const activePRain = spot.p_rain;
+  const activeDelta = spot.delta;
+  const activeRiskLevel = spot.risk_level;
+  const activeCauseLabel = spot.cause_label;
+  const activeDispatchType = spot.dispatch_type;
+  const activeConfidenceLower = spot.confidence_lower;
+  const activeConfidenceUpper = spot.confidence_upper;
+  const activeShap = spot.shap_top3 ?? [];
 
   const riskColor = (activeRiskLevel && RISK_COLORS[activeRiskLevel]) || "#94a3b8";
   const riskPercentNum = activePActual != null ? Math.round(activePActual * 100) : null;
@@ -91,8 +100,7 @@ export function RiskPanel({ spotId, onClose, onSpotUpdated }: RiskPanelProps) {
     try {
       const result = await predict(spot.spot_id, ts);
       if (result) {
-        setLivePrediction(result);
-        mutateSpot();
+        await mutate();
         setLastCalculatedTime(
           new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })
         );
@@ -129,28 +137,12 @@ export function RiskPanel({ spotId, onClose, onSpotUpdated }: RiskPanelProps) {
     try {
       const res = await api.getRandomHistorical(spot.spot_id);
       if (res) {
-        const mappedPrediction: PredictionResponse = {
-          spot_id: res.spot_id ?? spot.spot_id,
-          spot_name: spot.name,
-          predicted_for: res.predicted_for,
-          p_rain: res.p_rain,
-          p_actual: res.p_actual,
-          delta: res.delta,
-          risk_level: res.risk_level,
-          cause_label: res.cause_label,
-          dispatch_type: res.dispatch_type,
-          confidence_lower: res.confidence_lower ?? 0,
-          confidence_upper: res.confidence_upper ?? 1,
-          shap_top3: res.shap_top3 ?? [],
-        };
-        setLivePrediction(mappedPrediction);
         setLastCalculatedTime(
           new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })
         );
         setStatusMessage(
-          `${formatHistoricalDate(res.predicted_for)}: Risk ${Math.round(res.p_actual * 100)}% (${res.risk_level.toUpperCase()})`
+          `${formatDisplayDate(res.predicted_for)}: Risk ${Math.round(res.p_actual * 100)}% (${res.risk_level.toUpperCase()})`
         );
-
       } else {
         setErrorMessage("Failed to load historical prediction for this spot.");
       }
@@ -208,6 +200,12 @@ export function RiskPanel({ spotId, onClose, onSpotUpdated }: RiskPanelProps) {
             <p className="text-[11px] text-slate-500 mt-0.5">
               Ward G/South, Mumbai
             </p>
+            {spot.predicted_for && (
+              <div className="flex items-center gap-1 text-[10px] text-slate-400 font-mono mt-1">
+                <IconClock className="w-3 h-3" />
+                <span>{formatDisplayDate(spot.predicted_for)}</span>
+              </div>
+            )}
           </div>
         </div>
 
@@ -261,18 +259,18 @@ export function RiskPanel({ spotId, onClose, onSpotUpdated }: RiskPanelProps) {
           </div>
         </div>
 
-        {/* Probability Breakdown Column */}
-        <div className="flex-1 grid grid-cols-3 gap-2 bg-slate-50 p-2.5 rounded-lg border border-slate-100">
+        {/* Breakdown Values */}
+        <div className="flex-1 grid grid-cols-3 gap-2 border-l border-slate-100 pl-4 py-1">
           <div className="text-center">
-            <div className="text-[10px] text-slate-500">P_rain</div>
-            <div className="text-xs font-bold font-mono text-slate-800 mt-0.5">
+            <div className="text-[10px] text-slate-500">Rain Only</div>
+            <div className="text-xs font-bold font-mono text-slate-700 mt-0.5">
               {formatPercent(activePRain)}
             </div>
-            <div className="text-[9px] text-slate-400">(Rain + Terrain)</div>
+            <div className="text-[9px] text-slate-400">(Baseline)</div>
           </div>
 
-          <div className="text-center border-x border-slate-200">
-            <div className="text-[10px] text-slate-500">P_actual</div>
+          <div className="text-center">
+            <div className="text-[10px] text-slate-500">ML Risk</div>
             <div className="text-xs font-bold font-mono text-slate-800 mt-0.5">
               {formatPercent(activePActual)}
             </div>
@@ -368,7 +366,7 @@ export function RiskPanel({ spotId, onClose, onSpotUpdated }: RiskPanelProps) {
             })
           ) : (
             <div className="text-xs text-slate-400 py-2 text-center font-mono">
-              {isPredicting ? "Computing SHAP drivers..." : "—"}
+              —
             </div>
           )}
         </div>
