@@ -64,6 +64,16 @@ export default function DashboardPage() {
 
   const [isMonsoonMode, setIsMonsoonMode] = useState<boolean>(false);
 
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    try {
+      await mutate();
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
+
   // Handle batch prediction replay
   const handlePredictAll = async (timestamp?: string) => {
     const isMonsoon = Boolean(timestamp && timestamp.includes("2025"));
@@ -167,36 +177,24 @@ export default function DashboardPage() {
 
         {/* Replay Controls */}
         <div className="flex items-center gap-2 flex-wrap">
-          {isMonsoonMode ? (
-            <button
-              onClick={() => handlePredictAll(new Date().toISOString())}
-              disabled={isPredicting}
-              className="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium transition-colors disabled:opacity-50 flex items-center gap-1.5 shadow-xs"
-              title="Predict all spots at the current time"
-            >
-              <IconRefresh className={`w-3.5 h-3.5 ${isPredicting ? "animate-spin" : ""}`} />
-              <span>{isPredicting ? "Resetting..." : "Reset to Live Conditions"}</span>
-            </button>
-          ) : (
-            <button
-              onClick={() => handlePredictAll("2025-07-15T10:30:00Z")}
-              disabled={isPredicting}
-              className="px-3 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-medium transition-colors disabled:opacity-50 flex items-center gap-1.5 shadow-2xs"
-              title="Simulate 2025 historical monsoon cloudburst event"
-            >
-              <IconRefresh className={`w-3.5 h-3.5 ${isPredicting ? "animate-spin" : ""}`} />
-              <span>{isPredicting ? "Simulating..." : "Replay 2025 Monsoon"}</span>
-            </button>
-          )}
+          <button
+            onClick={() => handlePredictAll(HERO_TIMESTAMP)}
+            disabled={isPredicting}
+            className="px-3 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-medium transition-colors disabled:opacity-50 flex items-center gap-1.5 shadow-2xs"
+            title="Re-run both models for all spots at the 2025-07-15 monsoon event"
+          >
+            <IconRefresh className={`w-3.5 h-3.5 ${isPredicting ? "animate-spin" : ""}`} />
+            <span>{isPredicting ? "Replaying..." : "Replay 2025 Monsoon"}</span>
+          </button>
 
           <button
-            onClick={() => handlePredictAll(new Date().toISOString())}
-            disabled={isPredicting}
+            onClick={handleRefresh}
+            disabled={isRefreshing}
             className="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-medium transition-colors disabled:opacity-50 flex items-center gap-1.5 shadow-2xs"
-            title="Recalculate both models for all spots"
+            title="Reload the stored predictions from the backend"
           >
-            <IconRefresh className={`w-3.5 h-3.5 ${isPredicting ? "animate-spin text-[#0066cc]" : ""}`} />
-            <span>{isPredicting ? "Calculating..." : "Recalculate All"}</span>
+            <IconRefresh className={`w-3.5 h-3.5 ${isRefreshing ? "animate-spin text-[#0066cc]" : ""}`} />
+            <span>{isRefreshing ? "Refreshing..." : "Refresh Predictions"}</span>
           </button>
         </div>
       </div>
