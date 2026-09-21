@@ -51,3 +51,4 @@ class DrainHealthDetail(BaseModel):
     critical_delta: float = Field(description="learned Δ level the trend extrapolates toward")
     status: str
     weekly: list[WeeklyPoint] = []
+    message: str | None = None
