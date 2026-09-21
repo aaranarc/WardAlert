@@ -22,6 +22,15 @@ Chronic flooding locations identified by the **Brihanmumbai Municipal
 Corporation** for Ward G/South, geocoded to lat/lng. `elevation_m` is
 SRTM-derived. Columns: `id, name, lat, lng, notes, elevation_m`.
 
+> **Snapped coordinates.** The original geocodes (rounded to 3 decimals, ~110 m)
+> put four spots outside the ward polygon, three of them in the sea (SRTM reads
+> 0 m there): Worli Sea Face (9), Worli Village (16), Jamshedji Tata Road (21)
+> and Worli Dairy (29). Each was moved to the nearest point lying 100 m inside
+> the ward polygon (PostGIS, EPSG:32643), and `elevation_m` was re-sampled from
+> SRTM at the new point. The moves are 491 m, 156 m, 560 m and 373 m. These are
+> computed positions, not surveyed ones; names and notes are unchanged so the
+> news events linked to them still match. The models were not retrained.
+
 ### `rainfall_daily_gsouth.csv` — 1096 rows
 Daily rainfall, 1 Jan 2023 – 31 Dec 2025, from **CHIRPS/ERA5 reanalysis via the
 Open-Meteo API** for the G/South centroid. This is measured/reanalysis data,
