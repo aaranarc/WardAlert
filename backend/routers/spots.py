@@ -1,6 +1,7 @@
 """GET /api/spots and /api/spots/{id} — the map layer.
 
-Both read v_latest_risk, which LEFT JOINs the newest prediction onto every
+Both read v_latest_risk, which LEFT JOINs the 2025-07-15 replay prediction
+(or, failing that, the newest) onto every
 spot, so all 30 spots are returned even before anything has been predicted.
 """
 from __future__ import annotations
