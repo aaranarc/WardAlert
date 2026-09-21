@@ -12,7 +12,7 @@ import {
   ReferenceLine,
 } from "recharts";
 import { ShapFactor } from "@/lib/types";
-import { Layers } from "lucide-react";
+import { IconLayers } from "@/components/Common/Icons";
 
 interface ShapChartProps {
   factors: ShapFactor[] | null | undefined;
@@ -21,13 +21,12 @@ interface ShapChartProps {
 export function ShapChart({ factors }: ShapChartProps) {
   if (!factors || factors.length === 0) {
     return (
-      <div className="p-3 rounded-xl bg-[#0e0e24] border border-[#7B68EE]/20 text-xs text-slate-400 font-mono text-center">
+      <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-500 font-mono text-center">
         No SHAP attribution data available
       </div>
     );
   }
 
-  // Format data for Recharts horizontal bar chart
   const data = factors.map((f) => ({
     name: f.label || f.feature,
     feature: f.feature,
@@ -40,19 +39,19 @@ export function ShapChart({ factors }: ShapChartProps) {
   }));
 
   return (
-    <div className="p-3.5 rounded-xl bg-[#0e0e24] border border-[#7B68EE]/25 space-y-2">
+    <div className="p-3.5 rounded-xl bg-white border border-slate-200 space-y-2">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-1.5 text-xs text-slate-200 font-medium">
-          <Layers className="w-3.5 h-3.5 text-[#b8a9ff]" />
+        <div className="flex items-center gap-1.5 text-xs text-slate-800 font-medium">
+          <IconLayers className="w-3.5 h-3.5 text-[#0066cc]" />
           <span>SHAP Feature Attribution (Top 3 Drivers)</span>
         </div>
         <div className="flex items-center gap-2 text-[10px] font-mono">
-          <span className="flex items-center gap-1 text-emerald-400">
-            <span className="w-2 h-2 rounded-sm bg-emerald-400" />
+          <span className="flex items-center gap-1 text-emerald-600">
+            <span className="w-2 h-2 rounded-sm bg-emerald-500" />
             Lowers Risk
           </span>
-          <span className="flex items-center gap-1 text-rose-400">
-            <span className="w-2 h-2 rounded-sm bg-rose-400" />
+          <span className="flex items-center gap-1 text-rose-600">
+            <span className="w-2 h-2 rounded-sm bg-rose-500" />
             Raises Risk
           </span>
         </div>
@@ -75,35 +74,35 @@ export function ShapChart({ factors }: ShapChartProps) {
             <YAxis
               type="category"
               dataKey="name"
-              stroke="#94a3b8"
+              stroke="#64748b"
               fontSize={11}
               tickLine={false}
               axisLine={false}
               width={130}
-              tick={{ fill: "#cbd5e1" }}
+              tick={{ fill: "#475569" }}
             />
             <Tooltip
               content={({ active, payload }) => {
                 if (active && payload && payload.length) {
                   const item = payload[0].payload;
                   return (
-                    <div className="bg-[#12122b] border border-[#7B68EE]/40 p-2.5 rounded-lg shadow-xl text-xs font-mono">
-                      <p className="font-bold text-white mb-1">{item.name}</p>
-                      <p className="text-slate-300">
-                        Feature Value: <span className="text-white font-bold">{item.value}</span>
+                    <div className="bg-white border border-slate-200 p-2.5 rounded-lg shadow-md text-xs font-mono">
+                      <p className="font-bold text-slate-900 mb-1">{item.name}</p>
+                      <p className="text-slate-600">
+                        Feature Value: <span className="text-slate-900 font-bold">{item.value}</span>
                       </p>
-                      <p className="text-slate-300">
+                      <p className="text-slate-600">
                         SHAP Contribution:{" "}
                         <span
                           className={
-                            item.isIncreases ? "text-rose-400 font-bold" : "text-emerald-400 font-bold"
+                            item.isIncreases ? "text-rose-600 font-bold" : "text-emerald-600 font-bold"
                           }
                         >
                           {item.shapValue > 0 ? `+${item.shapValue}` : item.shapValue}
                         </span>
                       </p>
-                      <p className="text-[10px] text-slate-400 mt-1 capitalize">
-                        Direction: {item.direction?.replace("_", " ") || "—"}
+                      <p className="text-[10px] text-slate-500 mt-1 capitalize">
+                        Direction: {item.direction?.replace("_", " ") || "-"}
                       </p>
                     </div>
                   );
@@ -111,12 +110,12 @@ export function ShapChart({ factors }: ShapChartProps) {
                 return null;
               }}
             />
-            <ReferenceLine x={0} stroke="#475569" strokeDasharray="3 3" />
+            <ReferenceLine x={0} stroke="#cbd5e1" strokeDasharray="3 3" />
             <Bar dataKey="shapValue" radius={[4, 4, 4, 4]}>
               {data.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
-                  fill={entry.isIncreases ? "#f43f5e" : "#10b981"}
+                  fill={entry.isIncreases ? "#e11d48" : "#059669"}
                   fillOpacity={0.85}
                 />
               ))}

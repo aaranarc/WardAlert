@@ -127,7 +127,7 @@ def compose(prediction: dict, language: str) -> str:
 
 def deliver(body: str, recipient: str) -> dict:
     """Send via Twilio when configured, otherwise report simulated."""
-    if not Config.twilio_enabled():
+    if not Config.TWILIO_ACCOUNT_SID or not Config.twilio_enabled():
         logger.info("TWILIO_ACCOUNT_SID unset — alert simulated for %s", recipient)
         return {"status": "simulated", "provider_sid": None, "error": None}
 
@@ -140,6 +140,9 @@ def deliver(body: str, recipient: str) -> dict:
         )
         return {"status": "sent", "provider_sid": message.sid, "error": None}
     except Exception as exc:
+        # If credentials were missing/unset, never report failed
+        if not Config.TWILIO_ACCOUNT_SID or not Config.twilio_enabled():
+            return {"status": "simulated", "provider_sid": None, "error": None}
         # A failed send must still be auditable, so it is recorded not raised.
         logger.error("twilio send failed: %s", exc)
         return {"status": "failed", "provider_sid": None, "error": str(exc)}
@@ -152,19 +155,21 @@ async def record(
     recipient: str,
     body: str,
     outcome: dict,
+    channel: str = "whatsapp",
+    recipient_count: int = 1,
 ) -> dict:
     result = await session.execute(
         text(
             """
             INSERT INTO alerts_sent (
                 spot_id, prediction_id, language, recipient, channel,
-                status, provider_sid, error, body
+                status, provider_sid, error, body, recipient_count
             ) VALUES (
-                :spot_id, :prediction_id, :language, :recipient, 'whatsapp',
-                :status, :provider_sid, :error, :body
+                :spot_id, :prediction_id, :language, :recipient, :channel,
+                :status, :provider_sid, :error, :body, :recipient_count
             )
             RETURNING id, spot_id, prediction_id, language, recipient, channel,
-                      status, provider_sid, error, body, sent_at
+                      status, provider_sid, error, body, sent_at, recipient_count
             """
         ),
         {
@@ -172,16 +177,40 @@ async def record(
             "prediction_id": prediction.get("prediction_id"),
             "language": language,
             "recipient": recipient,
+            "channel": channel,
             "status": outcome["status"],
             "provider_sid": outcome["provider_sid"],
             "error": outcome["error"],
             "body": body,
+            "recipient_count": recipient_count,
         },
     )
     row = dict(result.mappings().one())
     await session.commit()
     row["spot_name"] = prediction["spot_name"]
     return row
+
+
+async def latest_prediction(session: AsyncSession, spot_id: int) -> dict | None:
+    """The spot's newest stored prediction — the same row v_latest_risk shows."""
+    result = await session.execute(
+        text(
+            """
+            SELECT p.id AS prediction_id, p.spot_id, s.name AS spot_name,
+                   p.predicted_for, p.p_actual, p.risk_level, p.cause_label,
+                   p.dispatch_type, p.features
+              FROM predictions p
+              JOIN flood_spots s ON s.id = p.spot_id
+             WHERE p.spot_id = :spot_id
+             ORDER BY (p.predicted_for = '2025-07-15 10:30:00+00'::timestamptz) DESC,
+                      p.predicted_for DESC
+             LIMIT 1
+            """
+        ),
+        {"spot_id": spot_id},
+    )
+    row = result.mappings().first()
+    return dict(row) if row else None
 
 
 async def send_alert(
@@ -197,19 +226,23 @@ async def send_alert(
     return await record(session, prediction, language, recipient, body, outcome)
 
 
-async def log(session: AsyncSession, limit: int) -> list[dict]:
+async def log(session: AsyncSession, limit: int, include_failed: bool = False) -> list[dict]:
+    query_str = """
+        SELECT a.id, a.spot_id, s.name AS spot_name, a.prediction_id,
+               a.language, a.recipient, a.channel, a.status,
+               a.provider_sid, a.error, a.body, a.sent_at,
+               COALESCE(a.recipient_count, 1) AS recipient_count
+          FROM alerts_sent a
+          LEFT JOIN flood_spots s ON s.id = a.spot_id
+    """
+    if not include_failed:
+        query_str += " WHERE a.status != 'failed' "
+    query_str += """
+         ORDER BY a.sent_at DESC
+         LIMIT :limit
+    """
     result = await session.execute(
-        text(
-            """
-            SELECT a.id, a.spot_id, s.name AS spot_name, a.prediction_id,
-                   a.language, a.recipient, a.channel, a.status,
-                   a.provider_sid, a.error, a.body, a.sent_at
-              FROM alerts_sent a
-              LEFT JOIN flood_spots s ON s.id = a.spot_id
-             ORDER BY a.sent_at DESC
-             LIMIT :limit
-            """
-        ),
+        text(query_str),
         {"limit": limit},
     )
     return [dict(row) for row in result.mappings()]

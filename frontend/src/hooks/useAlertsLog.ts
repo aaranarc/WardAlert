@@ -1,14 +1,14 @@
 import useSWR from "swr";
 import { useState } from "react";
 import { api } from "@/lib/api";
-import { AlertLogEntry, BroadcastResponse } from "@/lib/types";
+import { AlertLogEntry, AlertRequest, AlertResponse, BroadcastResponse } from "@/lib/types";
 
 export function useAlertsLog(limit: number = 50) {
   const { data, error, isLoading, mutate } = useSWR<AlertLogEntry[]>(
     `/api/alerts/log?limit=${limit}`,
     () => api.getAlertsLog(limit),
     {
-      refreshInterval: 10000,
+      refreshInterval: 30000,
       revalidateOnFocus: true,
     }
   );
@@ -16,11 +16,29 @@ export function useAlertsLog(limit: number = 50) {
   const [isSending, setIsSending] = useState(false);
   const [sendError, setSendError] = useState<unknown | null>(null);
 
-  const broadcast = async (spotId: number): Promise<BroadcastResponse | null> => {
+  const sendAlert = async (payload: AlertRequest): Promise<AlertResponse | null> => {
     setIsSending(true);
     setSendError(null);
     try {
-      const res = await api.broadcast(spotId);
+      const res = await api.sendAlert(payload);
+      mutate();
+      return res;
+    } catch (err) {
+      setSendError(err);
+      return null;
+    } finally {
+      setIsSending(false);
+    }
+  };
+
+  const broadcastAlert = async (
+    spotId: number,
+    mode: "normal" | "critical" = "normal"
+  ): Promise<BroadcastResponse | null> => {
+    setIsSending(true);
+    setSendError(null);
+    try {
+      const res = await api.broadcast(spotId, mode);
       mutate();
       return res;
     } catch (err) {
@@ -36,7 +54,8 @@ export function useAlertsLog(limit: number = 50) {
     isLoading,
     isError: !!error,
     error,
-    broadcast,
+    sendAlert,
+    broadcastAlert,
     isSending,
     sendError,
     mutate,

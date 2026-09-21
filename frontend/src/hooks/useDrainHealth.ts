@@ -7,8 +7,9 @@ export function useDrainHealth() {
     "/api/drain-health",
     () => api.getDrainHealth(),
     {
-      refreshInterval: 30000,
+      refreshInterval: 60000,
       revalidateOnFocus: true,
+      dedupingInterval: 60000,
     }
   );
 

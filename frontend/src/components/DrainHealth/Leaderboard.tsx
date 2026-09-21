@@ -3,17 +3,8 @@
 import React, { useState, useMemo } from "react";
 import { DrainHealthEntry } from "@/lib/types";
 import { FailureBadge } from "./FailureBadge";
-import { formatDate, formatNumber } from "@/lib/utils";
-import {
-  TrendingUp,
-  TrendingDown,
-  Minus,
-  Search,
-  ArrowUpDown,
-  Calendar,
-  AlertTriangle,
-  Flame,
-} from "lucide-react";
+import { formatDate } from "@/lib/utils";
+import { IconSearch } from "@/components/Common/Icons";
 
 interface LeaderboardProps {
   drains: DrainHealthEntry[];
@@ -33,14 +24,12 @@ export function Leaderboard({
   const sortedDrains = useMemo(() => {
     let result = [...drains];
 
-    // Filter
     if (search.trim()) {
       result = result.filter((d) =>
         d.name.toLowerCase().includes(search.toLowerCase())
       );
     }
 
-    // Sort
     result.sort((a, b) => {
       if (sortField === "health_score") {
         return sortAsc ? a.health_score - b.health_score : b.health_score - a.health_score;
@@ -62,180 +51,99 @@ export function Leaderboard({
       setSortAsc(!sortAsc);
     } else {
       setSortField(field);
-      setSortAsc(field === "health_score" ? true : false);
+      setSortAsc(true);
     }
   };
 
-  const getHealthColor = (score: number) => {
-    if (score < 55) return "bg-rose-500";
-    if (score < 75) return "bg-amber-500";
-    return "bg-emerald-500";
-  };
-
-  const getHealthTextColor = (score: number) => {
-    if (score < 55) return "text-rose-400";
-    if (score < 75) return "text-amber-400";
-    return "text-emerald-400";
-  };
-
   return (
-    <div className="flex flex-col h-full bg-[#12122b] border border-[#7B68EE]/20 rounded-2xl overflow-hidden shadow-xl">
-      {/* Header & Search */}
-      <div className="p-4 border-b border-[#7B68EE]/20 bg-[#161638] flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h2 className="text-sm font-bold text-white font-sans flex items-center gap-2">
-            <span>Drain Silt & Health Leaderboard</span>
-            <span className="text-[10px] font-mono text-slate-400 font-normal">
-              (Sorted by Health ASC — Worst First)
-            </span>
-          </h2>
-          <p className="text-[11px] text-slate-400 mt-0.5">
-            Ranked by learned Δ residual accumulation over historical weeks.
-          </p>
+    <div className="flex flex-col h-full bg-white rounded-xl border border-slate-200 overflow-hidden shadow-xs">
+      {/* Header and Search */}
+      <div className="p-3.5 border-b border-slate-100 bg-slate-50/70 space-y-2.5">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-xs font-bold text-slate-900">Drain Leaderboard</h2>
+            <p className="text-[11px] text-slate-500">Sorted by degradation risk</p>
+          </div>
+          <span className="text-[10px] font-mono text-slate-400">
+            {sortedDrains.length} of {drains.length}
+          </span>
         </div>
 
-        <div className="relative w-full sm:w-60">
-          <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
+        <div className="relative">
+          <IconSearch className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
-            placeholder="Filter drains by name..."
+            placeholder="Search drain spot..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-8 pr-3 py-1 text-xs rounded-lg bg-[#0d0d1a] border border-slate-700/80 text-white placeholder-slate-500 focus:outline-none focus:border-[#7B68EE] font-sans"
+            className="w-full pl-8 pr-3 py-1.5 text-xs bg-white border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#0066cc]"
           />
         </div>
       </div>
 
-      {/* Table Container */}
-      <div className="flex-1 overflow-auto">
+      {/* Table */}
+      <div className="flex-1 overflow-y-auto min-h-[320px]">
         <table className="w-full text-left text-xs border-collapse">
-          <thead className="bg-[#0e0e22] text-slate-400 font-mono text-[11px] sticky top-0 z-10 border-b border-[#7B68EE]/20 select-none">
+          <thead className="bg-slate-50 border-b border-slate-100 text-[10px] text-slate-500 uppercase font-semibold tracking-wider sticky top-0 z-10">
             <tr>
-              <th className="py-2.5 px-3 w-12 text-center">Rank</th>
               <th
                 onClick={() => handleHeaderClick("name")}
-                className="py-2.5 px-3 cursor-pointer hover:text-white transition-colors"
+                className="py-2.5 px-3 cursor-pointer hover:text-slate-900"
               >
-                <div className="flex items-center gap-1">
-                  <span>Spot Location</span>
-                  <ArrowUpDown className="w-3 h-3" />
-                </div>
+                Location {sortField === "name" && (sortAsc ? "↑" : "↓")}
               </th>
               <th
                 onClick={() => handleHeaderClick("health_score")}
-                className="py-2.5 px-3 cursor-pointer hover:text-white transition-colors min-w-[120px]"
+                className="py-2.5 px-3 cursor-pointer hover:text-slate-900 text-right"
               >
-                <div className="flex items-center gap-1">
-                  <span>Health Score</span>
-                  <ArrowUpDown className="w-3 h-3" />
-                </div>
+                Health {sortField === "health_score" && (sortAsc ? "↑" : "↓")}
               </th>
               <th
                 onClick={() => handleHeaderClick("avg_delta")}
-                className="py-2.5 px-3 cursor-pointer hover:text-white transition-colors hidden sm:table-cell"
+                className="py-2.5 px-3 cursor-pointer hover:text-slate-900 text-right"
               >
-                <div className="flex items-center gap-1">
-                  <span>Avg Δ</span>
-                  <ArrowUpDown className="w-3 h-3" />
-                </div>
+                Avg Δ {sortField === "avg_delta" && (sortAsc ? "↑" : "↓")}
               </th>
-              <th className="py-2.5 px-3 hidden md:table-cell">Trend Slope</th>
-              <th className="py-2.5 px-3">Predicted Failure</th>
-              <th className="py-2.5 px-3 text-right">Status</th>
+              <th className="py-2.5 px-3 text-center">Status</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-800/60 font-mono">
-            {sortedDrains.map((drain, idx) => {
+          <tbody className="divide-y divide-slate-100">
+            {sortedDrains.map((drain) => {
               const isSelected = selectedSpotId === drain.spot_id;
-              const slope = drain.trend_slope;
-              const isSlopePositive = slope !== null && slope > 0.0001;
-              const isSlopeNegative = slope !== null && slope < -0.0001;
+              const isLowHealth = drain.health_score < 60;
 
               return (
                 <tr
                   key={drain.spot_id}
                   onClick={() => onSelectSpot(drain.spot_id)}
-                  className={`cursor-pointer transition-all ${
+                  className={`cursor-pointer transition-colors ${
                     isSelected
-                      ? "bg-[#211f4c] text-white font-semibold border-l-4 border-l-[#b8a9ff]"
-                      : "hover:bg-[#18183c] text-slate-300"
+                      ? "bg-[#e8f2fc]"
+                      : "hover:bg-slate-50/80"
                   }`}
                 >
-                  {/* Rank */}
-                  <td className="py-3 px-3 text-center text-slate-400 text-[11px]">
-                    #{idx + 1}
-                  </td>
-
-                  {/* Name */}
-                  <td className="py-3 px-3 font-sans font-medium text-slate-200">
-                    <div className="flex items-center gap-1.5">
-                      <span>{drain.name}</span>
+                  <td className="py-2.5 px-3">
+                    <div className="font-semibold text-slate-900 truncate max-w-[130px]">
+                      {drain.name}
                     </div>
-                  </td>
-
-                  {/* Health Score */}
-                  <td className="py-3 px-3">
-                    <div className="space-y-1">
-                      <div className="flex items-center justify-between text-xs">
-                        <span className={`font-bold ${getHealthTextColor(drain.health_score)}`}>
-                          {drain.health_score.toFixed(1)}
-                        </span>
-                        <span className="text-[10px] text-slate-400">/ 100</span>
+                    {drain.predicted_failure_date && (
+                      <div className="text-[10px] text-rose-600 font-mono mt-0.5">
+                        Failure: {formatDate(drain.predicted_failure_date)}
                       </div>
-                      <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
-                        <div
-                          className={`h-full ${getHealthColor(drain.health_score)} rounded-full`}
-                          style={{ width: `${Math.max(5, Math.min(100, drain.health_score))}%` }}
-                        />
-                      </div>
-                    </div>
-                  </td>
-
-                  {/* Avg Delta */}
-                  <td className="py-3 px-3 hidden sm:table-cell text-slate-300">
-                    {formatNumber(drain.avg_delta, 3)}
-                  </td>
-
-                  {/* Trend Slope */}
-                  <td className="py-3 px-3 hidden md:table-cell text-[11px]">
-                    <div className="flex items-center gap-1">
-                      {isSlopePositive ? (
-                        <TrendingUp className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                      ) : isSlopeNegative ? (
-                        <TrendingDown className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                      ) : (
-                        <Minus className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                      )}
-                      <span
-                        className={
-                          isSlopePositive
-                            ? "text-amber-300"
-                            : isSlopeNegative
-                            ? "text-emerald-300"
-                            : "text-slate-400"
-                        }
-                      >
-                        {slope !== null
-                          ? `${slope > 0 ? "+" : ""}${(slope * 100).toFixed(2)}%/wk`
-                          : "—"}
-                      </span>
-                    </div>
-                  </td>
-
-                  {/* Predicted Failure Date */}
-                  <td className="py-3 px-3 text-xs">
-                    {drain.predicted_failure_date ? (
-                      <span className="text-rose-300 font-semibold flex items-center gap-1">
-                        <Calendar className="w-3 h-3 text-rose-400" />
-                        {formatDate(drain.predicted_failure_date)}
-                      </span>
-                    ) : (
-                      <span className="text-slate-400">—</span>
                     )}
                   </td>
 
-                  {/* Status */}
-                  <td className="py-3 px-3 text-right">
+                  <td className="py-2.5 px-3 text-right font-mono font-medium">
+                    <span className={isLowHealth ? "text-rose-600 font-bold" : "text-slate-800"}>
+                      {drain.health_score.toFixed(1)}
+                    </span>
+                  </td>
+
+                  <td className="py-2.5 px-3 text-right font-mono text-slate-600">
+                    +{drain.avg_delta.toFixed(3)}
+                  </td>
+
+                  <td className="py-2.5 px-3 text-center">
                     <FailureBadge
                       status={drain.status}
                       predictedFailureDate={drain.predicted_failure_date}

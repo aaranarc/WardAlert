@@ -5,12 +5,19 @@ spot, so all 30 spots are returned even before anything has been predicted.
 """
 from __future__ import annotations
 
+from datetime import datetime
+
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.db import get_session
-from backend.schemas.spot import SpotDetail, SpotRisk, SubscriberCount
+from backend.schemas.spot import (
+    HistoricalPrediction,
+    SpotDetail,
+    SpotRisk,
+    SubscriberCount,
+)
 from backend.services import subscriber_service
 
 router = APIRouter(prefix="/api/spots", tags=["spots"])
@@ -23,7 +30,87 @@ LATEST_RISK_COLUMNS = """
 
 
 @router.get("", response_model=list[SpotRisk])
-async def list_spots(session: AsyncSession = Depends(get_session)):
+async def list_spots(
+    timestamp: str | None = Query(None, description="ISO timestamp, 'random', or None for latest"),
+    exclude: str | None = Query(None, description="ISO timestamp to exclude when picking random"),
+    session: AsyncSession = Depends(get_session),
+):
+    if timestamp == "random":
+        exclude_ts = None
+        if exclude:
+            try:
+                exclude_ts = datetime.fromisoformat(exclude.replace("Z", "+00:00"))
+            except Exception:
+                pass
+
+        if exclude_ts is not None:
+            res_ts = await session.execute(
+                text(
+                    """
+                    SELECT predicted_for 
+                    FROM predictions 
+                    WHERE predicted_for < NOW() AND p_actual IS NOT NULL 
+                      AND predicted_for != :exclude_ts
+                    GROUP BY predicted_for 
+                    HAVING count(*) >= 30 
+                    ORDER BY RANDOM() 
+                    LIMIT 1
+                    """
+                ),
+                {"exclude_ts": exclude_ts}
+            )
+        else:
+            res_ts = await session.execute(
+                text(
+                    """
+                    SELECT predicted_for 
+                    FROM predictions 
+                    WHERE predicted_for < NOW() AND p_actual IS NOT NULL 
+                    GROUP BY predicted_for 
+                    HAVING count(*) >= 30 
+                    ORDER BY RANDOM() 
+                    LIMIT 1
+                    """
+                )
+            )
+        chosen_ts = res_ts.scalar()
+        if chosen_ts is not None:
+            q = text(
+                f"""
+                SELECT 
+                    s.id AS spot_id, s.name, s.lat, s.lng, s.elevation_m, s.depression_depth_m, s.nearest_drain_m, s.notes,
+                    p.predicted_for, p.p_rain, p.p_actual, p.delta, p.risk_level, p.cause_label,
+                    p.dispatch_type, p.confidence_lower, p.confidence_upper, p.shap_top3
+                FROM flood_spots s
+                LEFT JOIN predictions p ON p.spot_id = s.id AND p.predicted_for = :ts
+                ORDER BY s.id
+                """
+            )
+            result = await session.execute(q, {"ts": chosen_ts})
+            return [SpotRisk(**dict(row)) for row in result.mappings()]
+
+    elif timestamp:
+        try:
+            parsed_ts = datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
+        except Exception:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid ISO timestamp format",
+            )
+        q = text(
+            f"""
+            SELECT 
+                s.id AS spot_id, s.name, s.lat, s.lng, s.elevation_m, s.depression_depth_m, s.nearest_drain_m, s.notes,
+                p.predicted_for, p.p_rain, p.p_actual, p.delta, p.risk_level, p.cause_label,
+                p.dispatch_type, p.confidence_lower, p.confidence_upper, p.shap_top3
+            FROM flood_spots s
+            LEFT JOIN predictions p ON p.spot_id = s.id AND p.predicted_for = :ts
+            ORDER BY s.id
+            """
+        )
+        result = await session.execute(q, {"ts": parsed_ts})
+        return [SpotRisk(**dict(row)) for row in result.mappings()]
+
     result = await session.execute(text(f"SELECT {LATEST_RISK_COLUMNS} FROM v_latest_risk"))
     return [SpotRisk(**dict(row)) for row in result.mappings()]
 
@@ -66,3 +153,34 @@ async def get_spot(
 @router.get("/{spot_id}/subscriber-count", response_model=SubscriberCount)
 async def subscriber_count(spot_id: int, session: AsyncSession = Depends(get_session)):
     return {"count": await subscriber_service.count_for_spot(session, spot_id)}
+
+
+@router.get("/{spot_id}/random-historical", response_model=HistoricalPrediction)
+async def get_random_historical(
+    spot_id: int,
+    session: AsyncSession = Depends(get_session),
+):
+    result = await session.execute(
+        text(
+            """
+            SELECT spot_id, predicted_for, p_rain, p_actual, delta, risk_level,
+                   cause_label, dispatch_type, confidence_lower, confidence_upper,
+                   shap_top3
+              FROM predictions
+             WHERE spot_id = :spot_id
+               AND predicted_for < NOW()
+               AND p_actual IS NOT NULL
+             ORDER BY RANDOM()
+             LIMIT 1
+            """
+        ),
+        {"spot_id": spot_id},
+    )
+    row = result.mappings().first()
+    if row is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No historical predictions for this spot",
+        )
+    return HistoricalPrediction(**dict(row))
+

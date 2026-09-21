@@ -8,13 +8,16 @@ import {
   AlertRequest,
   AlertResponse,
   AlertLogEntry,
-  BroadcastResponse,
   HealthResponse,
-  SubscriberCount,
+  BroadcastResponse,
+  HistoricalPrediction,
 } from "./types";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL?.replace(/\/+$/, "") || "http://localhost:8000";
+
+export const HERO_TIMESTAMP = "2025-07-15T10:30:00Z";
+export const REFRESH_TIMESTAMP = "2023-07-03T09:00:00Z";
 
 export class ApiError extends Error {
   status: number;
@@ -68,22 +71,38 @@ export async function fetcher<T>(endpoint: string, options?: RequestInit): Promi
 // API methods
 export const api = {
   getHealth: () => fetcher<HealthResponse>("/api/health"),
-  getSpots: () => fetcher<SpotRisk[]>("/api/spots"),
+  getSpots: (timestamp?: string, exclude?: string) => {
+    const params = new URLSearchParams();
+    if (timestamp) params.append("timestamp", timestamp);
+    if (exclude) params.append("exclude", exclude);
+    const qs = params.toString();
+    return fetcher<SpotRisk[]>(qs ? `/api/spots?${qs}` : "/api/spots");
+  },
   getSpot: (id: number, historyHours: number = 24) =>
     fetcher<SpotDetail>(`/api/spots/${id}?history_hours=${historyHours}`),
+  getRandomHistorical: (spotId: number) =>
+    fetcher<HistoricalPrediction>(`/api/spots/${spotId}/random-historical`),
   predict: (payload: PredictRequest) =>
     fetcher<PredictionResponse>("/api/predict", {
       method: "POST",
-      body: JSON.stringify(payload),
+      body: JSON.stringify({
+        ...payload,
+        timestamp: payload.timestamp || HERO_TIMESTAMP,
+      }),
     }),
   predictAll: (timestamp?: string) =>
     fetcher<PredictionResponse[]>("/api/predict/all", {
       method: "POST",
-      body: JSON.stringify(timestamp ? { timestamp } : {}),
+      body: JSON.stringify({ timestamp: timestamp || HERO_TIMESTAMP }),
     }),
   getDrainHealth: () => fetcher<DrainHealthEntry[]>("/api/drain-health"),
   getDrainHealthDetail: (spotId: number) =>
     fetcher<DrainHealthDetail>(`/api/drain-health/${spotId}`),
+  desiltDrain: (spotId: number) =>
+    fetcher<DrainHealthDetail & { message?: string }>(`/api/drain-health/${spotId}/desilt`, {
+      method: "POST",
+    }),
+  getDbStats: () => fetcher<Record<string, unknown>>("/api/database/stats"),
   getAlertsLog: (limit: number = 50) =>
     fetcher<AlertLogEntry[]>(`/api/alerts/log?limit=${limit}`),
   sendAlert: (payload: AlertRequest) =>
@@ -91,8 +110,50 @@ export const api = {
       method: "POST",
       body: JSON.stringify(payload),
     }),
-  getSubscriberCount: (spotId: number) =>
-    fetcher<SubscriberCount>(`/api/spots/${spotId}/subscriber-count`),
-  broadcast: (spotId: number) =>
-    fetcher<BroadcastResponse>(`/api/alert/broadcast/${spotId}`, { method: "POST" }),
+  getSubscribersCount: (spotId: number) =>
+    fetcher<{
+      spot_id: number;
+      spot_name: string;
+      spot_subscribers: number;
+      radius_subscribers: number;
+      critical_radius_km: number;
+    }>(`/api/subscribers/count/${spotId}`),
+  broadcastAlert: (spotId: number, payload: { mode?: "normal" | "critical"; language?: string }) =>
+    fetcher<{
+      broadcast_count: number;
+      mode: string;
+      channels: string[];
+      message: string;
+      sample_payload?: string;
+    }>(`/api/alert/broadcast/${spotId}`, {
+      method: "POST",
+      body: JSON.stringify(payload),
+    }),
+  broadcast: (spotId: number, mode?: "normal" | "critical", language?: string) =>
+    fetcher<{
+      broadcast_count: number;
+      mode: string;
+      channels: string[];
+      message: string;
+      sample_payload?: string;
+    }>(`/api/alert/broadcast/${spotId}`, {
+      method: "POST",
+      body: JSON.stringify({ mode: mode || "normal", language }),
+    }),
+  simulateWhatsAppWebhook: (payload: {
+    From?: string;
+    Body?: string;
+    Latitude?: number;
+    Longitude?: number;
+  }) =>
+    fetcher<{
+      success: boolean;
+      action?: string;
+      reply_message?: string;
+      spot?: any;
+      distance_m?: number;
+    }>("/api/whatsapp/webhook", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    }),
 };

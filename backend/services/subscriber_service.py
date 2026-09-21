@@ -145,6 +145,31 @@ async def active_for_spot(session: AsyncSession, spot_id: int) -> list[dict]:
     return [dict(row) for row in result.mappings()]
 
 
+async def active_within_radius(
+    session: AsyncSession, spot_id: int, radius_km: float
+) -> list[dict]:
+    """All active subscribers within radius_km of the spot (ST_DWithin)."""
+    radius_meters = radius_km * 1000.0
+    result = await session.execute(
+        text(
+            """
+            WITH target_spot AS (
+                SELECT geom FROM flood_spots WHERE id = :spot_id
+            )
+            SELECT DISTINCT ON (sub.phone_hash) sub.phone_hash, sub.language
+              FROM subscribers sub
+              JOIN flood_spots s ON sub.spot_id = s.id
+             CROSS JOIN target_spot t
+             WHERE sub.expires_at > NOW()
+               AND ST_DWithin(s.geom::geography, t.geom::geography, :radius_meters)
+             ORDER BY sub.phone_hash, sub.id
+            """
+        ),
+        {"spot_id": spot_id, "radius_meters": radius_meters},
+    )
+    return [dict(row) for row in result.mappings()]
+
+
 async def count_for_spot(session: AsyncSession, spot_id: int) -> int:
     result = await session.execute(
         text(
