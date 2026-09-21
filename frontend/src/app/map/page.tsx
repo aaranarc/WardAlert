@@ -104,10 +104,10 @@ export default function MapPage() {
 
         {/* Replay / Refresh Controls */}
         <div className="bg-white/95 backdrop-blur-md p-1.5 rounded-xl border border-slate-200 shadow-xs pointer-events-auto flex items-center gap-2 flex-wrap">
-          <div className="px-2.5 py-1 rounded-lg bg-[#e8f2fc] border border-[#0066cc]/25 text-[#0066cc] text-xs font-medium flex items-center gap-1.5">
+          <div suppressHydrationWarning className="px-2.5 py-1 rounded-lg bg-[#e8f2fc] border border-[#0066cc]/25 text-[#0066cc] text-xs font-medium flex items-center gap-1.5">
             <IconClock className="w-3.5 h-3.5 shrink-0" />
-            <span>
-              Displaying Date: <strong className="font-semibold text-slate-900">{formatDateDMY(activeDate)}</strong>
+            <span suppressHydrationWarning>
+              Displaying Date: <strong suppressHydrationWarning className="font-semibold text-slate-900">{formatDateDMY(activeDate)}</strong>
             </span>
           </div>
 

@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import useSWR from "swr";
 import { api, HERO_TIMESTAMP, REFRESH_TIMESTAMP } from "@/lib/api";
 import { SpotRisk } from "@/lib/types";
@@ -33,12 +33,16 @@ export function useSpots() {
     }
   );
 
-  const activeDate =
-    data && data.length > 0 && data[0].predicted_for
-      ? data[0].predicted_for
-      : typeof window !== "undefined"
-      ? sessionStorage.getItem("wardalert_active_timestamp") || HERO_TIMESTAMP
-      : HERO_TIMESTAMP;
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const activeDate = !mounted
+    ? HERO_TIMESTAMP
+    : data && data.length > 0 && data[0].predicted_for
+    ? data[0].predicted_for
+    : (typeof window !== "undefined" && sessionStorage.getItem("wardalert_active_timestamp")) || HERO_TIMESTAMP;
 
   const refreshPredictions = async (): Promise<SpotRisk[] | null> => {
     try {

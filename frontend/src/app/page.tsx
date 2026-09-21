@@ -151,10 +151,10 @@ export default function DashboardPage() {
         {/* Replay Controls */}
         <div className="flex items-center gap-2 flex-wrap">
           {activeDate && (
-            <div className="px-3 py-1.5 rounded-lg bg-[#e8f2fc] border border-[#0066cc]/25 text-[#0066cc] text-xs font-medium flex items-center gap-1.5 shadow-2xs">
+            <div suppressHydrationWarning className="px-3 py-1.5 rounded-lg bg-[#e8f2fc] border border-[#0066cc]/25 text-[#0066cc] text-xs font-medium flex items-center gap-1.5 shadow-2xs">
               <IconClock className="w-3.5 h-3.5 shrink-0" />
-              <span>
-                Displaying Date: <strong className="font-semibold text-slate-900">{formatDateDMY(activeDate)}</strong>
+              <span suppressHydrationWarning>
+                Displaying Date: <strong suppressHydrationWarning className="font-semibold text-slate-900">{formatDateDMY(activeDate)}</strong>
               </span>
             </div>
           )}
