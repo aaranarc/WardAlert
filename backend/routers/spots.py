@@ -1,7 +1,6 @@
 """GET /api/spots and /api/spots/{id} — the map layer.
 
-Both read v_latest_risk, which LEFT JOINs the 2025-07-15 replay prediction
-(or, failing that, the newest) onto every
+Both read v_latest_risk, which LEFT JOINs the newest prediction onto every
 spot, so all 30 spots are returned even before anything has been predicted.
 """
 from __future__ import annotations
@@ -11,7 +10,12 @@ from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.db import get_session
-from backend.schemas.spot import SpotDetail, SpotRisk, SubscriberCount
+from backend.schemas.spot import (
+    HistoricalPrediction,
+    SpotDetail,
+    SpotRisk,
+    SubscriberCount,
+)
 from backend.services import subscriber_service
 
 router = APIRouter(prefix="/api/spots", tags=["spots"])
@@ -67,3 +71,34 @@ async def get_spot(
 @router.get("/{spot_id}/subscriber-count", response_model=SubscriberCount)
 async def subscriber_count(spot_id: int, session: AsyncSession = Depends(get_session)):
     return {"count": await subscriber_service.count_for_spot(session, spot_id)}
+
+
+@router.get("/{spot_id}/random-historical", response_model=HistoricalPrediction)
+async def get_random_historical(
+    spot_id: int,
+    session: AsyncSession = Depends(get_session),
+):
+    result = await session.execute(
+        text(
+            """
+            SELECT spot_id, predicted_for, p_rain, p_actual, delta, risk_level,
+                   cause_label, dispatch_type, confidence_lower, confidence_upper,
+                   shap_top3
+              FROM predictions
+             WHERE spot_id = :spot_id
+               AND predicted_for < NOW()
+               AND p_actual IS NOT NULL
+             ORDER BY RANDOM()
+             LIMIT 1
+            """
+        ),
+        {"spot_id": spot_id},
+    )
+    row = result.mappings().first()
+    if row is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No historical predictions for this spot",
+        )
+    return HistoricalPrediction(**dict(row))
+
