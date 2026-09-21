@@ -71,9 +71,10 @@ export async function fetcher<T>(endpoint: string, options?: RequestInit): Promi
 // API methods
 export const api = {
   getHealth: () => fetcher<HealthResponse>("/api/health"),
-  getSpots: (at?: string) => {
+  getSpots: (at?: string, exclude?: string) => {
     const params = new URLSearchParams();
     if (at) params.append("at", at);
+    if (exclude) params.append("exclude", exclude);
     const qs = params.toString();
     return fetcher<SpotRisk[]>(qs ? `/api/spots?${qs}` : "/api/spots");
   },
