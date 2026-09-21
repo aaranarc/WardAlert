@@ -62,9 +62,9 @@ export default function RiskAnalysisPage() {
               Risk Analysis
             </h1>
             {activeDate && (
-              <span className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#e8f2fc] text-[#0066cc] border border-[#0066cc]/25 flex items-center gap-1.5 shadow-2xs">
+              <span suppressHydrationWarning className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#e8f2fc] text-[#0066cc] border border-[#0066cc]/25 flex items-center gap-1.5 shadow-2xs">
                 <IconClock className="w-3.5 h-3.5" />
-                <span>Displaying Date: <strong className="font-semibold text-slate-900">{formatDateDMY(activeDate)}</strong></span>
+                <span suppressHydrationWarning>Displaying Date: <strong suppressHydrationWarning className="font-semibold text-slate-900">{formatDateDMY(activeDate)}</strong></span>
               </span>
             )}
           </div>
@@ -158,7 +158,7 @@ export default function RiskAnalysisPage() {
             <div className="flex items-center gap-2">
               <h2 className="text-xs font-bold text-slate-900">Risk Ranking by Spot</h2>
               {activeDate && (
-                <span className="text-[11px] text-[#0066cc] font-medium bg-[#e8f2fc] px-2 py-0.5 rounded-md border border-[#0066cc]/20">
+                <span suppressHydrationWarning className="text-[11px] text-[#0066cc] font-medium bg-[#e8f2fc] px-2 py-0.5 rounded-md border border-[#0066cc]/20">
                   {formatDateDMY(activeDate)}
                 </span>
               )}
