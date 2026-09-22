@@ -14,8 +14,8 @@ __pycache__/
 .mypy_cache/
 .ipynb_checkpoints/
 
-# ML artifacts (binaries — regenerate with `python -m ml.train_model_a`)
-ml/models/*.joblib
+# ML artifacts
+# ml/models/*.joblib included for deployment
 
 # Node
 node_modules/
