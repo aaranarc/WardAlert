@@ -131,5 +131,6 @@ async def desilt(session: AsyncSession, spot_id: int) -> dict | None:
 
     updated_detail = await detail(session, spot_id, Config.DRAIN_CRITICAL_DELTA)
     if updated_detail:
-        updated_detail["message"] = f"Successfully desilted {spot_name}. Hydraulic capacity restored to {updated_detail["health_score"]}%. Desilting crew logged."
+        score = updated_detail.get("health_score", 95)
+        updated_detail["message"] = f"Successfully desilted {spot_name}. Hydraulic capacity restored to {score}%. Desilting crew logged."
     return updated_detail
