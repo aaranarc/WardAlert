@@ -562,14 +562,23 @@ export function TrendChart({ detail, isLoading, onDesilted }: TrendChartProps) {
                             ) : (
                               <div className="space-y-1 text-slate-600">
                                 <p>
-                                  Avg Residual: <span className="text-[#0066cc] font-bold">+{data.avgDelta}</span>
+                                  Avg Residual:{" "}
+                                  <span className="text-[#0066cc] font-bold">
+                                    {data.avgDelta != null ? (data.avgDelta > 0 ? `+${data.avgDelta}` : `${data.avgDelta}`) : "-"}
+                                  </span>
                                 </p>
                                 <p>
-                                  Peak Residual: <span className="text-slate-800">+{data.maxDelta}</span>
+                                  Peak Residual:{" "}
+                                  <span className="text-slate-800">
+                                    {data.maxDelta != null ? (data.maxDelta > 0 ? `+${data.maxDelta}` : `${data.maxDelta}`) : "-"}
+                                  </span>
                                 </p>
                                 {data.trend !== null && (
                                   <p>
-                                    Linear Trend: <span className="text-amber-600 font-bold">+{data.trend}</span>
+                                    Linear Trend:{" "}
+                                    <span className="text-amber-600 font-bold">
+                                      {data.trend > 0 ? `+${data.trend}` : `${data.trend}`}
+                                    </span>
                                   </p>
                                 )}
                                 <p>
@@ -798,8 +807,12 @@ export function TrendChart({ detail, isLoading, onDesilted }: TrendChartProps) {
                             <div className="font-bold text-slate-900 mb-1 pb-1 border-b border-slate-100">
                               {data.name} (W{data.week})
                             </div>
-                            <p className="text-[#0066cc] font-bold">Avg Residual: +{data.avgDelta}</p>
-                            <p className="text-indigo-600 font-bold">Peak Residual: +{data.maxDelta}</p>
+                            <p className="text-[#0066cc] font-bold">
+                              Avg Residual: {data.avgDelta != null ? (data.avgDelta > 0 ? `+${data.avgDelta}` : `${data.avgDelta}`) : "-"}
+                            </p>
+                            <p className="text-indigo-600 font-bold">
+                              Peak Residual: {data.maxDelta != null ? (data.maxDelta > 0 ? `+${data.maxDelta}` : `${data.maxDelta}`) : "-"}
+                            </p>
                           </div>
                         );
                       }

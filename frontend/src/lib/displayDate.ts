@@ -10,13 +10,18 @@ let currentDisplayDate: string = DEFAULT_DISPLAY_DATE;
 const listeners = new Set<() => void>();
 
 if (typeof window !== "undefined") {
-  const saved = sessionStorage.getItem("wardalert_display_date");
-  // Clean up any stale "3 July 2023" saved in sessionStorage from the previous fixed-date bug
-  if (saved === "2023-07-03T09:00:00Z") {
-    sessionStorage.removeItem("wardalert_display_date");
-    currentDisplayDate = DEFAULT_DISPLAY_DATE;
-  } else if (saved) {
-    currentDisplayDate = saved;
+  const urlParams = new URLSearchParams(window.location.search);
+  const atParam = urlParams.get("at");
+  if (atParam) {
+    currentDisplayDate = atParam;
+    sessionStorage.setItem("wardalert_display_date", atParam);
+  } else {
+    const saved = sessionStorage.getItem("wardalert_display_date");
+    if (saved) {
+      currentDisplayDate = saved;
+    } else {
+      currentDisplayDate = DEFAULT_DISPLAY_DATE;
+    }
   }
 }
 
@@ -29,6 +34,11 @@ export function setDisplayDate(newDate: string) {
     currentDisplayDate = newDate;
     if (typeof window !== "undefined") {
       sessionStorage.setItem("wardalert_display_date", newDate);
+      try {
+        const url = new URL(window.location.href);
+        url.searchParams.set("at", newDate);
+        window.history.replaceState(null, "", url.toString());
+      } catch (e) {}
     }
     listeners.forEach((l) => l());
   }

@@ -32,6 +32,23 @@ SELECT w.spot_id,
 """
 
 
+def parse_as_of_date(at: str | datetime | date | None) -> date | None:
+    if at is None or at == "":
+        return None
+    if isinstance(at, date) and not isinstance(at, datetime):
+        return at
+    if isinstance(at, datetime):
+        return at.date()
+    try:
+        cleaned = at.replace("Z", "+00:00")
+        return datetime.fromisoformat(cleaned).date()
+    except Exception:
+        try:
+            return date.fromisoformat(at[:10])
+        except Exception:
+            return None
+
+
 def classify_status(slope: float | None, failure_date: date | None) -> str:
     """Plain-language state for the leaderboard chip."""
     if failure_date is not None and failure_date <= date.today():
@@ -45,8 +62,33 @@ def classify_status(slope: float | None, failure_date: date | None) -> str:
     return "stable"
 
 
-async def leaderboard(session: AsyncSession, limit: int | None = None) -> list[dict]:
-    result = await session.execute(text(LEADERBOARD_SQL))
+async def leaderboard(
+    session: AsyncSession,
+    limit: int | None = None,
+    at: str | datetime | date | None = None,
+) -> list[dict]:
+    as_of = parse_as_of_date(at)
+    if as_of is not None:
+        sql = """
+        SELECT w.spot_id,
+               s.name, s.lat, s.lng,
+               AVG(w.health_score)        AS health_score,
+               AVG(w.avg_delta)           AS avg_delta,
+               MAX(w.max_delta)           AS max_delta,
+               COUNT(*)                   AS weeks_tracked,
+               SUM(w.prediction_count)    AS prediction_count,
+               MAX(w.trend_slope)         AS trend_slope,
+               MIN(w.predicted_failure_date) AS predicted_failure_date
+          FROM drain_health_weekly w
+          JOIN flood_spots s ON s.id = w.spot_id
+         WHERE w.week_start <= :as_of
+         GROUP BY w.spot_id, s.name, s.lat, s.lng
+         ORDER BY AVG(w.health_score) ASC
+        """
+        result = await session.execute(text(sql), {"as_of": as_of})
+    else:
+        result = await session.execute(text(LEADERBOARD_SQL))
+
     rows = [dict(row) for row in result.mappings()]
     for row in rows:
         row["health_score"] = round(float(row["health_score"]), 2)
@@ -82,28 +124,58 @@ def compute_8week_projection(desilted_at: datetime, pre_residual: float) -> list
     return points
 
 
-async def detail(session: AsyncSession, spot_id: int, critical_delta: float) -> dict | None:
-    summary = await session.execute(
-        text(LEADERBOARD_SQL.replace("GROUP BY", "WHERE w.spot_id = :spot_id GROUP BY")),
-        {"spot_id": spot_id},
-    )
+async def detail(
+    session: AsyncSession,
+    spot_id: int,
+    critical_delta: float,
+    at: str | datetime | date | None = None,
+) -> dict | None:
+    as_of = parse_as_of_date(at)
+    if as_of is not None:
+        summary_sql = """
+        SELECT w.spot_id,
+               s.name, s.lat, s.lng,
+               AVG(w.health_score)        AS health_score,
+               AVG(w.avg_delta)           AS avg_delta,
+               MAX(w.max_delta)           AS max_delta,
+               COUNT(*)                   AS weeks_tracked,
+               SUM(w.prediction_count)    AS prediction_count,
+               MAX(w.trend_slope)         AS trend_slope,
+               MIN(w.predicted_failure_date) AS predicted_failure_date
+          FROM drain_health_weekly w
+          JOIN flood_spots s ON s.id = w.spot_id
+         WHERE w.spot_id = :spot_id AND w.week_start <= :as_of
+         GROUP BY w.spot_id, s.name, s.lat, s.lng
+        """
+        summary = await session.execute(text(summary_sql), {"spot_id": spot_id, "as_of": as_of})
+    else:
+        summary = await session.execute(
+            text(LEADERBOARD_SQL.replace("GROUP BY", "WHERE w.spot_id = :spot_id GROUP BY")),
+            {"spot_id": spot_id},
+        )
     row = summary.mappings().first()
     if row is None:
         return None
     row = dict(row)
 
-    weekly_result = await session.execute(
-        text(
-            """
+    if as_of is not None:
+        weekly_sql = """
+            SELECT year, week_number, week_start, avg_delta, max_delta,
+                   prediction_count, health_score, trend_intercept
+              FROM drain_health_weekly
+             WHERE spot_id = :spot_id AND week_start <= :as_of
+             ORDER BY year, week_number
+        """
+        weekly_result = await session.execute(text(weekly_sql), {"spot_id": spot_id, "as_of": as_of})
+    else:
+        weekly_sql = """
             SELECT year, week_number, week_start, avg_delta, max_delta,
                    prediction_count, health_score, trend_intercept
               FROM drain_health_weekly
              WHERE spot_id = :spot_id
              ORDER BY year, week_number
-            """
-        ),
-        {"spot_id": spot_id},
-    )
+        """
+        weekly_result = await session.execute(text(weekly_sql), {"spot_id": spot_id})
     weekly = [dict(point) for point in weekly_result.mappings()]
 
     # Fetch all historical desilt events for this spot
