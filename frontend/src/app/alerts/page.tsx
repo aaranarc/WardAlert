@@ -804,7 +804,7 @@ function AlertsContent() {
 
                 {/* Below the result, italic grey disclosure */}
                 <p className="text-[10px] text-slate-400 italic text-center pt-2 border-t border-slate-100">
-                  Demo submission — photo intake pipeline ships Phase 2. crowd_reports table and Model B feature integration are already live.
+                  Demo submission — full photo intake pipeline (media webhook → location match → crowd_reports insert → Model B feature update on next retrain) ships Phase 2.
                 </p>
               </div>
             )}
