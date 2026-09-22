@@ -55,9 +55,18 @@ class Config:
     POSTGRES_PORT = _int("POSTGRES_PORT", 5432)
     DB_CONNECT_TIMEOUT = _int("DB_CONNECT_TIMEOUT", 60)
 
+    DATABASE_URL = _str("DATABASE_URL", "")
+
     @classmethod
     def sync_dsn(cls) -> str:
         """psycopg2 / SQLAlchemy-sync connection string (loaders, training)."""
+        raw = os.environ.get("DATABASE_URL") or os.environ.get("DIRECT_URL")
+        if raw:
+            if raw.startswith("postgres://"):
+                raw = "postgresql://" + raw[len("postgres://"):]
+            elif raw.startswith("postgresql+asyncpg://"):
+                raw = "postgresql://" + raw[len("postgresql+asyncpg://"):]
+            return raw
         return (
             f"postgresql://{cls.POSTGRES_USER}:{cls.POSTGRES_PASSWORD}"
             f"@{cls.POSTGRES_HOST}:{cls.POSTGRES_PORT}/{cls.POSTGRES_DB}"
@@ -66,6 +75,18 @@ class Config:
     @classmethod
     def async_dsn(cls) -> str:
         """asyncpg connection string (FastAPI)."""
+        raw = os.environ.get("DATABASE_URL") or os.environ.get("DIRECT_URL")
+        if raw:
+            if raw.startswith("postgres://"):
+                raw = "postgresql+asyncpg://" + raw[len("postgres://"):]
+            elif raw.startswith("postgresql://"):
+                raw = "postgresql+asyncpg://" + raw[len("postgresql://"):]
+            # asyncpg does not accept sslmode query parameter; strip it if present
+            if "?" in raw:
+                base, query = raw.split("?", 1)
+                params = [p for p in query.split("&") if not p.startswith("sslmode=")]
+                raw = f"{base}?{'&'.join(params)}" if params else base
+            return raw
         return (
             f"postgresql+asyncpg://{cls.POSTGRES_USER}:{cls.POSTGRES_PASSWORD}"
             f"@{cls.POSTGRES_HOST}:{cls.POSTGRES_PORT}/{cls.POSTGRES_DB}"

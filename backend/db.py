@@ -11,10 +11,16 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_asyn
 
 from config import Config
 
+_dsn = Config.async_dsn()
+_connect_args = {}
+if not any(h in _dsn for h in ("localhost", "127.0.0.1", "wardalert-db")):
+    _connect_args["ssl"] = "require"
+
 engine = create_async_engine(
-    Config.async_dsn(),
+    _dsn,
     echo=False,
     pool_pre_ping=True,  # survive the database restarting under a long-lived API
+    connect_args=_connect_args,
 )
 
 SessionLocal = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
