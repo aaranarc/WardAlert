@@ -5,6 +5,7 @@ import {
   PredictionResponse,
   DrainHealthEntry,
   DrainHealthDetail,
+  DesiltResponse,
   AlertRequest,
   AlertResponse,
   AlertLogEntry,
@@ -98,8 +99,10 @@ export const api = {
   getDrainHealth: () => fetcher<DrainHealthEntry[]>("/api/drain-health"),
   getDrainHealthDetail: (spotId: number) =>
     fetcher<DrainHealthDetail>(`/api/drain-health/${spotId}`),
+  getDrainHealthWeekly: (spotId: number) =>
+    fetcher<DrainHealthDetail>(`/api/drain-health/${spotId}/weekly`),
   desiltDrain: (spotId: number) =>
-    fetcher<DrainHealthDetail & { message?: string }>(`/api/drain-health/${spotId}/desilt`, {
+    fetcher<DesiltResponse>(`/api/drain-health/${spotId}/desilt`, {
       method: "POST",
     }),
   getDbStats: () => fetcher<Record<string, unknown>>("/api/database/stats"),

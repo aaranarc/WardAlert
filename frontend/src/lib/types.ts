@@ -19,6 +19,7 @@ export interface SpotRisk {
   elevation_m: number | null;
   depression_depth_m: number | null;
   nearest_drain_m: number | null;
+  landmark?: string | null;
   notes: string | null;
   predicted_for: string | null;
   p_rain: number | null;
@@ -105,6 +106,34 @@ export interface WeeklyPoint {
   health_score: number | null;
 }
 
+export interface DesiltEventRecord {
+  id?: number;
+  spot_id: number;
+  desilted_at: string;
+  crew: string;
+  pre_residual: number;
+  projected_residual: number;
+}
+
+export interface ForwardProjectionPoint {
+  week_offset: number;
+  date_str: string;
+  projected_residual: number;
+  projected_health: number;
+}
+
+export interface DesiltResponse {
+  spot_id: number;
+  spot_name: string;
+  desilted_at: string;
+  pre_residual: number;
+  projected_residual: number;
+  projected_health: number;
+  projected_slope: number;
+  predicted_failure: string;
+  message?: string;
+}
+
 export interface DrainHealthDetail {
   spot_id: number;
   name: string;
@@ -120,6 +149,9 @@ export interface DrainHealthDetail {
   critical_delta: number;
   status: DrainStatus | string;
   weekly: WeeklyPoint[];
+  desilt_events?: DesiltEventRecord[];
+  forward_projection?: ForwardProjectionPoint[];
+  message?: string;
 }
 
 export interface AlertRequest {
@@ -155,6 +187,7 @@ export interface AlertLogEntry {
   error: string | null;
   body: string;
   sent_at: string;
+  dispatched_at?: string | null;
   recipient_count?: number;
 }
 

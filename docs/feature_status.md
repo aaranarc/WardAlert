@@ -21,6 +21,7 @@ simulated, and what is not built.
 | Drain health index | 4650 predictions → 1590 weekly rows → 30 trends fitted |
 | All 11 API endpoints | see `docs/verification_run.md` |
 | 4-language alert templates | en / hi / hinglish / mr, fully localised |
+| Log Desilting | Logs desilting event to DB; renders forward-looking drain recovery projection (~8 weeks). Historical observations preserved unchanged — full audit trail. Phase 2: integrate with BMC work-order dispatch system to auto-close the loop. |
 
 ## ⚠️ Simulation / partial
 

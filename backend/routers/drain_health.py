@@ -10,7 +10,11 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.db import get_session
-from backend.schemas.drain_health import DrainHealthDetail, DrainHealthEntry
+from backend.schemas.drain_health import (
+    DesiltResponse,
+    DrainHealthDetail,
+    DrainHealthEntry,
+)
 from backend.services import drain_health_service
 from config import Config
 
@@ -42,15 +46,30 @@ async def get_detail(
     return result
 
 
-@router.post("/{spot_id}/desilt", response_model=DrainHealthDetail)
+@router.get("/{spot_id}/weekly", response_model=DrainHealthDetail)
+async def get_weekly(
+    spot_id: int,
+    session: AsyncSession = Depends(get_session),
+):
+    """Alias for detail returning weekly points, historical desilt events, and recovery projection."""
+    result = await drain_health_service.detail(session, spot_id, Config.DRAIN_CRITICAL_DELTA)
+    if result is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"no drain health history for spot {spot_id}",
+        )
+    return result
+
+
+@router.post("/{spot_id}/desilt", response_model=DesiltResponse)
 async def desilt_drain(
     spot_id: int,
     session: AsyncSession = Depends(get_session),
 ):
-    result = await drain_health_service.desilt(session, spot_id)
+    result = await drain_health_service.record_desilt(session, spot_id)
     if result is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"spot {spot_id} not found in drain health records",
+            detail=f"spot {spot_id} not found",
         )
     return result
