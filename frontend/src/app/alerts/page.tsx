@@ -222,7 +222,7 @@ function AlertsContent() {
             Emergency Alert & WhatsApp Dispatch System
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">
-            Twilio WhatsApp inbound citizen bot, municipal radius broadcasts, and immutable audit ledger.
+            WhatsApp inbound citizen bot, municipal radius broadcasts, and immutable audit ledger.
           </p>
         </div>
 
@@ -428,7 +428,7 @@ function AlertsContent() {
               <div>
                 <span className="block font-medium text-slate-700 mb-1">Simulate Citizen Inbound Action</span>
                 <p className="text-[11px] text-slate-500 mb-2">
-                  Test how the Twilio webhook responds when citizens interact with the WardAlert WhatsApp bot.
+                  Test how the webhook responds when citizens interact with the WardAlert WhatsApp bot.
                 </p>
 
                 <div className="grid grid-cols-2 gap-2">
@@ -801,11 +801,6 @@ function AlertsContent() {
                     )}
                   </div>
                 </div>
-
-                {/* Below the result, italic grey disclosure */}
-                <p className="text-[10px] text-slate-400 italic text-center pt-2 border-t border-slate-100">
-                  Demo submission — full photo intake pipeline (media webhook → location match → crowd_reports insert → Model B feature update on next retrain) ships Phase 2.
-                </p>
               </div>
             )}
           </div>
