@@ -14,6 +14,7 @@ from backend.schemas.prediction import (
     PredictRequest,
 )
 from backend.services import prediction_service
+from config import Config
 from ml.predict import Predictor
 
 router = APIRouter(prefix="/api/predict", tags=["predict"])
@@ -21,7 +22,8 @@ router = APIRouter(prefix="/api/predict", tags=["predict"])
 
 @router.post("", response_model=PredictionResponse)
 async def predict(payload: PredictRequest, predictor: Predictor = Depends(get_predictor)):
-    return await prediction_service.predict_one(predictor, payload.spot_id, payload.timestamp)
+    moment = payload.timestamp or Config.HERO_TIMESTAMP
+    return await prediction_service.predict_one(predictor, payload.spot_id, moment)
 
 
 @router.post("/all", response_model=list[PredictionResponse])
@@ -29,5 +31,5 @@ async def predict_all(
     payload: PredictAllRequest | None = None,
     predictor: Predictor = Depends(get_predictor),
 ):
-    moment = payload.timestamp if payload else None
+    moment = (payload.timestamp if payload else None) or Config.HERO_TIMESTAMP
     return await prediction_service.predict_all(predictor, moment)

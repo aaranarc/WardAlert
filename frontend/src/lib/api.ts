@@ -96,11 +96,12 @@ export const api = {
       method: "POST",
       body: JSON.stringify({ timestamp: timestamp || HERO_TIMESTAMP }),
     }),
-  getDrainHealth: () => fetcher<DrainHealthEntry[]>("/api/drain-health"),
-  getDrainHealthDetail: (spotId: number) =>
-    fetcher<DrainHealthDetail>(`/api/drain-health/${spotId}`),
-  getDrainHealthWeekly: (spotId: number) =>
-    fetcher<DrainHealthDetail>(`/api/drain-health/${spotId}/weekly`),
+  getDrainHealth: (date?: string) =>
+    fetcher<DrainHealthEntry[]>(date ? `/api/drain-health?at=${encodeURIComponent(date)}` : "/api/drain-health"),
+  getDrainHealthDetail: (spotId: number, date?: string) =>
+    fetcher<DrainHealthDetail>(date ? `/api/drain-health/${spotId}?at=${encodeURIComponent(date)}` : `/api/drain-health/${spotId}`),
+  getDrainHealthWeekly: (spotId: number, date?: string) =>
+    fetcher<DrainHealthDetail>(date ? `/api/drain-health/${spotId}/weekly?at=${encodeURIComponent(date)}` : `/api/drain-health/${spotId}/weekly`),
   desiltDrain: (spotId: number) =>
     fetcher<DesiltResponse>(`/api/drain-health/${spotId}/desilt`, {
       method: "POST",

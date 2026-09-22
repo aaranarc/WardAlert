@@ -8,6 +8,7 @@ work out of the box.  See `.env.example` for documentation of each variable.
 from __future__ import annotations
 
 import os
+from datetime import datetime, timezone
 from pathlib import Path
 
 try:  # python-dotenv is in requirements.txt but config must not hard-fail on it
@@ -175,6 +176,10 @@ class Config:
     CONFIDENCE_PRIOR_BETA = _float("CONFIDENCE_PRIOR_BETA", 1.0)
     CONFIDENCE_LEVEL = _float("CONFIDENCE_LEVEL", 0.90)
     CONFIDENCE_STRENGTH = _float("CONFIDENCE_STRENGTH", 30.0)
+
+    # Canonical replay timestamp for historical cloudburst event
+    HERO_TIMESTAMP = datetime(2025, 7, 15, 10, 30, tzinfo=timezone.utc)
+    HERO_TIMESTAMP_ISO = "2025-07-15T10:30:00Z"
 
     # -------------------------------------------------------- drain health --
     DRAIN_HEALTH_MIN_WEEKS = _int("DRAIN_HEALTH_MIN_WEEKS", 4)

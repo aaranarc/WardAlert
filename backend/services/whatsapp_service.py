@@ -86,20 +86,27 @@ AGE_TEXT = {
 }
 
 
-def humanise_age(moment: datetime, language: str = "en") -> str:
-    """'just now' / '3h ago', in the recipient's language."""
+def humanise_age(moment: datetime | str, language: str = "en") -> str:
+    """'just now' / '3h ago', in recipient's language, or replay mode text for historical."""
+    if isinstance(moment, str):
+        try:
+            moment = datetime.fromisoformat(moment.replace("Z", "+00:00"))
+        except Exception:
+            return f"Simulated alert for {moment} · replay mode"
     if moment.tzinfo is None:
         moment = moment.replace(tzinfo=timezone.utc)
     seconds = (datetime.now(timezone.utc) - moment).total_seconds()
+    if seconds >= 86400:
+        date_str = moment.strftime("%d %b %Y, %H:%M UTC")
+        return f"Simulated alert for {date_str} · replay mode"
+
     words = AGE_TEXT.get(language, AGE_TEXT["en"])
 
     if seconds < 90:
         return words["now"]
     if seconds < 3600:
         return words["m"].format(n=int(seconds // 60))
-    if seconds < 86400:
-        return words["h"].format(n=int(seconds // 3600))
-    return words["d"].format(n=int(seconds // 86400))
+    return words["h"].format(n=int(seconds // 3600))
 
 
 def compose(prediction: dict, language: str) -> str:
@@ -107,8 +114,19 @@ def compose(prediction: dict, language: str) -> str:
     language = resolve_language(language)
     template = load_template(language)
     features = prediction.get("features") or {}
+    predicted_for = prediction.get("predicted_for")
+    if isinstance(predicted_for, str):
+        try:
+            predicted_for = datetime.fromisoformat(predicted_for.replace("Z", "+00:00"))
+        except Exception:
+            pass
 
-    return template.format(
+    if isinstance(predicted_for, datetime):
+        updated_str = humanise_age(predicted_for, language)
+    else:
+        updated_str = f"Simulated alert for {predicted_for} · replay mode"
+
+    rendered = template.format(
         spot_name=prediction["spot_name"],
         risk_level=RISK_TEXT.get(language, RISK_TEXT["en"]).get(
             prediction["risk_level"], prediction["risk_level"].upper()
@@ -118,10 +136,15 @@ def compose(prediction: dict, language: str) -> str:
         ),
         p_actual_pct=round(float(prediction["p_actual"]) * 100),
         rain_3h=round(float(features.get("rain_3h", 0.0)), 1),
-        updated_ago=humanise_age(prediction["predicted_for"], language),
+        updated_ago=updated_str,
         dispatch_action=DISPATCH_TEXT.get(language, DISPATCH_TEXT["en"]).get(
             prediction.get("dispatch_type"), prediction.get("dispatch_type", "")
         ),
+    )
+    return (
+        rendered.replace("Updated Simulated alert for", "Simulated alert for")
+        .replace("updated Simulated alert for", "Simulated alert for")
+        .replace("अपडेट: Simulated alert for", "Simulated alert for")
     )
 
 

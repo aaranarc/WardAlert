@@ -16,7 +16,7 @@ from config import Config
 
 
 def hash_phone(sender: str) -> str:
-    return hashlib.sha256(sender.encode("utf-8")).hexdigest()
+    return hashlib.sha256(sender.strip().encode("utf-8")).hexdigest()
 
 
 def template_languages() -> list[str]:
@@ -30,12 +30,13 @@ async def nearest_spot(session: AsyncSession, lat: float, lng: float) -> dict:
     result = await session.execute(
         text(
             """
-            SELECT id, name
+            SELECT id, name, lat, lng,
+                   ST_Distance(
+                       geom::geography,
+                       ST_SetSRID(ST_MakePoint(:lng, :lat), :srid)::geography
+                   ) AS distance_m
               FROM flood_spots
-             ORDER BY ST_Distance(
-                        geom::geography,
-                        ST_SetSRID(ST_MakePoint(:lng, :lat), :srid)::geography
-                      )
+             ORDER BY distance_m
              LIMIT 1
             """
         ),
@@ -112,6 +113,24 @@ async def active(session: AsyncSession, phone_hash: str) -> dict | None:
     return dict(row) if row else None
 
 
+async def any_subscription(session: AsyncSession, phone_hash: str) -> dict | None:
+    """Find subscription even if expired (for STATUS/EXTEND check)."""
+    result = await session.execute(
+        text(
+            """
+            SELECT id, phone_hash, spot_id, language, created_at, expires_at
+              FROM subscribers
+             WHERE phone_hash = :phone_hash
+             ORDER BY expires_at DESC
+             LIMIT 1
+            """
+        ),
+        {"phone_hash": phone_hash},
+    )
+    row = result.mappings().first()
+    return dict(row) if row else None
+
+
 async def set_language(session: AsyncSession, phone_hash: str, language: str) -> bool:
     result = await session.execute(
         text("UPDATE subscribers SET language = :language WHERE phone_hash = :phone_hash"),
@@ -178,3 +197,47 @@ async def count_for_spot(session: AsyncSession, spot_id: int) -> int:
         {"spot_id": spot_id},
     )
     return result.scalar_one()
+
+
+async def count_within_radius(
+    session: AsyncSession, spot_id: int, radius_km: float
+) -> int:
+    radius_meters = radius_km * 1000.0
+    result = await session.execute(
+        text(
+            """
+            WITH target_spot AS (
+                SELECT geom FROM flood_spots WHERE id = :spot_id
+            )
+            SELECT COUNT(DISTINCT sub.phone_hash)
+              FROM subscribers sub
+              JOIN flood_spots s ON sub.spot_id = s.id
+             CROSS JOIN target_spot t
+             WHERE sub.expires_at > NOW()
+               AND ST_DWithin(s.geom::geography, t.geom::geography, :radius_meters)
+            """
+        ),
+        {"spot_id": spot_id, "radius_meters": radius_meters},
+    )
+    return result.scalar_one()
+
+
+async def get_subscriber_counts(
+    session: AsyncSession, spot_id: int, radius_km: float = 2.0
+) -> dict | None:
+    spot_res = await session.execute(
+        text("SELECT id, name FROM flood_spots WHERE id = :spot_id"),
+        {"spot_id": spot_id},
+    )
+    spot = spot_res.mappings().first()
+    if not spot:
+        return None
+    spot_subs = await count_for_spot(session, spot_id)
+    radius_subs = await count_within_radius(session, spot_id, radius_km)
+    return {
+        "spot_id": spot["id"],
+        "spot_name": spot["name"],
+        "spot_subscribers": spot_subs,
+        "radius_subscribers": max(spot_subs, radius_subs),
+        "critical_radius_km": radius_km,
+    }

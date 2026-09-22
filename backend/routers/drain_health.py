@@ -24,17 +24,19 @@ router = APIRouter(prefix="/api/drain-health", tags=["drain-health"])
 @router.get("", response_model=list[DrainHealthEntry])
 async def get_leaderboard(
     limit: int | None = Query(None, ge=1, le=100),
+    at: str | None = Query(None, description="ISO timestamp or date string to filter degradation history"),
     session: AsyncSession = Depends(get_session),
 ):
-    return await drain_health_service.leaderboard(session, limit)
+    return await drain_health_service.leaderboard(session, limit, at)
 
 
 @router.get("/{spot_id}", response_model=DrainHealthDetail)
 async def get_detail(
     spot_id: int,
+    at: str | None = Query(None, description="ISO timestamp or date string to filter degradation history"),
     session: AsyncSession = Depends(get_session),
 ):
-    result = await drain_health_service.detail(session, spot_id, Config.DRAIN_CRITICAL_DELTA)
+    result = await drain_health_service.detail(session, spot_id, Config.DRAIN_CRITICAL_DELTA, at)
     if result is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -49,10 +51,11 @@ async def get_detail(
 @router.get("/{spot_id}/weekly", response_model=DrainHealthDetail)
 async def get_weekly(
     spot_id: int,
+    at: str | None = Query(None, description="ISO timestamp or date string to filter degradation history"),
     session: AsyncSession = Depends(get_session),
 ):
     """Alias for detail returning weekly points, historical desilt events, and recovery projection."""
-    result = await drain_health_service.detail(session, spot_id, Config.DRAIN_CRITICAL_DELTA)
+    result = await drain_health_service.detail(session, spot_id, Config.DRAIN_CRITICAL_DELTA, at)
     if result is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

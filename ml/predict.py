@@ -59,7 +59,7 @@ class Predictor:
         return self._predict(spot_id, moment, cur, persist)
 
     def _predict(self, spot_id: int, moment: datetime | None, cur, persist: bool) -> dict:
-        moment = moment or datetime.now(timezone.utc)
+        moment = moment or Config.HERO_TIMESTAMP
         spots = load_spots(cur)
         if spot_id not in spots:
             raise KeyError(f"unknown spot_id {spot_id}")
@@ -137,7 +137,7 @@ class Predictor:
             result["prediction_id"] = row[0]
 
     def predict_all(self, moment: datetime | None = None, persist: bool = True) -> list[dict]:
-        moment = moment or datetime.now(timezone.utc)
+        moment = moment or Config.HERO_TIMESTAMP
         with cursor() as cur:
             spot_ids = sorted(load_spots(cur))
             return [self.predict_one(sid, moment, cur=cur, persist=persist) for sid in spot_ids]
