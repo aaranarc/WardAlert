@@ -15,11 +15,11 @@ import {
   ResponsiveContainer,
   ReferenceLine,
 } from "recharts";
-import { DrainHealthDetail } from "@/lib/types";
+import { DrainHealthDetail, DesiltResponse } from "@/lib/types";
 import { FailureBadge } from "./FailureBadge";
 import { formatDate } from "@/lib/utils";
 import { api } from "@/lib/api";
-import { IconCheck, IconTruck, IconRefresh, IconWarning } from "@/components/Common/Icons";
+import { IconCheck, IconTruck, IconWarning } from "@/components/Common/Icons";
 
 interface TrendChartProps {
   detail: DrainHealthDetail | null;
@@ -32,6 +32,7 @@ export function TrendChart({ detail, isLoading, onDesilted }: TrendChartProps) {
   const [viewMode, setViewMode] = useState<"delta" | "health" | "spread">("delta");
   const [isDesilting, setIsDesilting] = useState(false);
   const [actionNotice, setActionNotice] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [desiltResult, setDesiltResult] = useState<DesiltResponse | null>(null);
 
   useEffect(() => {
     setIsMounted(true);
@@ -39,6 +40,7 @@ export function TrendChart({ detail, isLoading, onDesilted }: TrendChartProps) {
 
   useEffect(() => {
     setActionNotice(null);
+    setDesiltResult(null);
   }, [detail?.spot_id]);
 
   const handleDesilt = async () => {
@@ -47,9 +49,12 @@ export function TrendChart({ detail, isLoading, onDesilted }: TrendChartProps) {
     setActionNotice(null);
     try {
       const res = await api.desiltDrain(detail.spot_id);
+      setDesiltResult(res);
       setActionNotice({
         type: "success",
-        text: res.message || `Successfully desilted ${detail.name}. Hydraulic capacity restored to ${res.health_score ?? "95"}%.`,
+        text:
+          res.message ||
+          `Desilting logged for ${res.spot_name || detail.name}. Projected drain health: ${res.projected_health.toFixed(1)}/100. Historical residuals preserved.`,
       });
       if (onDesilted) {
         onDesilted();
@@ -83,17 +88,48 @@ export function TrendChart({ detail, isLoading, onDesilted }: TrendChartProps) {
     document.body.removeChild(link);
   };
 
+  const latestDesiltEvent = detail?.desilt_events && detail.desilt_events.length > 0
+    ? detail.desilt_events[detail.desilt_events.length - 1]
+    : null;
+
+  const hasDesilted = Boolean(desiltResult || latestDesiltEvent);
+  const projectedResidual = desiltResult?.projected_residual ?? latestDesiltEvent?.projected_residual ?? 0.0200;
+  const projectedHealth =
+    desiltResult?.projected_health ??
+    (latestDesiltEvent
+      ? Number((100 * (1 - latestDesiltEvent.projected_residual / 0.300)).toFixed(1))
+      : 93.3);
+  const projectedSlope = desiltResult?.projected_slope ?? -0.0050;
+  const predictedFailure = desiltResult?.predicted_failure || (hasDesilted ? "Monsoon Ready" : null);
+
+  const allDesiltLabels = useMemo(() => {
+    const labels: string[] = [];
+    if (detail?.desilt_events) {
+      for (const ev of detail.desilt_events) {
+        const l = formatDate(ev.desilted_at);
+        if (!labels.includes(l)) labels.push(l);
+      }
+    }
+    if (desiltResult?.desilted_at) {
+      const l = formatDate(desiltResult.desilted_at);
+      if (!labels.includes(l)) labels.push(l);
+    }
+    return labels;
+  }, [detail?.desilt_events, desiltResult]);
+
   const chartData = useMemo(() => {
     if (!detail) return [];
     const list = detail.weekly || (detail as any).weekly_history || [];
     if (!Array.isArray(list) || list.length === 0) return [];
-    return list.map((pt: any, idx: number) => {
+
+    const historical = list.map((pt: any, idx: number) => {
       const t = idx;
       let trendVal = null;
       const slope = detail.trend_slope ?? (detail as any).regression_slope ?? null;
       const intercept = detail.trend_intercept ?? 0.02;
       if (slope !== null && intercept !== null) {
         trendVal = Number((intercept + slope * t).toFixed(4));
+        if (trendVal < 0) trendVal = 0;
       }
 
       const weekNum = pt.week_number ?? (list.length - idx);
@@ -105,13 +141,79 @@ export function TrendChart({ detail, isLoading, onDesilted }: TrendChartProps) {
         year: pt.year ?? 2025,
         avgDelta: Number((pt.avg_delta ?? pt.actual_delta ?? 0).toFixed(4)),
         maxDelta: Number((pt.max_delta ?? (pt.avg_delta ?? pt.actual_delta ?? 0) * 1.35).toFixed(4)),
-        trend: trendVal ?? pt.trend_delta ?? null,
+        trend: trendVal !== null ? Math.max(0, trendVal) : pt.trend_delta ?? null,
         healthScore: Number((pt.health_score ?? detail.health_score ?? 85).toFixed(1)),
         predictions: pt.prediction_count ?? 14,
         note: pt.note,
+        recoveryResidual: null as number | null,
+        recoveryHealth: null as number | null,
+        isProjection: false,
+        isDesiltMarker: false,
       };
     });
-  }, [detail]);
+
+    if (!hasDesilted) {
+      return historical;
+    }
+
+    const desiltDateStr = desiltResult?.desilted_at || latestDesiltEvent?.desilted_at || new Date().toISOString();
+    const desiltMarkerLabel = formatDate(desiltDateStr);
+
+    const anchorPoint = {
+      name: desiltMarkerLabel,
+      week: "Desilt",
+      year: new Date(desiltDateStr).getFullYear(),
+      avgDelta: null,
+      maxDelta: null,
+      trend: null,
+      healthScore: null,
+      recoveryResidual: 0.0200,
+      recoveryHealth: 93.3,
+      predictions: 0,
+      note: "Desilted (Capacity Reset)",
+      isProjection: true,
+      isDesiltMarker: true,
+    };
+
+    const projectionPoints =
+      detail.forward_projection && detail.forward_projection.length > 0
+        ? detail.forward_projection.map((fp) => ({
+            name: formatDate(fp.date_str),
+            week: `+${fp.week_offset}w`,
+            year: new Date(fp.date_str).getFullYear(),
+            avgDelta: null,
+            maxDelta: null,
+            trend: null,
+            healthScore: null,
+            recoveryResidual: fp.projected_residual,
+            recoveryHealth: fp.projected_health,
+            predictions: 0,
+            note: `W+${fp.week_offset} Recovery`,
+            isProjection: true,
+            isDesiltMarker: false,
+          }))
+        : [0.020, 0.022, 0.025, 0.030, 0.045, 0.065, 0.090, 0.120].map((res, i) => {
+            const offset = i + 1;
+            const dt = new Date(Date.now() + offset * 7 * 24 * 3600 * 1000);
+            return {
+              name: formatDate(dt.toISOString()),
+              week: `+${offset}w`,
+              year: dt.getFullYear(),
+              avgDelta: null,
+              maxDelta: null,
+              trend: null,
+              healthScore: null,
+              recoveryResidual: res,
+              recoveryHealth: Number((100 * (1 - res / 0.300)).toFixed(1)),
+              predictions: 0,
+              note: `W+${offset} Recovery`,
+              isProjection: true,
+              isDesiltMarker: false,
+            };
+          });
+
+    return [...historical, anchorPoint, ...projectionPoints];
+  }, [detail, hasDesilted, desiltResult, latestDesiltEvent]);
 
   if (isLoading) {
     return (
@@ -133,7 +235,7 @@ export function TrendChart({ detail, isLoading, onDesilted }: TrendChartProps) {
     );
   }
 
-  const criticalDelta = detail.critical_delta ?? 0.5135;
+  const criticalDelta = detail.critical_delta ?? 0.3000;
   const failureDateFormatted = detail.predicted_failure_date
     ? formatDate(detail.predicted_failure_date)
     : null;
@@ -146,8 +248,8 @@ export function TrendChart({ detail, isLoading, onDesilted }: TrendChartProps) {
           <div className="flex items-center gap-2">
             <h3 className="text-sm font-bold text-slate-900">{detail.name}</h3>
             <FailureBadge
-              status={detail.status}
-              predictedFailureDate={detail.predicted_failure_date}
+              status={hasDesilted ? "improving" : detail.status}
+              predictedFailureDate={hasDesilted ? null : detail.predicted_failure_date}
             />
           </div>
           <div className="text-[11px] text-slate-500 font-mono mt-0.5 flex items-center gap-2">
@@ -165,7 +267,8 @@ export function TrendChart({ detail, isLoading, onDesilted }: TrendChartProps) {
             <div className="text-right">
               <div className="text-[9px] text-slate-400 uppercase font-semibold">Drain Health</div>
               <div className="text-sm font-bold font-mono text-[#0066cc]">
-                {(detail.health_score ?? 0).toFixed(1)} <span className="text-[10px] text-slate-400">/ 100</span>
+                {(hasDesilted ? projectedHealth : (detail.health_score ?? 0)).toFixed(1)}{" "}
+                <span className="text-[10px] text-slate-400">/ 100</span>
               </div>
             </div>
           </div>
@@ -225,21 +328,37 @@ export function TrendChart({ detail, isLoading, onDesilted }: TrendChartProps) {
         <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100 space-y-0.5">
           <div className="text-[10px] text-slate-500 font-medium">Current Avg Residual</div>
           <div className="text-xs font-bold font-mono text-slate-900">
-            +{(detail.avg_delta ?? 0).toFixed(4)}
+            {hasDesilted ? `+${projectedResidual.toFixed(4)}` : `+${(detail.avg_delta ?? 0).toFixed(4)}`}
           </div>
+          {hasDesilted && (
+            <div className="text-[9px] text-sky-600 font-medium leading-tight">
+              (post-desilt projection)
+            </div>
+          )}
         </div>
 
         <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100 space-y-0.5">
           <div className="text-[10px] text-slate-500 font-medium">Weekly Slope</div>
           <div
             className={`text-xs font-bold font-mono ${
-              detail.trend_slope && detail.trend_slope > 0 ? "text-amber-600" : "text-emerald-600"
+              hasDesilted
+                ? "text-emerald-600"
+                : detail.trend_slope && detail.trend_slope > 0
+                ? "text-amber-600"
+                : "text-emerald-600"
             }`}
           >
-            {detail.trend_slope !== null
+            {hasDesilted
+              ? `${projectedSlope > 0 ? "+" : ""}${projectedSlope.toFixed(4)}/wk`
+              : detail.trend_slope !== null
               ? `${detail.trend_slope > 0 ? "+" : ""}${(detail.trend_slope * 100).toFixed(3)}%/wk`
               : "Stable"}
           </div>
+          {hasDesilted && (
+            <div className="text-[9px] text-emerald-600 font-medium leading-tight">
+              (recovery projection)
+            </div>
+          )}
         </div>
 
         <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100 space-y-0.5">
@@ -252,8 +371,13 @@ export function TrendChart({ detail, isLoading, onDesilted }: TrendChartProps) {
         <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100 space-y-0.5">
           <div className="text-[10px] text-slate-500 font-medium">Predicted Failure</div>
           <div className="text-xs font-bold font-mono text-slate-800 truncate">
-            {failureDateFormatted || "Monsoon Ready (Safe)"}
+            {hasDesilted ? (predictedFailure || "Monsoon Ready") : (failureDateFormatted || "Monsoon Ready (Safe)")}
           </div>
+          {hasDesilted && (
+            <div className="text-[9px] text-emerald-600 font-medium leading-tight">
+              (hydraulic reset)
+            </div>
+          )}
         </div>
       </div>
 
@@ -309,7 +433,7 @@ export function TrendChart({ detail, isLoading, onDesilted }: TrendChartProps) {
         </div>
 
         {/* Legend Indicators */}
-        <div className="flex items-center gap-4 text-[11px] text-slate-500 pt-1">
+        <div className="flex flex-wrap items-center gap-4 text-[11px] text-slate-500 pt-1">
           {viewMode === "delta" && (
             <>
               <span className="flex items-center gap-1 text-[#0066cc]">
@@ -324,6 +448,12 @@ export function TrendChart({ detail, isLoading, onDesilted }: TrendChartProps) {
                 <span className="w-2.5 h-0.5 bg-rose-600" />
                 Critical Threshold ({criticalDelta.toFixed(3)})
               </span>
+              {hasDesilted && (
+                <span className="flex items-center gap-1 text-sky-600 font-medium">
+                  <span className="w-2.5 h-0.5 border-t-2 border-dashed border-sky-500" />
+                  Recovery Projection (8 wks)
+                </span>
+              )}
             </>
           )}
           {viewMode === "health" && (
@@ -340,6 +470,12 @@ export function TrendChart({ detail, isLoading, onDesilted }: TrendChartProps) {
                 <span className="w-2.5 h-0.5 border-t border-dashed border-rose-500" />
                 Overdue Critical (55)
               </span>
+              {hasDesilted && (
+                <span className="flex items-center gap-1 text-emerald-600 font-medium">
+                  <span className="w-2.5 h-0.5 border-t-2 border-dashed border-emerald-500" />
+                  Recovery Projection
+                </span>
+              )}
             </>
           )}
           {viewMode === "spread" && (
@@ -385,8 +521,8 @@ export function TrendChart({ detail, isLoading, onDesilted }: TrendChartProps) {
                     stroke="#64748b"
                     fontSize={10}
                     tickLine={false}
-                    domain={[0, Math.max(0.08, criticalDelta * 1.1)]}
-                    tickFormatter={(v) => v.toFixed(2)}
+                    domain={[0, (dataMax: number) => Math.max(0.65, Number(((dataMax || 0) + 0.05).toFixed(2)))]}
+                    tickFormatter={(v) => Number(v).toFixed(2)}
                   />
                   <Tooltip
                     content={({ active, payload }) => {
@@ -395,29 +531,55 @@ export function TrendChart({ detail, isLoading, onDesilted }: TrendChartProps) {
                         return (
                           <div className="bg-white/95 backdrop-blur-sm border border-slate-200 p-3 rounded-xl shadow-md text-xs font-mono">
                             <div className="font-bold text-slate-900 mb-1.5 pb-1 border-b border-slate-100 flex items-center justify-between gap-3">
-                              <span>{data.name} (W{data.week})</span>
+                              <span>{data.name} {data.week ? `(${data.week})` : ""}</span>
                               {data.note && (
-                                <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 font-sans">
+                                <span
+                                  className={`text-[9px] px-1.5 py-0.5 rounded font-sans ${
+                                    data.isProjection
+                                      ? "bg-sky-100 text-sky-800"
+                                      : "bg-emerald-100 text-emerald-800"
+                                  }`}
+                                >
                                   {data.note}
                                 </span>
                               )}
                             </div>
-                            <div className="space-y-1 text-slate-600">
-                              <p>
-                                Avg Residual: <span className="text-[#0066cc] font-bold">+{data.avgDelta}</span>
-                              </p>
-                              <p>
-                                Peak Residual: <span className="text-slate-800">+{data.maxDelta}</span>
-                              </p>
-                              {data.trend !== null && (
+                            {data.isProjection ? (
+                              <div className="space-y-1 text-slate-600">
                                 <p>
-                                  Linear Trend: <span className="text-amber-600 font-bold">+{data.trend}</span>
+                                  Projected Residual:{" "}
+                                  <span className="text-sky-600 font-bold">
+                                    +{Number(data.recoveryResidual || 0).toFixed(4)}
+                                  </span>
                                 </p>
-                              )}
-                              <p>
-                                Health Score: <span className="text-emerald-600 font-bold">{data.healthScore?.toFixed(1) || "N/A"}</span>
-                              </p>
-                            </div>
+                                <p>
+                                  Projected Health:{" "}
+                                  <span className="text-emerald-600 font-bold">
+                                    {Number(data.recoveryHealth || 0).toFixed(1)} / 100
+                                  </span>
+                                </p>
+                              </div>
+                            ) : (
+                              <div className="space-y-1 text-slate-600">
+                                <p>
+                                  Avg Residual: <span className="text-[#0066cc] font-bold">+{data.avgDelta}</span>
+                                </p>
+                                <p>
+                                  Peak Residual: <span className="text-slate-800">+{data.maxDelta}</span>
+                                </p>
+                                {data.trend !== null && (
+                                  <p>
+                                    Linear Trend: <span className="text-amber-600 font-bold">+{data.trend}</span>
+                                  </p>
+                                )}
+                                <p>
+                                  Health Score:{" "}
+                                  <span className="text-emerald-600 font-bold">
+                                    {data.healthScore?.toFixed(1) || "N/A"}
+                                  </span>
+                                </p>
+                              </div>
+                            )}
                           </div>
                         );
                       }
@@ -436,6 +598,21 @@ export function TrendChart({ detail, isLoading, onDesilted }: TrendChartProps) {
                       position: "insideTopRight",
                     }}
                   />
+                  {allDesiltLabels.map((lbl, idx) => (
+                    <ReferenceLine
+                      key={`desilt-ref-delta-${idx}`}
+                      x={lbl}
+                      stroke="#64748b"
+                      strokeDasharray="4 4"
+                      strokeWidth={1.5}
+                      label={{
+                        value: "Desilted",
+                        fill: "#475569",
+                        fontSize: 10,
+                        position: "top",
+                      }}
+                    />
+                  ))}
                   <Area
                     type="monotone"
                     dataKey="avgDelta"
@@ -454,6 +631,19 @@ export function TrendChart({ detail, isLoading, onDesilted }: TrendChartProps) {
                     dot={false}
                     name="Linear Fit"
                   />
+                  {hasDesilted && (
+                    <Line
+                      type="monotone"
+                      dataKey="recoveryResidual"
+                      stroke="#0284c7"
+                      strokeDasharray="4 4"
+                      strokeWidth={2}
+                      dot={{ r: 3, fill: "#0284c7" }}
+                      activeDot={{ r: 5, fill: "#0284c7" }}
+                      name="Recovery Projection"
+                      connectNulls={false}
+                    />
+                  )}
                 </ComposedChart>
               ) : viewMode === "health" ? (
                 <LineChart
@@ -474,7 +664,7 @@ export function TrendChart({ detail, isLoading, onDesilted }: TrendChartProps) {
                     stroke="#64748b"
                     fontSize={10}
                     tickLine={false}
-                    domain={[20, 100]}
+                    domain={[0, 100]}
                     tickFormatter={(v) => `${v}%`}
                   />
                   <Tooltip
@@ -483,15 +673,44 @@ export function TrendChart({ detail, isLoading, onDesilted }: TrendChartProps) {
                         const data = payload[0].payload;
                         return (
                           <div className="bg-white/95 backdrop-blur-sm border border-slate-200 p-3 rounded-xl shadow-md text-xs font-mono">
-                            <div className="font-bold text-slate-900 mb-1 pb-1 border-b border-slate-100">
-                              {data.name} (W{data.week})
+                            <div className="font-bold text-slate-900 mb-1 pb-1 border-b border-slate-100 flex items-center justify-between gap-3">
+                              <span>{data.name} {data.week ? `(${data.week})` : ""}</span>
+                              {data.note && (
+                                <span
+                                  className={`text-[9px] px-1.5 py-0.5 rounded font-sans ${
+                                    data.isProjection
+                                      ? "bg-sky-100 text-sky-800"
+                                      : "bg-emerald-100 text-emerald-800"
+                                  }`}
+                                >
+                                  {data.note}
+                                </span>
+                              )}
                             </div>
-                            <p className="text-emerald-700 font-bold text-sm">
-                              Health Score: {data.healthScore?.toFixed(1)} / 100
-                            </p>
-                            <p className="text-[10px] text-slate-500 mt-1">
-                              Status: {data.healthScore >= 70 ? "Stable" : data.healthScore >= 55 ? "Degrading" : "Overdue"}
-                            </p>
+                            {data.isProjection ? (
+                              <div className="space-y-1 text-slate-600">
+                                <p className="text-emerald-700 font-bold text-sm">
+                                  Projected Health: {Number(data.recoveryHealth || 0).toFixed(1)} / 100
+                                </p>
+                                <p className="text-[10px] text-slate-500 mt-1">
+                                  Status: Forward Recovery Projection
+                                </p>
+                              </div>
+                            ) : (
+                              <div className="space-y-1 text-slate-600">
+                                <p className="text-emerald-700 font-bold text-sm">
+                                  Health Score: {data.healthScore?.toFixed(1)} / 100
+                                </p>
+                                <p className="text-[10px] text-slate-500 mt-1">
+                                  Status:{" "}
+                                  {data.healthScore >= 70
+                                    ? "Stable"
+                                    : data.healthScore >= 55
+                                    ? "Degrading"
+                                    : "Overdue"}
+                                </p>
+                              </div>
+                            )}
                           </div>
                         );
                       }
@@ -510,6 +729,21 @@ export function TrendChart({ detail, isLoading, onDesilted }: TrendChartProps) {
                     strokeDasharray="3 3"
                     label={{ value: "Overdue (55)", fill: "#e11d48", fontSize: 10, position: "insideBottomLeft" }}
                   />
+                  {allDesiltLabels.map((lbl, idx) => (
+                    <ReferenceLine
+                      key={`desilt-ref-health-${idx}`}
+                      x={lbl}
+                      stroke="#64748b"
+                      strokeDasharray="4 4"
+                      strokeWidth={1.5}
+                      label={{
+                        value: "Desilted",
+                        fill: "#475569",
+                        fontSize: 10,
+                        position: "top",
+                      }}
+                    />
+                  ))}
                   <Line
                     type="monotone"
                     dataKey="healthScore"
@@ -519,6 +753,19 @@ export function TrendChart({ detail, isLoading, onDesilted }: TrendChartProps) {
                     activeDot={{ r: 5 }}
                     name="Health Score"
                   />
+                  {hasDesilted && (
+                    <Line
+                      type="monotone"
+                      dataKey="recoveryHealth"
+                      stroke="#10b981"
+                      strokeDasharray="4 4"
+                      strokeWidth={2}
+                      dot={{ r: 3, fill: "#10b981" }}
+                      activeDot={{ r: 5, fill: "#10b981" }}
+                      name="Recovery Projection"
+                      connectNulls={false}
+                    />
+                  )}
                 </LineChart>
               ) : (
                 <BarChart
@@ -539,9 +786,41 @@ export function TrendChart({ detail, isLoading, onDesilted }: TrendChartProps) {
                     stroke="#64748b"
                     fontSize={10}
                     tickLine={false}
-                    tickFormatter={(v) => v.toFixed(2)}
+                    tickFormatter={(v) => Number(v).toFixed(2)}
                   />
-                  <Tooltip />
+                  <Tooltip
+                    content={({ active, payload }) => {
+                      if (active && payload && payload.length) {
+                        const data = payload[0].payload;
+                        if (data.isProjection) return null;
+                        return (
+                          <div className="bg-white/95 backdrop-blur-sm border border-slate-200 p-3 rounded-xl shadow-md text-xs font-mono">
+                            <div className="font-bold text-slate-900 mb-1 pb-1 border-b border-slate-100">
+                              {data.name} (W{data.week})
+                            </div>
+                            <p className="text-[#0066cc] font-bold">Avg Residual: +{data.avgDelta}</p>
+                            <p className="text-indigo-600 font-bold">Peak Residual: +{data.maxDelta}</p>
+                          </div>
+                        );
+                      }
+                      return null;
+                    }}
+                  />
+                  {allDesiltLabels.map((lbl, idx) => (
+                    <ReferenceLine
+                      key={`desilt-ref-bar-${idx}`}
+                      x={lbl}
+                      stroke="#64748b"
+                      strokeDasharray="4 4"
+                      strokeWidth={1.5}
+                      label={{
+                        value: "Desilted",
+                        fill: "#475569",
+                        fontSize: 10,
+                        position: "top",
+                      }}
+                    />
+                  ))}
                   <Bar dataKey="avgDelta" fill="#0066cc" name="Average Residual" radius={[3, 3, 0, 0]} />
                   <Bar dataKey="maxDelta" fill="#818cf8" name="Peak Residual" radius={[3, 3, 0, 0]} />
                 </BarChart>

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import date
+from datetime import date, datetime
 
 from pydantic import BaseModel, Field
 
@@ -36,6 +36,34 @@ class WeeklyPoint(BaseModel):
     health_score: float | None = None
 
 
+class DesiltEventRecord(BaseModel):
+    id: int | None = None
+    spot_id: int
+    desilted_at: datetime
+    crew: str = "BMC Ward G-South"
+    pre_residual: float
+    projected_residual: float = 0.02
+
+
+class ForwardProjectionPoint(BaseModel):
+    week_offset: int
+    date_str: str
+    projected_residual: float
+    projected_health: float
+
+
+class DesiltResponse(BaseModel):
+    spot_id: int
+    spot_name: str
+    desilted_at: datetime
+    pre_residual: float
+    projected_residual: float
+    projected_health: float
+    projected_slope: float
+    predicted_failure: str
+    message: str | None = None
+
+
 class DrainHealthDetail(BaseModel):
     spot_id: int
     name: str
@@ -51,4 +79,6 @@ class DrainHealthDetail(BaseModel):
     critical_delta: float = Field(description="learned Δ level the trend extrapolates toward")
     status: str
     weekly: list[WeeklyPoint] = []
+    desilt_events: list[DesiltEventRecord] = []
+    forward_projection: list[ForwardProjectionPoint] = []
     message: str | None = None

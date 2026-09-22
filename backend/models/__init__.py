@@ -2,6 +2,7 @@
 from backend.models.base import Base
 from backend.models.alert_sent import AlertSent
 from backend.models.crowd_report import CrowdReport
+from backend.models.desilt_event import DesiltEvent
 from backend.models.drain_health_weekly import DrainHealthWeekly
 from backend.models.drainage_segment import DrainageSegment
 from backend.models.feature_snapshot import FeatureSnapshot
@@ -16,6 +17,7 @@ __all__ = [
     "Base",
     "AlertSent",
     "CrowdReport",
+    "DesiltEvent",
     "DrainHealthWeekly",
     "DrainageSegment",
     "FeatureSnapshot",
