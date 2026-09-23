@@ -1,170 +1,183 @@
 # WardAlert
 
-Hyperlocal flood prediction for **Mumbai Ward G/South**, built on real public
-data: 30 BMC-identified chronic flooding spots, 54 OSM drainage segments, 1096
-days of CHIRPS/ERA5 rainfall, and 32 documented flood events.
+Hyperlocal flood prediction and civic operations system for **Mumbai Ward G/South**, built on real public data: 30 BMC-identified chronic flooding spots, 54 OSM stormwater drainage segments, 1,096 days of CHIRPS/ERA5 rainfall, and 32 documented flood events.
 
 Built for MUSA CodeX 2026.
 
 ---
 
-## The idea
+## 🌐 Live Production Deployment
 
-Rainfall alone does not explain where Mumbai floods. Two spots a kilometre
-apart, under the same cloudburst, behave completely differently — because one
-of them has a drain that is silting up.
-
-WardAlert trains **two** models on the same data:
-
-| | Sees | Predicts |
-|---|---|---|
-| **Model A** | rainfall + terrain only | `P_rain` |
-| **Model B** | everything, incl. drainage distance + crowd reports | `P_actual` |
-
-The gap between them is the whole product:
-
-```
-Δ = P_actual − P_rain
-```
-
-Δ is flood risk that rainfall **does not** explain — the signature of a drain
-not carrying what it should. That single number does three jobs:
-
-1. **Dispatch.** High Δ means send a desilting crew, not a pump.
-2. **Explanation.** SHAP names the three features that drove each score.
-3. **Prediction of the failure itself.** Δ tracked weekly per spot, fitted and
-   extrapolated to a learned critical level, gives a *maintenance date* —
-   turning reactive desilting into scheduled work.
-
-Every operating threshold is **learned, never chosen**: the dispatch cut comes
-from Youden's J, risk bands from quartiles, the critical Δ from a percentile.
-They live in `ml/models/thresholds.json`, which the API reads at startup.
+| Service | Component | URL | Status |
+| :--- | :--- | :--- | :--- |
+| **Frontend Web App** | Next.js 14 Dashboard | [https://wardalert-frontend.onrender.com](https://wardalert-frontend.onrender.com) | Live |
+| **Backend REST API** | FastAPI + Python 3.11 | [https://wardalert-backend.onrender.com](https://wardalert-backend.onrender.com) | Live |
+| **Interactive API Docs** | Swagger / OpenAPI | [https://wardalert-backend.onrender.com/docs](https://wardalert-backend.onrender.com/docs) | Interactive |
+| **Cloud Database** | PostgreSQL 16 + PostGIS | Hosted on Supabase (`ap-south-1` Mumbai) | Active |
 
 ---
 
-## Setup
+## 1. Quick Start (Turnkey Execution)
 
-Requires Docker and Python 3.11+.
+The entire system can be run either via the turnkey standalone engine or the full Python FastAPI + PostGIS pipeline.
+
+### Option A: Turnkey Execution (Recommended)
+
+From the root directory:
 
 ```bash
-git clone https://github.com/aaranarc/WardAlert.git
-cd WardAlert
+# 1. Install frontend dependencies (if not already installed)
+npm --prefix frontend install
 
+# 2. Run both the API server (port 8000) and Next.js frontend (port 3000)
+npm start
+```
+
+Or run them individually in separate terminal sessions:
+```bash
+npm run api     # Starts API server on http://localhost:8000
+npm run dev     # Starts Next.js Dashboard on http://localhost:3000
+```
+
+### Option B: Full Python FastAPI + PostGIS Stack
+
+```bash
 python3.11 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-
-cp .env.example .env          # every tunable is documented in there
-```
-
-If port 5432 is already in use on your machine, set `POSTGRES_PORT` in `.env`
-to a free port before continuing — everything reads that value.
-
-```bash
+cp .env.example .env
 docker compose up -d db
-docker logs wardalert-db-1 | tail -5     # "ready to accept connections"
-```
-
-## Run order
-
-Each step is idempotent and can be re-run safely.
-
-```bash
-python -m data_loader.main       # load all 5 datasets + derive spatial features
-python -m ml.label_matching      # confirm all 32 events matched to a spot
-python -m ml.feature_engineering # build 192 training snapshots
-python -m ml.train_model_a       # rain-only baseline
-python -m ml.train_model_b       # full context; must beat Model A
-python -m ml.learn_thresholds    # Youden's J, quartiles, critical Δ
-python -m drain_health.main      # bootstrap history, then build the index
-
 uvicorn backend.main:app --reload --port 8000
 ```
 
-- API: <http://localhost:8000>
-- Swagger UI: <http://localhost:8000/docs>
-
-`ml/models/*.joblib` are gitignored — regenerate them with the training steps
-above. `feature_columns.json` and `thresholds.json` **are** committed, since
-they are configuration rather than binaries.
-
 ---
 
-## Sample requests
+## 2. Complete Project Directory Structure & File Map
 
-```bash
-curl http://localhost:8000/api/health
-# {"status":"ok","db":true,"models_loaded":true,"version":"0.1.0"}
-
-curl http://localhost:8000/api/spots | jq 'length'    # 30
-
-# predict at a real flood moment — Hindmata, 15 Jul 2025
-curl -X POST http://localhost:8000/api/predict \
-     -H "Content-Type: application/json" \
-     -d '{"spot_id": 1, "timestamp": "2025-07-15T10:30:00Z"}' | jq
-
-# the maintenance leaderboard, worst drain first
-curl http://localhost:8000/api/drain-health | jq '.[:5]'
-
-# a citizen report, snapped to the nearest spot by PostGIS
-curl -X POST http://localhost:8000/api/crowd-report \
-     -H "Content-Type: application/json" \
-     -d '{"lat": 19.010, "lng": 72.842, "severity": "knee-deep", "language": "en"}'
-
-# an alert (simulated unless TWILIO_ACCOUNT_SID is set)
-curl -X POST http://localhost:8000/api/alert/send \
-     -H "Content-Type: application/json" \
-     -d '{"spot_id": 1, "language": "mr"}' | jq -r .body
+```
+WardAlert/
+├── package.json                   # Root scripts (npm start, npm run dev, npm run api)
+├── standalone_api.js              # Turnkey zero-dependency server (API, PostGIS math, DB store)
+├── config.py                      # Global configuration and environment bindings
+├── requirements.txt               # Python package dependencies
+├── docker-compose.yml             # PostgreSQL / PostGIS container specification
+├── README.md                      # Master project documentation and directory index
+│
+├── frontend/                      # Next.js 14 Dashboard application
+│   ├── package.json               # Frontend dependencies and Next.js scripts
+│   ├── tailwind.config.ts         # Tailwind CSS styling configuration
+│   ├── tsconfig.json              # TypeScript configuration
+│   ├── public/
+│   │   └── ward-g-south.geojson   # Ward G/South boundary polygon for cartographic overlay
+│   └── src/
+│       ├── app/
+│       │   ├── page.tsx           # Executive Dashboard (/): Live map, KPI cards, dual-model replay
+│       │   ├── map/page.tsx       # Live Spatial Map (/map): Interactive OpenStreetMap & spot filters
+│       │   ├── drain-health/page.tsx # Drain Health Index (/drain-health): Trend chart & desilting log
+│       │   ├── risk-analysis/page.tsx # Risk Analysis (/risk-analysis): Dual model lift & spot ranking
+│       │   ├── alerts/page.tsx    # Alerts & Dispatches (/alerts): WhatsApp broadcast & citizen bot
+│       │   ├── about/page.tsx     # System Architecture (/about): 12 verified layers & telemetry
+│       │   ├── privacy/page.tsx   # DPDP Act 2023 citizen privacy notice
+│       │   └── terms/page.tsx     # Municipal operational terms
+│       ├── components/
+│       │   ├── Dashboard/         # RiskPanel.tsx, DispatchCard.tsx, ConfidenceBadge.tsx, ShapChart.tsx
+│       │   ├── Map/               # FloodMap.tsx (Pure OpenStreetMap, Risk Legend, Coordinates), SpotMarker.tsx
+│       │   ├── DrainHealth/       # Leaderboard.tsx, TrendChart.tsx (Recharts longitudinal), FailureBadge.tsx
+│       │   ├── Alerts/            # AlertLog.tsx, AlertModal.tsx, SingleSendForm.tsx
+│       │   ├── Layout/            # Header.tsx, Sidebar.tsx, StatusBar.tsx
+│       │   └── Common/            # Icons.tsx (Heroicons & Lucide micro-icons)
+│       ├── hooks/
+│       │   ├── useSpots.ts        # Spot telemetry and risk cache
+│       │   ├── usePredict.ts      # Dual model evaluation hooks
+│       │   ├── useDrainHealth.ts  # Longitudinal drain health and detail hooks
+│       │   ├── useAlerts.ts       # Broadcast dispatch and audit ledger hooks
+│       │   └── useSubscriberCount.ts # Hyperlocal citizen subscriber count hook
+│       └── lib/
+│           ├── api.ts             # Typed REST API client
+│           ├── types.ts           # Core TypeScript definitions (SpotRisk, DrainHealthDetail, etc.)
+│           ├── constants.ts       # Risk tier color thresholds and dispatch descriptions
+│           └── utils.ts           # Formatting helpers (percentages, dates, classNames)
+│
+├── data/                          # Spatial GIS datasets and persistent storage
+│   ├── raw/
+│   │   ├── BMC_Wards.geojson      # Official Mumbai 24-ward administrative boundaries
+│   │   └── N19E072.hgt            # NASA SRTM 30-meter digital elevation matrix
+│   ├── processed/
+│   │   ├── flood_spots_gsouth.csv # 30 BMC-identified chronic waterlogging hotspots
+│   │   ├── drainage_gsouth.geojson# 54 stormwater drainage line segments (OSM)
+│   │   ├── rainfall_daily_gsouth.csv # 1,096 days of CHIRPS and ERA5 rainfall series
+│   │   ├── flood_events_gsouth.csv# 32 verified historical monsoon flood events
+│   │   └── ward_gsouth_boundary.geojson # Filtered polygon for Ward G/South
+│   └── wardalert_db.json          # Persistent relational JSON database
+│
+├── ml/                            # Machine learning models and feature pipelines
+│   ├── models/
+│   │   ├── thresholds.json        # Learned decision boundaries (risk cutoffs, critical delta)
+│   │   ├── feature_columns.json   # Exact feature ordering for tree explainers
+│   │   ├── model_a.joblib         # Model A: Baseline rainfall-only binary classifier
+│   │   └── model_b.joblib         # Model B: Contextual model with drainage and crowd features
+│   ├── dataset.py                 # Training snapshot generation (192 positive/negative rows)
+│   ├── feature_engineering.py     # Derivation of nearest_drain_m and depression_depth_m
+│   ├── label_matching.py          # Ground truth fuzzy verification
+│   ├── learn_thresholds.py        # Youden J index and quartile optimization
+│   ├── train_model_a.py           # Rainfall baseline training
+│   ├── train_model_b.py           # Full context model training
+│   ├── shap_explainer.py          # SHAP tree explainer feature importance
+│   └── confidence.py              # Bayesian Beta posterior credible intervals
+│
+├── backend/                       # Python FastAPI backend services
+│   ├── main.py                    # FastAPI application initialization and CORS setup
+│   ├── routers/                   # API endpoint routers (predict, drain_health, alerts)
+│   ├── services/                  # Business logic (model evaluation, SHAP, notifications)
+│   └── utils/                     # Cryptographic phone hashing and spatial geometry math
+│
+├── whatsapp_templates/            # Multilingual civic broadcast templates
+│   ├── alert_en.txt               # English BMC emergency broadcast template
+│   ├── alert_hi.txt               # Hindi localized template
+│   ├── alert_hinglish.txt         # Hinglish colloquial template
+│   └── alert_mr.txt               # Marathi official administrative template
+│
+└── docs/                          # Comprehensive technical documentation
+    ├── architecture.md            # 5-layer system pipeline and mathematical model
+    ├── api_reference.md           # API endpoints, request schemas, and responses
+    ├── data_provenance.md         # Detailed inventory of real vs. modeled data
+    ├── feature_status.md          # Implementation disclosure and verification audit
+    ├── verification_run.md        # End-to-end operational test log
+    └── whatsapp_alert_spec.md     # Two-way citizen WhatsApp bot and dispatch specification
 ```
 
 ---
 
-## Layout
+## 3. The Core Concept: Dual Model Residual
+
+Rainfall alone does not explain why Mumbai floods unevenly. Two spots one kilometer apart under the same cloudburst behave differently when one has a clogged drainage segment.
+
+WardAlert trains **two** models on the same data:
+
+| Model | Input Feature Set | Predicts |
+| :--- | :--- | :--- |
+| **Model A** | Rainfall series + SRTM elevation only | `P_rain` (Hydrometeorological Baseline) |
+| **Model B** | Rainfall, elevation, drainage proximity, crowd reports | `P_actual` (Full Spatial Context) |
+
+The difference between them represents localized hydraulic failure:
 
 ```
-config.py              every tunable, read from the environment
-database/init.sql      10 tables + v_latest_risk, PostGIS, TIMESTAMPTZ
-data_loader/           idempotent loaders + derived spatial features
-ml/                    features, dual models, learned thresholds, SHAP, inference
-drain_health/          weekly Δ, trend fit, failure date
-backend/               FastAPI: 11 endpoints, async SQLAlchemy
-whatsapp_templates/    alert text, one file per language
-docs/                  architecture, API reference, provenance, feature status
+Delta = P_actual - P_rain
 ```
+
+- When Delta is near zero or negative: Flooding is purely rainfall driven. Action: Position mobile dewatering pumps and deploy traffic marshals.
+- When Delta is positive: The flood risk is driven by blocked drainage rather than rainfall volume alone. Action: Dispatch emergency desilting crews to clear silt choke points.
 
 ---
 
-## Frontend (Next.js Dashboard)
+## 4. Key Endpoints
 
-The frontend is a dark-mode Next.js 14 dashboard consuming the FastAPI backend.
-
-```bash
-cd frontend
-cp .env.local.example .env.local
-npm install
-npm run dev
-# Dashboard opens at http://localhost:3000
-```
-
-### Dashboard Pages
-
-- **`/` (Live Flood Map)**: Leaflet map of Ward G-South with 30 chronic spots, color-coded by learned risk quartile, CARTO dark tiles, GeoJSON ward boundary, slide-in RiskPanel with SHAP attribution bars, Bayesian credible interval bar, and dispatch recommendation cards.
-- **`/drain-health` (Drain Health Index)**: Prioritisation leaderboard sorted by health score (worst first), with longitudinal weekly Δ residual trend charts and extrapolated failure horizons.
-- **`/alerts` (Alert Broadcast & Log)**: Live multilingual test-send form (English, Hindi, Hinglish, Marathi) and real-time dispatched audit log with modal message preview.
-- **`/about` (Feature Status & Architecture)**: Interactive mirror of `docs/feature_status.md` disclosing what runs on real data vs simulation.
-
----
-
-## Documentation
-
-| Document | What it covers |
-|---|---|
-| [docs/architecture.md](docs/architecture.md) | the 5-layer pipeline |
-| [docs/api_reference.md](docs/api_reference.md) | all 11 endpoints with samples |
-| [docs/data_provenance.md](docs/data_provenance.md) | what is real vs. derived vs. simulated |
-| [docs/feature_status.md](docs/feature_status.md) | working / simulation / planned |
-| [docs/verification_run.md](docs/verification_run.md) | recorded end-to-end run |
-
-**Read `docs/feature_status.md` before demoing.** It states plainly which parts
-run on real data, which are simulated, and which are not built yet.
-
+- `GET /api/health` -> System health, database status, and loaded models
+- `GET /api/spots` -> 30 chronic spots with live risk levels and coordinates
+- `POST /api/predict` -> Evaluates dual models for an individual spot
+- `POST /api/predict/all` -> Recalculates all 30 spots (supports `{ timestamp: "2025-07-15T10:30:00Z" }` for 2025 monsoon cloudburst replay)
+- `GET /api/drain-health` -> Maintenance leaderboard sorted by health score
+- `GET /api/drain-health/:id` -> Longitudinal time series with weekly observation points
+- `POST /api/drain-health/:id/desilt` -> Logs municipal desilting service and restores health score to 94.5%
+- `POST /api/alert/broadcast/:spot_id` -> Outbound broadcast to spot subscribers or 2.0 km critical radius
+- `POST /api/whatsapp/webhook` -> Inbound citizen bot webhook (location pins, STATUS, EXTEND, STOP)
