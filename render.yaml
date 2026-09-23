@@ -15,7 +15,7 @@ services:
         value: "*"
 
   - type: web
-    name: wardalert-frontend
+    name: wardalert-mumbai
     runtime: node
     region: oregon
     plan: free

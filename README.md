@@ -10,7 +10,7 @@ Built for MUSA CodeX 2026.
 
 | Service | Component | URL | Status |
 | :--- | :--- | :--- | :--- |
-| **Frontend Web App** | Next.js 14 Dashboard | [https://wardalert-frontend.onrender.com](https://wardalert-frontend.onrender.com) | Live |
+| **Frontend Web App** | Next.js 14 Dashboard | [https://wardalert-mumbai.onrender.com](https://wardalert-mumbai.onrender.com) | Live |
 | **Backend REST API** | FastAPI + Python 3.11 | [https://wardalert-backend.onrender.com](https://wardalert-backend.onrender.com) | Live |
 | **Interactive API Docs** | Swagger / OpenAPI | [https://wardalert-backend.onrender.com/docs](https://wardalert-backend.onrender.com/docs) | Interactive |
 | **Cloud Database** | PostgreSQL 16 + PostGIS | Hosted on Supabase (`ap-south-1` Mumbai) | Active |
