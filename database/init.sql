@@ -260,3 +260,17 @@ CREATE TABLE IF NOT EXISTS subscribers (
     expires_at  TIMESTAMPTZ DEFAULT (NOW() + INTERVAL '7 days')
 );
 CREATE INDEX IF NOT EXISTS idx_subscribers_spot ON subscribers (spot_id, expires_at);
+
+-- --------------------------------------------------------------------------
+-- 12. desilt_events — records of municipal desilting actions and recovery
+-- --------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS desilt_events (
+    id                 SERIAL PRIMARY KEY,
+    spot_id            INTEGER REFERENCES flood_spots (id) ON DELETE CASCADE,
+    desilted_at        TIMESTAMPTZ NOT NULL DEFAULT now(),
+    crew               TEXT,
+    pre_residual       DOUBLE PRECISION,
+    projected_residual DOUBLE PRECISION,
+    created_at         TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_desilt_events_spot ON desilt_events (spot_id, desilted_at);
