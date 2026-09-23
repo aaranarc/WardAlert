@@ -26,10 +26,11 @@ export function WardBoundary() {
       data={geoData}
       interactive={false}
       style={() => ({
-        color: "#1f2937",
-        weight: 2,
+        color: "#1e293b",
+        weight: 2.5,
         opacity: 1,
-        fillOpacity: 0,
+        fillColor: "#0066cc",
+        fillOpacity: 0.04,
       })}
     />
   );

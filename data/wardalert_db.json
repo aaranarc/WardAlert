@@ -1,0 +1,6627 @@
+{
+  "version": 2,
+  "initialized_at": "2026-09-20T14:43:29.835Z",
+  "telemetry": {
+    "active_aws_stations": 165,
+    "rainfall_rate_mmh": 12.4,
+    "rain_3h_mm": 34.8,
+    "rain_24h_mm": 68.2,
+    "tide_level_m": 4.2,
+    "storm_surge_m": 0.35,
+    "last_sensor_sync": "2026-09-20T14:43:29.836Z"
+  },
+  "spots": [
+    {
+      "spot_id": 1,
+      "id": 1,
+      "name": "Hindmata Junction",
+      "lat": 19.01,
+      "lng": 72.842,
+      "elevation_m": 15,
+      "depression_depth_m": 0.84,
+      "nearest_drain_m": 376.8,
+      "notes": "BMC-identified chronic; holding pond installed",
+      "predicted_for": "2026-09-21T08:47:25.667Z",
+      "p_rain": 0.4078,
+      "p_actual": 0.367,
+      "delta": -0.0408,
+      "risk_level": "moderate",
+      "cause_label": "rainfall_driven",
+      "dispatch_type": "pump_and_traffic",
+      "confidence_lower": 0.292,
+      "confidence_upper": 0.432,
+      "shap_top3": [
+        {
+          "feature": "rain_3h",
+          "label": "3-hour rainfall intensity",
+          "value": 34.8,
+          "shap_value": 1.42,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "depression_depth_m",
+          "label": "local topographic depression",
+          "value": 0.84,
+          "shap_value": 0.88,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "elevation_m",
+          "label": "SRTM topographic elevation",
+          "value": 15,
+          "shap_value": -0.45,
+          "direction": "decreases_risk"
+        }
+      ]
+    },
+    {
+      "spot_id": 2,
+      "id": 2,
+      "name": "Worli Naka",
+      "lat": 19.015,
+      "lng": 72.818,
+      "elevation_m": 8,
+      "depression_depth_m": 1.68,
+      "nearest_drain_m": 946.8,
+      "notes": "Coastal+drainage",
+      "predicted_for": "2026-09-21T08:40:48.735Z",
+      "p_rain": 0.4807,
+      "p_actual": 0.4326,
+      "delta": -0.0481,
+      "risk_level": "moderate",
+      "cause_label": "rainfall_driven",
+      "dispatch_type": "pump_and_traffic",
+      "confidence_lower": 0.3576,
+      "confidence_upper": 0.4976,
+      "shap_top3": [
+        {
+          "feature": "rain_3h",
+          "label": "3-hour rainfall intensity",
+          "value": 34.8,
+          "shap_value": 1.42,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "depression_depth_m",
+          "label": "local topographic depression",
+          "value": 1.68,
+          "shap_value": 0.88,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "elevation_m",
+          "label": "SRTM topographic elevation",
+          "value": 8,
+          "shap_value": -0.45,
+          "direction": "increases_risk"
+        }
+      ]
+    },
+    {
+      "spot_id": 3,
+      "id": 3,
+      "name": "Prabhadevi Junction",
+      "lat": 19.02,
+      "lng": 72.828,
+      "elevation_m": 4,
+      "depression_depth_m": 2.16,
+      "nearest_drain_m": 1052.2,
+      "notes": "Near station",
+      "predicted_for": "2026-09-21T08:47:09.066Z",
+      "p_rain": 0.527,
+      "p_actual": 0.4743,
+      "delta": -0.0527,
+      "risk_level": "high",
+      "cause_label": "rainfall_driven",
+      "dispatch_type": "pump_and_traffic",
+      "confidence_lower": 0.3993,
+      "confidence_upper": 0.5393,
+      "shap_top3": [
+        {
+          "feature": "rain_3h",
+          "label": "3-hour rainfall intensity",
+          "value": 34.8,
+          "shap_value": 1.42,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "depression_depth_m",
+          "label": "local topographic depression",
+          "value": 2.16,
+          "shap_value": 0.88,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "elevation_m",
+          "label": "SRTM topographic elevation",
+          "value": 4,
+          "shap_value": -0.45,
+          "direction": "increases_risk"
+        }
+      ]
+    },
+    {
+      "spot_id": 4,
+      "id": 4,
+      "name": "Lower Parel (Kamla Mills)",
+      "lat": 19.005,
+      "lng": 72.83,
+      "elevation_m": 4,
+      "depression_depth_m": 2.16,
+      "nearest_drain_m": 465.6,
+      "notes": "Commercial hub",
+      "predicted_for": "2026-09-21T08:40:48.735Z",
+      "p_rain": 0.527,
+      "p_actual": 0.4743,
+      "delta": -0.0527,
+      "risk_level": "high",
+      "cause_label": "rainfall_driven",
+      "dispatch_type": "pump_and_traffic",
+      "confidence_lower": 0.3993,
+      "confidence_upper": 0.5393,
+      "shap_top3": [
+        {
+          "feature": "rain_3h",
+          "label": "3-hour rainfall intensity",
+          "value": 34.8,
+          "shap_value": 1.42,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "depression_depth_m",
+          "label": "local topographic depression",
+          "value": 2.16,
+          "shap_value": 0.88,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "elevation_m",
+          "label": "SRTM topographic elevation",
+          "value": 4,
+          "shap_value": -0.45,
+          "direction": "increases_risk"
+        }
+      ]
+    },
+    {
+      "spot_id": 5,
+      "id": 5,
+      "name": "Elphinstone Road Station",
+      "lat": 19.007,
+      "lng": 72.831,
+      "elevation_m": 24,
+      "depression_depth_m": 0.15,
+      "nearest_drain_m": 245.6,
+      "notes": "Station area",
+      "predicted_for": "2026-09-21T08:40:48.735Z",
+      "p_rain": 0.3746,
+      "p_actual": 0.3371,
+      "delta": -0.0375,
+      "risk_level": "moderate",
+      "cause_label": "rainfall_driven",
+      "dispatch_type": "pump_and_traffic",
+      "confidence_lower": 0.2621,
+      "confidence_upper": 0.4021,
+      "shap_top3": [
+        {
+          "feature": "rain_3h",
+          "label": "3-hour rainfall intensity",
+          "value": 34.8,
+          "shap_value": 1.42,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "depression_depth_m",
+          "label": "local topographic depression",
+          "value": 0.15,
+          "shap_value": 0.88,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "elevation_m",
+          "label": "SRTM topographic elevation",
+          "value": 24,
+          "shap_value": -0.45,
+          "direction": "decreases_risk"
+        }
+      ]
+    },
+    {
+      "spot_id": 6,
+      "id": 6,
+      "name": "Currey Road",
+      "lat": 18.995,
+      "lng": 72.836,
+      "elevation_m": 5,
+      "depression_depth_m": 2.04,
+      "nearest_drain_m": 1263.1,
+      "notes": "Between Byculla and Parel",
+      "predicted_for": "2026-09-21T08:40:48.735Z",
+      "p_rain": 0.5205,
+      "p_actual": 0.4685,
+      "delta": -0.0521,
+      "risk_level": "high",
+      "cause_label": "rainfall_driven",
+      "dispatch_type": "pump_and_traffic",
+      "confidence_lower": 0.3935,
+      "confidence_upper": 0.5335,
+      "shap_top3": [
+        {
+          "feature": "rain_3h",
+          "label": "3-hour rainfall intensity",
+          "value": 34.8,
+          "shap_value": 1.42,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "depression_depth_m",
+          "label": "local topographic depression",
+          "value": 2.04,
+          "shap_value": 0.88,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "elevation_m",
+          "label": "SRTM topographic elevation",
+          "value": 5,
+          "shap_value": -0.45,
+          "direction": "increases_risk"
+        }
+      ]
+    },
+    {
+      "spot_id": 7,
+      "id": 7,
+      "name": "Parel TT",
+      "lat": 19.003,
+      "lng": 72.837,
+      "elevation_m": 13,
+      "depression_depth_m": 1.08,
+      "nearest_drain_m": 412.7,
+      "notes": "Chronic",
+      "predicted_for": "2026-09-21T08:40:48.735Z",
+      "p_rain": 0.4247,
+      "p_actual": 0.3823,
+      "delta": -0.0425,
+      "risk_level": "moderate",
+      "cause_label": "rainfall_driven",
+      "dispatch_type": "pump_and_traffic",
+      "confidence_lower": 0.3073,
+      "confidence_upper": 0.4473,
+      "shap_top3": [
+        {
+          "feature": "rain_3h",
+          "label": "3-hour rainfall intensity",
+          "value": 34.8,
+          "shap_value": 1.42,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "depression_depth_m",
+          "label": "local topographic depression",
+          "value": 1.08,
+          "shap_value": 0.88,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "elevation_m",
+          "label": "SRTM topographic elevation",
+          "value": 13,
+          "shap_value": -0.45,
+          "direction": "decreases_risk"
+        }
+      ]
+    },
+    {
+      "spot_id": 8,
+      "id": 8,
+      "name": "Love Grove Junction",
+      "lat": 19.014,
+      "lng": 72.822,
+      "elevation_m": 12,
+      "depression_depth_m": 1.2,
+      "nearest_drain_m": 556.1,
+      "notes": "Drainage bottleneck",
+      "predicted_for": "2026-09-21T08:40:48.735Z",
+      "p_rain": 0.4344,
+      "p_actual": 0.3909,
+      "delta": -0.0434,
+      "risk_level": "moderate",
+      "cause_label": "rainfall_driven",
+      "dispatch_type": "pump_and_traffic",
+      "confidence_lower": 0.3159,
+      "confidence_upper": 0.4559,
+      "shap_top3": [
+        {
+          "feature": "rain_3h",
+          "label": "3-hour rainfall intensity",
+          "value": 34.8,
+          "shap_value": 1.42,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "depression_depth_m",
+          "label": "local topographic depression",
+          "value": 1.2,
+          "shap_value": 0.88,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "elevation_m",
+          "label": "SRTM topographic elevation",
+          "value": 12,
+          "shap_value": -0.45,
+          "direction": "increases_risk"
+        }
+      ]
+    },
+    {
+      "spot_id": 9,
+      "id": 9,
+      "name": "Worli Sea Face",
+      "lat": 19.018,
+      "lng": 72.812,
+      "elevation_m": 8,
+      "depression_depth_m": 1.68,
+      "nearest_drain_m": 1657,
+      "notes": "Tidal",
+      "predicted_for": "2026-09-21T08:40:48.735Z",
+      "p_rain": 0.4807,
+      "p_actual": 0.4326,
+      "delta": -0.0481,
+      "risk_level": "moderate",
+      "cause_label": "rainfall_driven",
+      "dispatch_type": "pump_and_traffic",
+      "confidence_lower": 0.3576,
+      "confidence_upper": 0.4976,
+      "shap_top3": [
+        {
+          "feature": "rain_3h",
+          "label": "3-hour rainfall intensity",
+          "value": 34.8,
+          "shap_value": 1.42,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "depression_depth_m",
+          "label": "local topographic depression",
+          "value": 1.68,
+          "shap_value": 0.88,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "elevation_m",
+          "label": "SRTM topographic elevation",
+          "value": 8,
+          "shap_value": -0.45,
+          "direction": "increases_risk"
+        }
+      ]
+    },
+    {
+      "spot_id": 10,
+      "id": 10,
+      "name": "Dr Ambedkar Road Prabhadevi",
+      "lat": 19.019,
+      "lng": 72.83,
+      "elevation_m": 14,
+      "depression_depth_m": 0.96,
+      "nearest_drain_m": 977.4,
+      "notes": "Arterial",
+      "predicted_for": "2026-09-21T08:40:48.735Z",
+      "p_rain": 0.4159,
+      "p_actual": 0.3743,
+      "delta": -0.0416,
+      "risk_level": "moderate",
+      "cause_label": "rainfall_driven",
+      "dispatch_type": "pump_and_traffic",
+      "confidence_lower": 0.2993,
+      "confidence_upper": 0.4393,
+      "shap_top3": [
+        {
+          "feature": "rain_3h",
+          "label": "3-hour rainfall intensity",
+          "value": 34.8,
+          "shap_value": 1.42,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "depression_depth_m",
+          "label": "local topographic depression",
+          "value": 0.96,
+          "shap_value": 0.88,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "elevation_m",
+          "label": "SRTM topographic elevation",
+          "value": 14,
+          "shap_value": -0.45,
+          "direction": "decreases_risk"
+        }
+      ]
+    },
+    {
+      "spot_id": 11,
+      "id": 11,
+      "name": "Sane Guruji Marg",
+      "lat": 19.001,
+      "lng": 72.834,
+      "elevation_m": 9,
+      "depression_depth_m": 1.56,
+      "nearest_drain_m": 608.9,
+      "notes": "Low-lying",
+      "predicted_for": "2026-09-21T08:40:48.735Z",
+      "p_rain": 0.4679,
+      "p_actual": 0.4211,
+      "delta": -0.0468,
+      "risk_level": "moderate",
+      "cause_label": "rainfall_driven",
+      "dispatch_type": "pump_and_traffic",
+      "confidence_lower": 0.3461,
+      "confidence_upper": 0.4861,
+      "shap_top3": [
+        {
+          "feature": "rain_3h",
+          "label": "3-hour rainfall intensity",
+          "value": 34.8,
+          "shap_value": 1.42,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "depression_depth_m",
+          "label": "local topographic depression",
+          "value": 1.56,
+          "shap_value": 0.88,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "elevation_m",
+          "label": "SRTM topographic elevation",
+          "value": 9,
+          "shap_value": -0.45,
+          "direction": "increases_risk"
+        }
+      ]
+    },
+    {
+      "spot_id": 12,
+      "id": 12,
+      "name": "Senapati Bapat Marg",
+      "lat": 19.01,
+      "lng": 72.828,
+      "elevation_m": 4,
+      "depression_depth_m": 2.16,
+      "nearest_drain_m": 22.9,
+      "notes": "Corporate area",
+      "predicted_for": "2026-09-21T08:40:48.735Z",
+      "p_rain": 0.527,
+      "p_actual": 0.645,
+      "delta": 0.015,
+      "risk_level": "low",
+      "cause_label": "rainfall_driven",
+      "dispatch_type": "pump_and_traffic",
+      "confidence_lower": 0.57,
+      "confidence_upper": 0.71,
+      "shap_top3": [
+        {
+          "feature": "rain_3h",
+          "label": "3-hour rainfall intensity",
+          "value": 34.8,
+          "shap_value": 1.42,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "depression_depth_m",
+          "label": "local topographic depression",
+          "value": 2.16,
+          "shap_value": 0.88,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "elevation_m",
+          "label": "SRTM topographic elevation",
+          "value": 4,
+          "shap_value": -0.45,
+          "direction": "increases_risk"
+        }
+      ]
+    },
+    {
+      "spot_id": 13,
+      "id": 13,
+      "name": "NM Joshi Marg",
+      "lat": 18.998,
+      "lng": 72.833,
+      "elevation_m": 8,
+      "depression_depth_m": 1.68,
+      "nearest_drain_m": 958,
+      "notes": "Chronic",
+      "predicted_for": "2026-09-21T08:40:48.735Z",
+      "p_rain": 0.4807,
+      "p_actual": 0.4326,
+      "delta": -0.0481,
+      "risk_level": "moderate",
+      "cause_label": "rainfall_driven",
+      "dispatch_type": "pump_and_traffic",
+      "confidence_lower": 0.3576,
+      "confidence_upper": 0.4976,
+      "shap_top3": [
+        {
+          "feature": "rain_3h",
+          "label": "3-hour rainfall intensity",
+          "value": 34.8,
+          "shap_value": 1.42,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "depression_depth_m",
+          "label": "local topographic depression",
+          "value": 1.68,
+          "shap_value": 0.88,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "elevation_m",
+          "label": "SRTM topographic elevation",
+          "value": 8,
+          "shap_value": -0.45,
+          "direction": "increases_risk"
+        }
+      ]
+    },
+    {
+      "spot_id": 14,
+      "id": 14,
+      "name": "Delisle Road",
+      "lat": 19.006,
+      "lng": 72.831,
+      "elevation_m": 7,
+      "depression_depth_m": 1.8,
+      "nearest_drain_m": 355.1,
+      "notes": "Rail crossing",
+      "predicted_for": "2026-09-21T08:40:48.735Z",
+      "p_rain": 0.4942,
+      "p_actual": 0.4447,
+      "delta": -0.0494,
+      "risk_level": "moderate",
+      "cause_label": "rainfall_driven",
+      "dispatch_type": "pump_and_traffic",
+      "confidence_lower": 0.3697,
+      "confidence_upper": 0.5097,
+      "shap_top3": [
+        {
+          "feature": "rain_3h",
+          "label": "3-hour rainfall intensity",
+          "value": 34.8,
+          "shap_value": 1.42,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "depression_depth_m",
+          "label": "local topographic depression",
+          "value": 1.8,
+          "shap_value": 0.88,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "elevation_m",
+          "label": "SRTM topographic elevation",
+          "value": 7,
+          "shap_value": -0.45,
+          "direction": "increases_risk"
+        }
+      ]
+    },
+    {
+      "spot_id": 15,
+      "id": 15,
+      "name": "Prabhadevi Chowpatty",
+      "lat": 19.021,
+      "lng": 72.822,
+      "elevation_m": 8,
+      "depression_depth_m": 1.68,
+      "nearest_drain_m": 1235.8,
+      "notes": "Coastal",
+      "predicted_for": "2026-09-21T08:40:48.735Z",
+      "p_rain": 0.4807,
+      "p_actual": 0.4326,
+      "delta": -0.0481,
+      "risk_level": "moderate",
+      "cause_label": "rainfall_driven",
+      "dispatch_type": "pump_and_traffic",
+      "confidence_lower": 0.3576,
+      "confidence_upper": 0.4976,
+      "shap_top3": [
+        {
+          "feature": "rain_3h",
+          "label": "3-hour rainfall intensity",
+          "value": 34.8,
+          "shap_value": 1.42,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "depression_depth_m",
+          "label": "local topographic depression",
+          "value": 1.68,
+          "shap_value": 0.88,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "elevation_m",
+          "label": "SRTM topographic elevation",
+          "value": 8,
+          "shap_value": -0.45,
+          "direction": "increases_risk"
+        }
+      ]
+    },
+    {
+      "spot_id": 16,
+      "id": 16,
+      "name": "Worli Village",
+      "lat": 19.021,
+      "lng": 72.815,
+      "elevation_m": 8,
+      "depression_depth_m": 1.68,
+      "nearest_drain_m": 1627.2,
+      "notes": "Historic settlement",
+      "predicted_for": "2026-09-21T08:40:48.735Z",
+      "p_rain": 0.4807,
+      "p_actual": 0.4326,
+      "delta": -0.0481,
+      "risk_level": "moderate",
+      "cause_label": "rainfall_driven",
+      "dispatch_type": "pump_and_traffic",
+      "confidence_lower": 0.3576,
+      "confidence_upper": 0.4976,
+      "shap_top3": [
+        {
+          "feature": "rain_3h",
+          "label": "3-hour rainfall intensity",
+          "value": 34.8,
+          "shap_value": 1.42,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "depression_depth_m",
+          "label": "local topographic depression",
+          "value": 1.68,
+          "shap_value": 0.88,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "elevation_m",
+          "label": "SRTM topographic elevation",
+          "value": 8,
+          "shap_value": -0.45,
+          "direction": "increases_risk"
+        }
+      ]
+    },
+    {
+      "spot_id": 17,
+      "id": 17,
+      "name": "Century Bazaar Prabhadevi",
+      "lat": 19.017,
+      "lng": 72.827,
+      "elevation_m": 14,
+      "depression_depth_m": 0.96,
+      "nearest_drain_m": 718.1,
+      "notes": "Market area",
+      "predicted_for": "2026-09-21T08:40:48.735Z",
+      "p_rain": 0.4159,
+      "p_actual": 0.3743,
+      "delta": -0.0416,
+      "risk_level": "moderate",
+      "cause_label": "rainfall_driven",
+      "dispatch_type": "pump_and_traffic",
+      "confidence_lower": 0.2993,
+      "confidence_upper": 0.4393,
+      "shap_top3": [
+        {
+          "feature": "rain_3h",
+          "label": "3-hour rainfall intensity",
+          "value": 34.8,
+          "shap_value": 1.42,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "depression_depth_m",
+          "label": "local topographic depression",
+          "value": 0.96,
+          "shap_value": 0.88,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "elevation_m",
+          "label": "SRTM topographic elevation",
+          "value": 14,
+          "shap_value": -0.45,
+          "direction": "decreases_risk"
+        }
+      ]
+    },
+    {
+      "spot_id": 18,
+      "id": 18,
+      "name": "Peninsula Corporate Park",
+      "lat": 19.008,
+      "lng": 72.829,
+      "elevation_m": 19,
+      "depression_depth_m": 0.36,
+      "nearest_drain_m": 167.8,
+      "notes": "Business hub",
+      "predicted_for": "2026-09-21T08:40:48.735Z",
+      "p_rain": 0.3831,
+      "p_actual": 0.4085,
+      "delta": 0.0254,
+      "risk_level": "moderate",
+      "cause_label": "rainfall_driven",
+      "dispatch_type": "pump_and_traffic",
+      "confidence_lower": 0.3335,
+      "confidence_upper": 0.4735,
+      "shap_top3": [
+        {
+          "feature": "rain_3h",
+          "label": "3-hour rainfall intensity",
+          "value": 34.8,
+          "shap_value": 1.42,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "depression_depth_m",
+          "label": "local topographic depression",
+          "value": 0.36,
+          "shap_value": 0.88,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "elevation_m",
+          "label": "SRTM topographic elevation",
+          "value": 19,
+          "shap_value": -0.45,
+          "direction": "decreases_risk"
+        }
+      ]
+    },
+    {
+      "spot_id": 19,
+      "id": 19,
+      "name": "Pandurang Budhkar Marg",
+      "lat": 19.009,
+      "lng": 72.821,
+      "elevation_m": 18,
+      "depression_depth_m": 0.48,
+      "nearest_drain_m": 473.8,
+      "notes": "Coastal road",
+      "predicted_for": "2026-09-21T08:40:48.735Z",
+      "p_rain": 0.3881,
+      "p_actual": 0.3493,
+      "delta": -0.0388,
+      "risk_level": "moderate",
+      "cause_label": "rainfall_driven",
+      "dispatch_type": "pump_and_traffic",
+      "confidence_lower": 0.2743,
+      "confidence_upper": 0.4143,
+      "shap_top3": [
+        {
+          "feature": "rain_3h",
+          "label": "3-hour rainfall intensity",
+          "value": 34.8,
+          "shap_value": 1.42,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "depression_depth_m",
+          "label": "local topographic depression",
+          "value": 0.48,
+          "shap_value": 0.88,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "elevation_m",
+          "label": "SRTM topographic elevation",
+          "value": 18,
+          "shap_value": -0.45,
+          "direction": "decreases_risk"
+        }
+      ]
+    },
+    {
+      "spot_id": 20,
+      "id": 20,
+      "name": "Annie Besant Road Worli",
+      "lat": 19.01,
+      "lng": 72.816,
+      "elevation_m": 20,
+      "depression_depth_m": 0.24,
+      "nearest_drain_m": 983.8,
+      "notes": "Arterial",
+      "predicted_for": "2026-09-21T08:40:48.735Z",
+      "p_rain": 0.3788,
+      "p_actual": 0.341,
+      "delta": -0.0379,
+      "risk_level": "moderate",
+      "cause_label": "rainfall_driven",
+      "dispatch_type": "pump_and_traffic",
+      "confidence_lower": 0.266,
+      "confidence_upper": 0.406,
+      "shap_top3": [
+        {
+          "feature": "rain_3h",
+          "label": "3-hour rainfall intensity",
+          "value": 34.8,
+          "shap_value": 1.42,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "depression_depth_m",
+          "label": "local topographic depression",
+          "value": 0.24,
+          "shap_value": 0.88,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "elevation_m",
+          "label": "SRTM topographic elevation",
+          "value": 20,
+          "shap_value": -0.45,
+          "direction": "decreases_risk"
+        }
+      ]
+    },
+    {
+      "spot_id": 21,
+      "id": 21,
+      "name": "Jamshedji Tata Road",
+      "lat": 19.023,
+      "lng": 72.825,
+      "elevation_m": 8,
+      "depression_depth_m": 1.68,
+      "nearest_drain_m": 1392.8,
+      "notes": "Central Prabhadevi",
+      "predicted_for": "2026-09-21T08:40:48.735Z",
+      "p_rain": 0.4807,
+      "p_actual": 0.4326,
+      "delta": -0.0481,
+      "risk_level": "moderate",
+      "cause_label": "rainfall_driven",
+      "dispatch_type": "pump_and_traffic",
+      "confidence_lower": 0.3576,
+      "confidence_upper": 0.4976,
+      "shap_top3": [
+        {
+          "feature": "rain_3h",
+          "label": "3-hour rainfall intensity",
+          "value": 34.8,
+          "shap_value": 1.42,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "depression_depth_m",
+          "label": "local topographic depression",
+          "value": 1.68,
+          "shap_value": 0.88,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "elevation_m",
+          "label": "SRTM topographic elevation",
+          "value": 8,
+          "shap_value": -0.45,
+          "direction": "increases_risk"
+        }
+      ]
+    },
+    {
+      "spot_id": 22,
+      "id": 22,
+      "name": "Curry Road Bridge Approach",
+      "lat": 18.997,
+      "lng": 72.837,
+      "elevation_m": 11,
+      "depression_depth_m": 1.32,
+      "nearest_drain_m": 1054,
+      "notes": "Bridge area",
+      "predicted_for": "2026-09-21T08:40:48.735Z",
+      "p_rain": 0.4448,
+      "p_actual": 0.4003,
+      "delta": -0.0445,
+      "risk_level": "moderate",
+      "cause_label": "rainfall_driven",
+      "dispatch_type": "pump_and_traffic",
+      "confidence_lower": 0.3253,
+      "confidence_upper": 0.4653,
+      "shap_top3": [
+        {
+          "feature": "rain_3h",
+          "label": "3-hour rainfall intensity",
+          "value": 34.8,
+          "shap_value": 1.42,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "depression_depth_m",
+          "label": "local topographic depression",
+          "value": 1.32,
+          "shap_value": 0.88,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "elevation_m",
+          "label": "SRTM topographic elevation",
+          "value": 11,
+          "shap_value": -0.45,
+          "direction": "increases_risk"
+        }
+      ]
+    },
+    {
+      "spot_id": 23,
+      "id": 23,
+      "name": "Ganpatrao Kadam Marg",
+      "lat": 19.001,
+      "lng": 72.828,
+      "elevation_m": 9,
+      "depression_depth_m": 1.56,
+      "nearest_drain_m": 945.2,
+      "notes": "Lower Parel",
+      "predicted_for": "2026-09-21T08:40:48.735Z",
+      "p_rain": 0.4679,
+      "p_actual": 0.4211,
+      "delta": -0.0468,
+      "risk_level": "moderate",
+      "cause_label": "rainfall_driven",
+      "dispatch_type": "pump_and_traffic",
+      "confidence_lower": 0.3461,
+      "confidence_upper": 0.4861,
+      "shap_top3": [
+        {
+          "feature": "rain_3h",
+          "label": "3-hour rainfall intensity",
+          "value": 34.8,
+          "shap_value": 1.42,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "depression_depth_m",
+          "label": "local topographic depression",
+          "value": 1.56,
+          "shap_value": 0.88,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "elevation_m",
+          "label": "SRTM topographic elevation",
+          "value": 9,
+          "shap_value": -0.45,
+          "direction": "increases_risk"
+        }
+      ]
+    },
+    {
+      "spot_id": 24,
+      "id": 24,
+      "name": "Tulsi Pipe Road",
+      "lat": 19.001,
+      "lng": 72.836,
+      "elevation_m": 13,
+      "depression_depth_m": 1.08,
+      "nearest_drain_m": 598.4,
+      "notes": "Chronic",
+      "predicted_for": "2026-09-21T08:40:48.735Z",
+      "p_rain": 0.4247,
+      "p_actual": 0.3823,
+      "delta": -0.0425,
+      "risk_level": "moderate",
+      "cause_label": "rainfall_driven",
+      "dispatch_type": "pump_and_traffic",
+      "confidence_lower": 0.3073,
+      "confidence_upper": 0.4473,
+      "shap_top3": [
+        {
+          "feature": "rain_3h",
+          "label": "3-hour rainfall intensity",
+          "value": 34.8,
+          "shap_value": 1.42,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "depression_depth_m",
+          "label": "local topographic depression",
+          "value": 1.08,
+          "shap_value": 0.88,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "elevation_m",
+          "label": "SRTM topographic elevation",
+          "value": 13,
+          "shap_value": -0.45,
+          "direction": "decreases_risk"
+        }
+      ]
+    },
+    {
+      "spot_id": 25,
+      "id": 25,
+      "name": "Sayani Road Prabhadevi",
+      "lat": 19.018,
+      "lng": 72.829,
+      "elevation_m": 15,
+      "depression_depth_m": 0.84,
+      "nearest_drain_m": 844.4,
+      "notes": "Residential",
+      "predicted_for": "2026-09-21T08:40:48.735Z",
+      "p_rain": 0.4078,
+      "p_actual": 0.367,
+      "delta": -0.0408,
+      "risk_level": "moderate",
+      "cause_label": "rainfall_driven",
+      "dispatch_type": "pump_and_traffic",
+      "confidence_lower": 0.292,
+      "confidence_upper": 0.432,
+      "shap_top3": [
+        {
+          "feature": "rain_3h",
+          "label": "3-hour rainfall intensity",
+          "value": 34.8,
+          "shap_value": 1.42,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "depression_depth_m",
+          "label": "local topographic depression",
+          "value": 0.84,
+          "shap_value": 0.88,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "elevation_m",
+          "label": "SRTM topographic elevation",
+          "value": 15,
+          "shap_value": -0.45,
+          "direction": "decreases_risk"
+        }
+      ]
+    },
+    {
+      "spot_id": 26,
+      "id": 26,
+      "name": "Veer Savarkar Marg",
+      "lat": 19.017,
+      "lng": 72.816,
+      "elevation_m": 8,
+      "depression_depth_m": 1.68,
+      "nearest_drain_m": 1248.3,
+      "notes": "Coastal",
+      "predicted_for": "2026-09-21T08:40:48.735Z",
+      "p_rain": 0.4807,
+      "p_actual": 0.4326,
+      "delta": -0.0481,
+      "risk_level": "moderate",
+      "cause_label": "rainfall_driven",
+      "dispatch_type": "pump_and_traffic",
+      "confidence_lower": 0.3576,
+      "confidence_upper": 0.4976,
+      "shap_top3": [
+        {
+          "feature": "rain_3h",
+          "label": "3-hour rainfall intensity",
+          "value": 34.8,
+          "shap_value": 1.42,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "depression_depth_m",
+          "label": "local topographic depression",
+          "value": 1.68,
+          "shap_value": 0.88,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "elevation_m",
+          "label": "SRTM topographic elevation",
+          "value": 8,
+          "shap_value": -0.45,
+          "direction": "increases_risk"
+        }
+      ]
+    },
+    {
+      "spot_id": 27,
+      "id": 27,
+      "name": "Mahalaxmi Racecourse Rd",
+      "lat": 18.983,
+      "lng": 72.814,
+      "elevation_m": 31,
+      "depression_depth_m": 0.15,
+      "nearest_drain_m": 439.6,
+      "notes": "Adjacent flood spot",
+      "predicted_for": "2026-09-21T08:40:48.735Z",
+      "p_rain": 0.3733,
+      "p_actual": 0.336,
+      "delta": -0.0373,
+      "risk_level": "moderate",
+      "cause_label": "rainfall_driven",
+      "dispatch_type": "pump_and_traffic",
+      "confidence_lower": 0.261,
+      "confidence_upper": 0.401,
+      "shap_top3": [
+        {
+          "feature": "rain_3h",
+          "label": "3-hour rainfall intensity",
+          "value": 34.8,
+          "shap_value": 1.42,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "depression_depth_m",
+          "label": "local topographic depression",
+          "value": 0.15,
+          "shap_value": 0.88,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "elevation_m",
+          "label": "SRTM topographic elevation",
+          "value": 31,
+          "shap_value": -0.45,
+          "direction": "decreases_risk"
+        }
+      ]
+    },
+    {
+      "spot_id": 28,
+      "id": 28,
+      "name": "Haji Ali Junction",
+      "lat": 18.984,
+      "lng": 72.812,
+      "elevation_m": 10,
+      "depression_depth_m": 1.44,
+      "nearest_drain_m": 575.7,
+      "notes": "Near-ward",
+      "predicted_for": "2026-09-21T08:40:48.735Z",
+      "p_rain": 0.456,
+      "p_actual": 0.4104,
+      "delta": -0.0456,
+      "risk_level": "moderate",
+      "cause_label": "rainfall_driven",
+      "dispatch_type": "pump_and_traffic",
+      "confidence_lower": 0.3354,
+      "confidence_upper": 0.4754,
+      "shap_top3": [
+        {
+          "feature": "rain_3h",
+          "label": "3-hour rainfall intensity",
+          "value": 34.8,
+          "shap_value": 1.42,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "depression_depth_m",
+          "label": "local topographic depression",
+          "value": 1.44,
+          "shap_value": 0.88,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "elevation_m",
+          "label": "SRTM topographic elevation",
+          "value": 10,
+          "shap_value": -0.45,
+          "direction": "increases_risk"
+        }
+      ]
+    },
+    {
+      "spot_id": 29,
+      "id": 29,
+      "name": "Worli Dairy",
+      "lat": 19.02,
+      "lng": 72.813,
+      "elevation_m": 8,
+      "depression_depth_m": 1.68,
+      "nearest_drain_m": 1703.6,
+      "notes": "Coastal",
+      "predicted_for": "2026-09-21T08:40:48.735Z",
+      "p_rain": 0.4807,
+      "p_actual": 0.4326,
+      "delta": -0.0481,
+      "risk_level": "moderate",
+      "cause_label": "rainfall_driven",
+      "dispatch_type": "pump_and_traffic",
+      "confidence_lower": 0.3576,
+      "confidence_upper": 0.4976,
+      "shap_top3": [
+        {
+          "feature": "rain_3h",
+          "label": "3-hour rainfall intensity",
+          "value": 34.8,
+          "shap_value": 1.42,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "depression_depth_m",
+          "label": "local topographic depression",
+          "value": 1.68,
+          "shap_value": 0.88,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "elevation_m",
+          "label": "SRTM topographic elevation",
+          "value": 8,
+          "shap_value": -0.45,
+          "direction": "increases_risk"
+        }
+      ]
+    },
+    {
+      "spot_id": 30,
+      "id": 30,
+      "name": "Elphinstone Bridge East",
+      "lat": 19.005,
+      "lng": 72.833,
+      "elevation_m": 10,
+      "depression_depth_m": 1.44,
+      "nearest_drain_m": 282.8,
+      "notes": "Rail bridge approach",
+      "predicted_for": "2026-09-21T08:40:48.735Z",
+      "p_rain": 0.456,
+      "p_actual": 0.4104,
+      "delta": -0.0456,
+      "risk_level": "moderate",
+      "cause_label": "rainfall_driven",
+      "dispatch_type": "pump_and_traffic",
+      "confidence_lower": 0.3354,
+      "confidence_upper": 0.4754,
+      "shap_top3": [
+        {
+          "feature": "rain_3h",
+          "label": "3-hour rainfall intensity",
+          "value": 34.8,
+          "shap_value": 1.42,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "depression_depth_m",
+          "label": "local topographic depression",
+          "value": 1.44,
+          "shap_value": 0.88,
+          "direction": "increases_risk"
+        },
+        {
+          "feature": "elevation_m",
+          "label": "SRTM topographic elevation",
+          "value": 10,
+          "shap_value": -0.45,
+          "direction": "increases_risk"
+        }
+      ]
+    }
+  ],
+  "subscribers": [
+    {
+      "id": 1,
+      "phone_hash": "5d174055fad36762e2c7202288524e4c83f13a5780346dc6624805955d4bafd1",
+      "raw_phone_display": "+91 9820...002",
+      "spot_id": 1,
+      "language": "en",
+      "created_at": "2026-09-19T14:43:29.889Z",
+      "expires_at": "2026-09-27T14:43:29.889Z"
+    },
+    {
+      "id": 2,
+      "phone_hash": "9439a1dd415018a1f2254e578fce872b882f870df120b8421e0a63649a9b27f6",
+      "raw_phone_display": "+91 9820...003",
+      "spot_id": 1,
+      "language": "hi",
+      "created_at": "2026-09-18T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 3,
+      "phone_hash": "a1213ec056114da9b0bfde0b2c5a130fa85d8f9cc2cd1fbba414905067b67900",
+      "raw_phone_display": "+91 9820...004",
+      "spot_id": 1,
+      "language": "hinglish",
+      "created_at": "2026-09-17T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 4,
+      "phone_hash": "6a08cea11a68fc5edb5939dae460215774dd8bd59862455e06ea7746939e12ff",
+      "raw_phone_display": "+91 9820...005",
+      "spot_id": 2,
+      "language": "hi",
+      "created_at": "2026-09-19T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 5,
+      "phone_hash": "a53eaa9fef8b57ae7a60d112619baac28194ba66333e85499cc3fd7bd4807a58",
+      "raw_phone_display": "+91 9820...006",
+      "spot_id": 2,
+      "language": "hinglish",
+      "created_at": "2026-09-18T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 6,
+      "phone_hash": "5c47a118ceb55b08ca718614f4927fd3a9f7e9cb84175c50eebbc2894e3dfd49",
+      "raw_phone_display": "+91 9820...007",
+      "spot_id": 2,
+      "language": "mr",
+      "created_at": "2026-09-17T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 7,
+      "phone_hash": "f8d16709d6efc1859ba7c50d5e74ce39ef1b0e1dddd96c4e9b59a41943fa8143",
+      "raw_phone_display": "+91 9820...008",
+      "spot_id": 2,
+      "language": "en",
+      "created_at": "2026-09-16T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 8,
+      "phone_hash": "acd5e289e97beef738d05a3159d1b9f98846aa2f13cc5f1f83152cdac2d1a5b8",
+      "raw_phone_display": "+91 9820...009",
+      "spot_id": 3,
+      "language": "hinglish",
+      "created_at": "2026-09-19T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 9,
+      "phone_hash": "1d3a33c3f7e0a130a1b858f55fa36dcbced31c23b1bc875714767788e457161b",
+      "raw_phone_display": "+91 9820...010",
+      "spot_id": 3,
+      "language": "mr",
+      "created_at": "2026-09-18T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 10,
+      "phone_hash": "0ba61963908fd4dadffa81915795754580e40c00db1388063a7125cd57d86af6",
+      "raw_phone_display": "+91 9820...011",
+      "spot_id": 3,
+      "language": "en",
+      "created_at": "2026-09-17T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 11,
+      "phone_hash": "62c9c6e556e630cef105619f66ac24b3dcebb6d68ad3185de5fcc91d751ef7f3",
+      "raw_phone_display": "+91 9820...012",
+      "spot_id": 3,
+      "language": "hi",
+      "created_at": "2026-09-16T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 12,
+      "phone_hash": "251850544851828698922a7cf286d76efdc4f7282e52637ddbf2a9fa06a1f2ad",
+      "raw_phone_display": "+91 9820...013",
+      "spot_id": 3,
+      "language": "hinglish",
+      "created_at": "2026-09-15T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 13,
+      "phone_hash": "b25d0a165f603553db8fc6b731532258aef95e33c6617f93abfaaee2dd8b112f",
+      "raw_phone_display": "+91 9820...014",
+      "spot_id": 4,
+      "language": "mr",
+      "created_at": "2026-09-19T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 14,
+      "phone_hash": "3dc31a67e016fba8ecb2494e6755cef62d823f124a543d719a1d9c4472986498",
+      "raw_phone_display": "+91 9820...015",
+      "spot_id": 4,
+      "language": "en",
+      "created_at": "2026-09-18T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 15,
+      "phone_hash": "cd2e7111b4887feb0413983f51f888051329f5299bc7ed6695fdc4c262416941",
+      "raw_phone_display": "+91 9820...016",
+      "spot_id": 4,
+      "language": "hi",
+      "created_at": "2026-09-17T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 16,
+      "phone_hash": "dd157d224fd68889c86f9b8512fd2a77e9f8a3933358b685c9a7e004a25ee996",
+      "raw_phone_display": "+91 9820...017",
+      "spot_id": 4,
+      "language": "hinglish",
+      "created_at": "2026-09-16T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 17,
+      "phone_hash": "51f31d45984503b60b8e90f2632031c4a92474751a5595ce69c77978b38cb20a",
+      "raw_phone_display": "+91 9820...018",
+      "spot_id": 4,
+      "language": "mr",
+      "created_at": "2026-09-15T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 18,
+      "phone_hash": "144f067d88c279a53fbf25bb529f6d151e873cae880efe88607b9c1ff994f6c1",
+      "raw_phone_display": "+91 9820...019",
+      "spot_id": 4,
+      "language": "en",
+      "created_at": "2026-09-14T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 19,
+      "phone_hash": "61879b9255e2cc988d4b30591fd86a176198a6f8ea81b93a2fc42112a1ff8c7c",
+      "raw_phone_display": "+91 9820...020",
+      "spot_id": 5,
+      "language": "en",
+      "created_at": "2026-09-19T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 20,
+      "phone_hash": "c753468d5f54555afb5074c26c6c7c76fc2bfcab76d466b1f6cf304bc1252257",
+      "raw_phone_display": "+91 9820...021",
+      "spot_id": 5,
+      "language": "hi",
+      "created_at": "2026-09-18T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 21,
+      "phone_hash": "9109e217482893b7ba3c91794da7ed35e763619065c49aac7db943000d44350a",
+      "raw_phone_display": "+91 9820...022",
+      "spot_id": 5,
+      "language": "hinglish",
+      "created_at": "2026-09-17T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 22,
+      "phone_hash": "35de473417d708b9bbe27b075311de8984ded421ed943c5885094ca2f6de58cd",
+      "raw_phone_display": "+91 9820...023",
+      "spot_id": 5,
+      "language": "mr",
+      "created_at": "2026-09-16T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 23,
+      "phone_hash": "a2189bbfa885f1908d1ff74518d23c2616d2da74b62630590aa7f37c744bdc89",
+      "raw_phone_display": "+91 9820...024",
+      "spot_id": 5,
+      "language": "en",
+      "created_at": "2026-09-15T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 24,
+      "phone_hash": "a4ded28836e65d61841c15e44c74eb84f127b0e1008fa7622430a0946caf26d4",
+      "raw_phone_display": "+91 9820...025",
+      "spot_id": 5,
+      "language": "hi",
+      "created_at": "2026-09-14T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 25,
+      "phone_hash": "3d4fea814b17e590d9439ee1b67ced5cab43a9a65929ef170d78bce31e57561f",
+      "raw_phone_display": "+91 9820...026",
+      "spot_id": 5,
+      "language": "hinglish",
+      "created_at": "2026-09-13T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 26,
+      "phone_hash": "32311fdc035d632535e24619e55f4623b10609c7df6ddfa276b006018f3d2ba2",
+      "raw_phone_display": "+91 9820...027",
+      "spot_id": 6,
+      "language": "hi",
+      "created_at": "2026-09-19T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 27,
+      "phone_hash": "2d064aa3a484e666e353e4ffd0c7944b60021efc1f5dd429776629d0bc6ed2f2",
+      "raw_phone_display": "+91 9820...028",
+      "spot_id": 6,
+      "language": "hinglish",
+      "created_at": "2026-09-18T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 28,
+      "phone_hash": "b335082b8c13f97529e9584a4eafc42a3b4aebce5170c14440a9846bae2ef6fd",
+      "raw_phone_display": "+91 9820...029",
+      "spot_id": 6,
+      "language": "mr",
+      "created_at": "2026-09-17T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 29,
+      "phone_hash": "f223953089f3a8bae0305dd868710301f748dc1960cbf66c192c37b1ba283e7d",
+      "raw_phone_display": "+91 9820...030",
+      "spot_id": 6,
+      "language": "en",
+      "created_at": "2026-09-16T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 30,
+      "phone_hash": "df4fa2a65b58d626cfcc976e71ea0adbeacffc47ddcb7acd3dd154dbf5b450f8",
+      "raw_phone_display": "+91 9820...031",
+      "spot_id": 6,
+      "language": "hi",
+      "created_at": "2026-09-15T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 31,
+      "phone_hash": "d4a4f968e37556cb7c279059cafcd416e0b506cdd7d556438a44c8b21622a2ef",
+      "raw_phone_display": "+91 9820...032",
+      "spot_id": 6,
+      "language": "hinglish",
+      "created_at": "2026-09-14T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 32,
+      "phone_hash": "605b57774af018f9abc6959495b1da8b5ebe405406ae4269e0e33314d0e37bb4",
+      "raw_phone_display": "+91 9820...033",
+      "spot_id": 6,
+      "language": "mr",
+      "created_at": "2026-09-13T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 33,
+      "phone_hash": "c0c031c53b1e31a1bcf50b6e0efef541f02a8f5ae3cac165c9def96907db08fd",
+      "raw_phone_display": "+91 9820...034",
+      "spot_id": 6,
+      "language": "en",
+      "created_at": "2026-09-12T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 34,
+      "phone_hash": "908482cc00fbc9eca59de23c12b905784ec38bbaf042cff1b7cb888072f56524",
+      "raw_phone_display": "+91 9820...035",
+      "spot_id": 7,
+      "language": "hinglish",
+      "created_at": "2026-09-19T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 35,
+      "phone_hash": "f27b80b907342a50ad334ec9d223c9151966fcba444bed5aa7708535dcf616a8",
+      "raw_phone_display": "+91 9820...036",
+      "spot_id": 7,
+      "language": "mr",
+      "created_at": "2026-09-18T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 36,
+      "phone_hash": "cf795b4be419d0580351de1a2004a4bd15ae7ffedefb66f7fb02b5e876eea728",
+      "raw_phone_display": "+91 9820...037",
+      "spot_id": 7,
+      "language": "en",
+      "created_at": "2026-09-17T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 37,
+      "phone_hash": "55bebf993f7a972416d72ab3e2ce248522d4bba3e831c046a6e5c5548d9cdd7f",
+      "raw_phone_display": "+91 9820...038",
+      "spot_id": 8,
+      "language": "mr",
+      "created_at": "2026-09-19T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 38,
+      "phone_hash": "c7945a524dd497511b7e0d0dba6c4f72f0605e292ad2ebb1e4d79e4851d2f5ad",
+      "raw_phone_display": "+91 9820...039",
+      "spot_id": 8,
+      "language": "en",
+      "created_at": "2026-09-18T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 39,
+      "phone_hash": "d0c7dd364b1a59bc4ea10967013ce45f6fc787d58db15da72ecb9ad6299fa35e",
+      "raw_phone_display": "+91 9820...040",
+      "spot_id": 8,
+      "language": "hi",
+      "created_at": "2026-09-17T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 40,
+      "phone_hash": "79da4c57080e93fe41fb74029dcca087f08c32bbf3e3ddfb0393b6048a391019",
+      "raw_phone_display": "+91 9820...041",
+      "spot_id": 8,
+      "language": "hinglish",
+      "created_at": "2026-09-16T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 41,
+      "phone_hash": "50dff63004a383c5d4aad7a3b2f3f52b0c2b7f900fea82209ee14ac2a0992487",
+      "raw_phone_display": "+91 9820...042",
+      "spot_id": 9,
+      "language": "en",
+      "created_at": "2026-09-19T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 42,
+      "phone_hash": "d188090874f910b6fa1d81ddfcdb26870b792a8a16e861069b4e6f7ed96021a7",
+      "raw_phone_display": "+91 9820...043",
+      "spot_id": 9,
+      "language": "hi",
+      "created_at": "2026-09-18T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 43,
+      "phone_hash": "a7bf3012ea234b5a01310892010d454119d5fbb472fc908fcbfd16224e5e52f2",
+      "raw_phone_display": "+91 9820...044",
+      "spot_id": 9,
+      "language": "hinglish",
+      "created_at": "2026-09-17T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 44,
+      "phone_hash": "c37ecc216c425324fb242376d809b5cba18c1fcbfd05ad65c82fa15cb986dcce",
+      "raw_phone_display": "+91 9820...045",
+      "spot_id": 9,
+      "language": "mr",
+      "created_at": "2026-09-16T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 45,
+      "phone_hash": "e67922eb637b33ccc1d6e58bc9ddd6d9449d2aa4628cc6de69cae729458f12d5",
+      "raw_phone_display": "+91 9820...046",
+      "spot_id": 9,
+      "language": "en",
+      "created_at": "2026-09-15T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 46,
+      "phone_hash": "461b7291f9e2c742985bf2f7e979243d8270eb20facee44f53e4a2d794e20507",
+      "raw_phone_display": "+91 9820...047",
+      "spot_id": 10,
+      "language": "hi",
+      "created_at": "2026-09-19T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 47,
+      "phone_hash": "517216116f6c1ddf5036a76990e42eea00cf20051da88c262d13e4ed2f8afc0d",
+      "raw_phone_display": "+91 9820...048",
+      "spot_id": 10,
+      "language": "hinglish",
+      "created_at": "2026-09-18T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 48,
+      "phone_hash": "4d4a4afa1d7cb14c469d6ff0945e57156e3e8e2e0b38dbbd4fc9a345b5ea053c",
+      "raw_phone_display": "+91 9820...049",
+      "spot_id": 10,
+      "language": "mr",
+      "created_at": "2026-09-17T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 49,
+      "phone_hash": "4bdb965166f91ce8161623c4b7650a79438138f2f22c43c90f8c79db57514359",
+      "raw_phone_display": "+91 9820...050",
+      "spot_id": 10,
+      "language": "en",
+      "created_at": "2026-09-16T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 50,
+      "phone_hash": "d31ea28529b23c24b037e8cbf80c106e74492a82fe57c0e241fe0c0aaf973cd6",
+      "raw_phone_display": "+91 9820...051",
+      "spot_id": 10,
+      "language": "hi",
+      "created_at": "2026-09-15T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 51,
+      "phone_hash": "8df8824c46ec9b62b50665a6fed2e99879e7280fcbd770faf29adf19a96bddfa",
+      "raw_phone_display": "+91 9820...052",
+      "spot_id": 10,
+      "language": "hinglish",
+      "created_at": "2026-09-14T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 52,
+      "phone_hash": "ba9b12ea105667fee3345ebeda53ad39402989994a149382a23c9d1d7e835327",
+      "raw_phone_display": "+91 9820...053",
+      "spot_id": 11,
+      "language": "hinglish",
+      "created_at": "2026-09-19T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 53,
+      "phone_hash": "b3c15fe63aedbd70355285c3c7fdb8dee548c7c5006e25a8b1b2ac0fb87d030a",
+      "raw_phone_display": "+91 9820...054",
+      "spot_id": 11,
+      "language": "mr",
+      "created_at": "2026-09-18T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 54,
+      "phone_hash": "855e3a6fefd9bf72985f0ba451e291a8e757dab02382f1be48a83db160fcb950",
+      "raw_phone_display": "+91 9820...055",
+      "spot_id": 11,
+      "language": "en",
+      "created_at": "2026-09-17T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 55,
+      "phone_hash": "c471e21095249317e17c6d0705d32afd8edc454423ff36dfa8415b36cf2f7a0a",
+      "raw_phone_display": "+91 9820...056",
+      "spot_id": 11,
+      "language": "hi",
+      "created_at": "2026-09-16T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 56,
+      "phone_hash": "1f20b3055463e5efefa90820ebd14ba3560620e3ad0cc23a4bf3b098402807f3",
+      "raw_phone_display": "+91 9820...057",
+      "spot_id": 11,
+      "language": "hinglish",
+      "created_at": "2026-09-15T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 57,
+      "phone_hash": "a97def988720355f99ae255244c3b0f3921544e522cdc8cf1584f041e257c5b7",
+      "raw_phone_display": "+91 9820...058",
+      "spot_id": 11,
+      "language": "mr",
+      "created_at": "2026-09-14T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 58,
+      "phone_hash": "6409e5d92a2338b3d19925894612f1010b8a75700ce598261848b6d6dbf763fc",
+      "raw_phone_display": "+91 9820...059",
+      "spot_id": 11,
+      "language": "en",
+      "created_at": "2026-09-13T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 59,
+      "phone_hash": "f6e391f8e980ecad2940167c5a9c7d6749f3ab6a15e26e6e38313abafb4128a1",
+      "raw_phone_display": "+91 9820...060",
+      "spot_id": 12,
+      "language": "mr",
+      "created_at": "2026-09-19T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 60,
+      "phone_hash": "351ae187b7a2d17b79fec57cb7e1d5ce6f0b4e2ee7b620a3287d07d5ee0e0f2e",
+      "raw_phone_display": "+91 9820...061",
+      "spot_id": 12,
+      "language": "en",
+      "created_at": "2026-09-18T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 61,
+      "phone_hash": "3317c9e4a46fd0361492b69fd41f8f241bfccdd30a69521e50fd3896d2aa21f1",
+      "raw_phone_display": "+91 9820...062",
+      "spot_id": 12,
+      "language": "hi",
+      "created_at": "2026-09-17T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 62,
+      "phone_hash": "4180037fe2917ee655f262583074a3fc249e69889cc036173938c7566d084d83",
+      "raw_phone_display": "+91 9820...063",
+      "spot_id": 12,
+      "language": "hinglish",
+      "created_at": "2026-09-16T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 63,
+      "phone_hash": "b5852eb0683369f38a474326a9c59a34eb660633898e719f4600da7f9abbe1db",
+      "raw_phone_display": "+91 9820...064",
+      "spot_id": 12,
+      "language": "mr",
+      "created_at": "2026-09-15T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 64,
+      "phone_hash": "86dcc5b8bcb0e1d21c97bcb63f8aa03f9634d8713777325c60f490a01e14cd95",
+      "raw_phone_display": "+91 9820...065",
+      "spot_id": 12,
+      "language": "en",
+      "created_at": "2026-09-14T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 65,
+      "phone_hash": "b081de134924b814781f9524756bfde0489006638235ccee93aae4228accffb9",
+      "raw_phone_display": "+91 9820...066",
+      "spot_id": 12,
+      "language": "hi",
+      "created_at": "2026-09-13T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 66,
+      "phone_hash": "a7be3a5592ce9bfcaf43d0f388419bd8a14c1c77c8ad8c5bf6192ff614016ca2",
+      "raw_phone_display": "+91 9820...067",
+      "spot_id": 12,
+      "language": "hinglish",
+      "created_at": "2026-09-12T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 67,
+      "phone_hash": "3deacf86fdfab2d989a75bc4437da6fea895f9885dffd86714755d22ba78c6b7",
+      "raw_phone_display": "+91 9820...068",
+      "spot_id": 13,
+      "language": "en",
+      "created_at": "2026-09-19T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 68,
+      "phone_hash": "8097f67ae8671bd6df40c098d193db292c0e7d389c9bb52cbeb2d3a90289e4ab",
+      "raw_phone_display": "+91 9820...069",
+      "spot_id": 13,
+      "language": "hi",
+      "created_at": "2026-09-18T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 69,
+      "phone_hash": "4612de3788f16e0d3005dd3c52bd97f399b3bcc8b4bd4fc78af97178ecfdd1e4",
+      "raw_phone_display": "+91 9820...070",
+      "spot_id": 13,
+      "language": "hinglish",
+      "created_at": "2026-09-17T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 70,
+      "phone_hash": "925a2c30533e5b1d687092c9f7f68f9994eb490b784bfdeac349190ce7dd899b",
+      "raw_phone_display": "+91 9820...071",
+      "spot_id": 14,
+      "language": "hi",
+      "created_at": "2026-09-19T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 71,
+      "phone_hash": "c0474cdb399478bed530b0c6fa851a0cbd461ceb6ececee2d598f034a4ae806d",
+      "raw_phone_display": "+91 9820...072",
+      "spot_id": 14,
+      "language": "hinglish",
+      "created_at": "2026-09-18T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 72,
+      "phone_hash": "85750692d14a04be35b4f241e425b778f93e8944afcef14b0e2ab25c9e010ba8",
+      "raw_phone_display": "+91 9820...073",
+      "spot_id": 14,
+      "language": "mr",
+      "created_at": "2026-09-17T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 73,
+      "phone_hash": "80b0370c71b42dd0bd460e739026c0a0105d7a47b65306fc26dd4c03c09066e4",
+      "raw_phone_display": "+91 9820...074",
+      "spot_id": 14,
+      "language": "en",
+      "created_at": "2026-09-16T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 74,
+      "phone_hash": "d5f79aa38938accb0f433dc8fc7d237f7354e81546bc52bd08887cab2949b0cc",
+      "raw_phone_display": "+91 9820...075",
+      "spot_id": 15,
+      "language": "hinglish",
+      "created_at": "2026-09-19T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 75,
+      "phone_hash": "f7bc13b7848a8901122671003e625550b05a4406d749a13112eda57e7d0f9c94",
+      "raw_phone_display": "+91 9820...076",
+      "spot_id": 15,
+      "language": "mr",
+      "created_at": "2026-09-18T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 76,
+      "phone_hash": "bc443164ecbb2b93f806eabf8f94b15bdad6675337dbc8df7647271c6fcd09fe",
+      "raw_phone_display": "+91 9820...077",
+      "spot_id": 15,
+      "language": "en",
+      "created_at": "2026-09-17T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 77,
+      "phone_hash": "3f567e8aadb3aefeb8982d29e5abb4745061ce9a9ce15a5c4e896353f548086a",
+      "raw_phone_display": "+91 9820...078",
+      "spot_id": 15,
+      "language": "hi",
+      "created_at": "2026-09-16T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 78,
+      "phone_hash": "c860e9766537504003f86e1e521be6fa3d4011132a1c558f04a188e4fbc33f29",
+      "raw_phone_display": "+91 9820...079",
+      "spot_id": 15,
+      "language": "hinglish",
+      "created_at": "2026-09-15T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 79,
+      "phone_hash": "c95c72c33440f73aab22648261c6af5358d663efe277be492cd85f4b377b103b",
+      "raw_phone_display": "+91 9820...080",
+      "spot_id": 16,
+      "language": "mr",
+      "created_at": "2026-09-19T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 80,
+      "phone_hash": "6f8fc58c2baebbfa62ebd8092451ffc571a07a96c4fc178cc18b82247b4a4666",
+      "raw_phone_display": "+91 9820...081",
+      "spot_id": 16,
+      "language": "en",
+      "created_at": "2026-09-18T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 81,
+      "phone_hash": "27b2b6d9dced3e1b28c6c9a698a934a4f4e80f8ffd96cb25be2883fb8333b0da",
+      "raw_phone_display": "+91 9820...082",
+      "spot_id": 16,
+      "language": "hi",
+      "created_at": "2026-09-17T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 82,
+      "phone_hash": "75f8b0702ecd2ba764e5bc904a625ef1b716c62e027535ec1e57b569c698da09",
+      "raw_phone_display": "+91 9820...083",
+      "spot_id": 16,
+      "language": "hinglish",
+      "created_at": "2026-09-16T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 83,
+      "phone_hash": "b3bdc05ea4a4c583f3877505445ae34cd934b47773f3f350931854ca222dabf5",
+      "raw_phone_display": "+91 9820...084",
+      "spot_id": 16,
+      "language": "mr",
+      "created_at": "2026-09-15T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 84,
+      "phone_hash": "650c31ecbb989a52b34907cc453a01942f125640b06dff6336987a78d2ffbe37",
+      "raw_phone_display": "+91 9820...085",
+      "spot_id": 16,
+      "language": "en",
+      "created_at": "2026-09-14T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 85,
+      "phone_hash": "7712c90c0ba566ad340016cff7d6ccb49bc9bdae783efc944d8b52fbbfc2f3ed",
+      "raw_phone_display": "+91 9820...086",
+      "spot_id": 17,
+      "language": "en",
+      "created_at": "2026-09-19T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 86,
+      "phone_hash": "3fb470864119b244c78f468f80d944bb45b35c02ce182272a5defae94ff1ed25",
+      "raw_phone_display": "+91 9820...087",
+      "spot_id": 17,
+      "language": "hi",
+      "created_at": "2026-09-18T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 87,
+      "phone_hash": "9b75e9f4b998dd11e0ac48754aaf4e1620699b1c4ccf64c4fc244bffafcd47ed",
+      "raw_phone_display": "+91 9820...088",
+      "spot_id": 17,
+      "language": "hinglish",
+      "created_at": "2026-09-17T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 88,
+      "phone_hash": "84a9c39ff5d30ab6d2a15805c5948eb161282429287fe3ff0c807e6830fd5e27",
+      "raw_phone_display": "+91 9820...089",
+      "spot_id": 17,
+      "language": "mr",
+      "created_at": "2026-09-16T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 89,
+      "phone_hash": "7a1daad8b1eeac5fcc32cdd4ee429f3e0b8525b047fec7e70b543092032e4a67",
+      "raw_phone_display": "+91 9820...090",
+      "spot_id": 17,
+      "language": "en",
+      "created_at": "2026-09-15T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 90,
+      "phone_hash": "5bdfaf24db3bffb994138396abf28b41f3a94935eb356c2ab74280d4723f0998",
+      "raw_phone_display": "+91 9820...091",
+      "spot_id": 17,
+      "language": "hi",
+      "created_at": "2026-09-14T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 91,
+      "phone_hash": "ca836ba97a6eddc8134c9e8f19c27102fe1ca969dfe620f1617de1d4476b9434",
+      "raw_phone_display": "+91 9820...092",
+      "spot_id": 17,
+      "language": "hinglish",
+      "created_at": "2026-09-13T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 92,
+      "phone_hash": "72ec2a51298cc60183404c1cf8d7f9d926274bdf11031af7e187525ba90f58cb",
+      "raw_phone_display": "+91 9820...093",
+      "spot_id": 18,
+      "language": "hi",
+      "created_at": "2026-09-19T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 93,
+      "phone_hash": "9fb1076eacb1dcc5470e76e4ede077343f53f4842f0c071d5ebf35f779094110",
+      "raw_phone_display": "+91 9820...094",
+      "spot_id": 18,
+      "language": "hinglish",
+      "created_at": "2026-09-18T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 94,
+      "phone_hash": "a233bc3dcb760c410669fd8b7e52bf148b1ccc9305186d5927c0e0963db325e1",
+      "raw_phone_display": "+91 9820...095",
+      "spot_id": 18,
+      "language": "mr",
+      "created_at": "2026-09-17T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 95,
+      "phone_hash": "da590e580090c2c9dd3ffc3f5a91ed622138689f4ffa6ff0b49f7298310f6057",
+      "raw_phone_display": "+91 9820...096",
+      "spot_id": 18,
+      "language": "en",
+      "created_at": "2026-09-16T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 96,
+      "phone_hash": "048353469f26965cc329d297b0fe3d65a2bb56624028b86bb091883332d5f22f",
+      "raw_phone_display": "+91 9820...097",
+      "spot_id": 18,
+      "language": "hi",
+      "created_at": "2026-09-15T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 97,
+      "phone_hash": "dbeac5fb3e9924d43229b974f4256e840543b7751c79c2e703e21040ec50174a",
+      "raw_phone_display": "+91 9820...098",
+      "spot_id": 18,
+      "language": "hinglish",
+      "created_at": "2026-09-14T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 98,
+      "phone_hash": "19ff18d72af19612453ae60a8d3f0c06e982439d25d068f0a839cf9c0ca4016a",
+      "raw_phone_display": "+91 9820...099",
+      "spot_id": 18,
+      "language": "mr",
+      "created_at": "2026-09-13T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 99,
+      "phone_hash": "7b2f065ef57b56727efad461228c57f57632a5170a44e8a0efebd47e02d61b0a",
+      "raw_phone_display": "+91 9820...100",
+      "spot_id": 18,
+      "language": "en",
+      "created_at": "2026-09-12T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 100,
+      "phone_hash": "3e2fa2d7a087f668d43b820ed17ae4e5c2775d44bb56955b651d6b40737c823c",
+      "raw_phone_display": "+91 9820...101",
+      "spot_id": 19,
+      "language": "hinglish",
+      "created_at": "2026-09-19T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 101,
+      "phone_hash": "2376b5808f7aef2800f430ac244bf6bd396361cafe735d2a5ac0a9db8acb9d54",
+      "raw_phone_display": "+91 9820...102",
+      "spot_id": 19,
+      "language": "mr",
+      "created_at": "2026-09-18T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 102,
+      "phone_hash": "f3527378511e5c262e2560fc26a9dbdd59c874000f3b885dca172db75ae69350",
+      "raw_phone_display": "+91 9820...103",
+      "spot_id": 19,
+      "language": "en",
+      "created_at": "2026-09-17T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 103,
+      "phone_hash": "c8c90d7d8295d3fa71da3ab768d0652ada63b66debc3a2a84602866ba8d13193",
+      "raw_phone_display": "+91 9820...104",
+      "spot_id": 20,
+      "language": "mr",
+      "created_at": "2026-09-19T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 104,
+      "phone_hash": "29cc43fe5e5093356683fafd3ccc8cda34efb7d35e48ac4f4b68be955c26e75a",
+      "raw_phone_display": "+91 9820...105",
+      "spot_id": 20,
+      "language": "en",
+      "created_at": "2026-09-18T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 105,
+      "phone_hash": "2d1ab3d3974ee8eac1605deb3e5e894e04f062c838a5cc74bb2827983a66a0ce",
+      "raw_phone_display": "+91 9820...106",
+      "spot_id": 20,
+      "language": "hi",
+      "created_at": "2026-09-17T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 106,
+      "phone_hash": "d64fd9b4d4139de834f16feb0371f1e946254145205d7d7afb7b792da7cea6c7",
+      "raw_phone_display": "+91 9820...107",
+      "spot_id": 20,
+      "language": "hinglish",
+      "created_at": "2026-09-16T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 107,
+      "phone_hash": "05522fea7f8b9e000870e9d7810369dbecd3dce8d15d3c0c0f3df9fd825d5c3d",
+      "raw_phone_display": "+91 9820...108",
+      "spot_id": 21,
+      "language": "en",
+      "created_at": "2026-09-19T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 108,
+      "phone_hash": "2295d79322084e3b6382af2523a5e87a209c35b6cf95322a7235c27bbb3e9166",
+      "raw_phone_display": "+91 9820...109",
+      "spot_id": 21,
+      "language": "hi",
+      "created_at": "2026-09-18T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 109,
+      "phone_hash": "0e410bd1cc26187ffc49c50e2cf0677766a6ac66071e2572fd36076a2d925202",
+      "raw_phone_display": "+91 9820...110",
+      "spot_id": 21,
+      "language": "hinglish",
+      "created_at": "2026-09-17T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.890Z"
+    },
+    {
+      "id": 110,
+      "phone_hash": "258a43211b15390900270a9d2d2fead2cb29e00907fe9e3221522cc21a0c453c",
+      "raw_phone_display": "+91 9820...111",
+      "spot_id": 21,
+      "language": "mr",
+      "created_at": "2026-09-16T14:43:29.890Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 111,
+      "phone_hash": "4d9a67375576b37c135266fda20aa1aa4edac7e062201f8118fbec829a5f882a",
+      "raw_phone_display": "+91 9820...112",
+      "spot_id": 21,
+      "language": "en",
+      "created_at": "2026-09-15T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 112,
+      "phone_hash": "38b0e6590e8801a449fef721dfa367bbbb4ca1825e0844b04fc6c990556d897e",
+      "raw_phone_display": "+91 9820...113",
+      "spot_id": 22,
+      "language": "hi",
+      "created_at": "2026-09-19T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 113,
+      "phone_hash": "d30ef5ef8d50423d524ead2b62064b7e81ebc933b7afdeecbdab49cdb5f83688",
+      "raw_phone_display": "+91 9820...114",
+      "spot_id": 22,
+      "language": "hinglish",
+      "created_at": "2026-09-18T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 114,
+      "phone_hash": "52c2d7b89263b5311caad8dc2368109eeea6e2ec6b0a0cf0835931a4ca0fe5ec",
+      "raw_phone_display": "+91 9820...115",
+      "spot_id": 22,
+      "language": "mr",
+      "created_at": "2026-09-17T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 115,
+      "phone_hash": "12baec441accda5b6a9dd88b36830d93e630ffdc8c32727b4875748811a1ed13",
+      "raw_phone_display": "+91 9820...116",
+      "spot_id": 22,
+      "language": "en",
+      "created_at": "2026-09-16T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 116,
+      "phone_hash": "47b0b808a09cd625f9049fa62150d2b5f48ac86e63a366b3f5153a4b1f5b72ac",
+      "raw_phone_display": "+91 9820...117",
+      "spot_id": 22,
+      "language": "hi",
+      "created_at": "2026-09-15T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 117,
+      "phone_hash": "1e9d693f007514b7bef8bdc9014f70aec9f5081adae0325576186ffe77a80dd9",
+      "raw_phone_display": "+91 9820...118",
+      "spot_id": 22,
+      "language": "hinglish",
+      "created_at": "2026-09-14T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 118,
+      "phone_hash": "902fbd4da62bded695388bdcdf650e9eebb968b734bb043101724b824f7458ff",
+      "raw_phone_display": "+91 9820...119",
+      "spot_id": 23,
+      "language": "hinglish",
+      "created_at": "2026-09-19T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 119,
+      "phone_hash": "82ff730010a0d29373a60759b456f5db60d83e08c02c2e958eda9acd9da29ad2",
+      "raw_phone_display": "+91 9820...120",
+      "spot_id": 23,
+      "language": "mr",
+      "created_at": "2026-09-18T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 120,
+      "phone_hash": "2f8ce28aade2dcc6b366aeacb076f64d9649d5e277f475ce6ee9c93c8c90561f",
+      "raw_phone_display": "+91 9820...121",
+      "spot_id": 23,
+      "language": "en",
+      "created_at": "2026-09-17T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 121,
+      "phone_hash": "343d241953b11bfa27629867bc5be93281fa7c40e9db25f63abf8f0374dc7ffe",
+      "raw_phone_display": "+91 9820...122",
+      "spot_id": 23,
+      "language": "hi",
+      "created_at": "2026-09-16T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 122,
+      "phone_hash": "80bc4e21cc0c0f57648c751b7e0661527af5b55488cad38e447597e13d3199b2",
+      "raw_phone_display": "+91 9820...123",
+      "spot_id": 23,
+      "language": "hinglish",
+      "created_at": "2026-09-15T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 123,
+      "phone_hash": "065f37663ff31c2fd142f20535290bc55841199318b20924d31d29c9af855055",
+      "raw_phone_display": "+91 9820...124",
+      "spot_id": 23,
+      "language": "mr",
+      "created_at": "2026-09-14T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 124,
+      "phone_hash": "b242de593667e7d1ffa4c8bcb3559f8994b0b66ad65031ace48152df06d2abc7",
+      "raw_phone_display": "+91 9820...125",
+      "spot_id": 23,
+      "language": "en",
+      "created_at": "2026-09-13T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 125,
+      "phone_hash": "90aab735b11e5a80eb56275e2d404e456f12f2fad682e9b04253d78010f6df2b",
+      "raw_phone_display": "+91 9820...126",
+      "spot_id": 24,
+      "language": "mr",
+      "created_at": "2026-09-19T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 126,
+      "phone_hash": "b4173fc98711a0d530f7591fd6a15ae019f69e393ebda3d3b9c445031b90b0c3",
+      "raw_phone_display": "+91 9820...127",
+      "spot_id": 24,
+      "language": "en",
+      "created_at": "2026-09-18T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 127,
+      "phone_hash": "8657f8e8d39f033b1c4738f8b261615b8f222026ad3575d411cf49a8e6c6233c",
+      "raw_phone_display": "+91 9820...128",
+      "spot_id": 24,
+      "language": "hi",
+      "created_at": "2026-09-17T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 128,
+      "phone_hash": "21bec996077445ee59ad0c1642e865f746c7b04a9bd71ff14b2334a510b770e8",
+      "raw_phone_display": "+91 9820...129",
+      "spot_id": 24,
+      "language": "hinglish",
+      "created_at": "2026-09-16T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 129,
+      "phone_hash": "adb575bf5bb7716dcaab46531d8a4b4093ea883222f596d65ba56e3ae25f353c",
+      "raw_phone_display": "+91 9820...130",
+      "spot_id": 24,
+      "language": "mr",
+      "created_at": "2026-09-15T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 130,
+      "phone_hash": "3fd924879d3252e616d75ab69e08eace6d74ca9f37c54b536d06c7382f467407",
+      "raw_phone_display": "+91 9820...131",
+      "spot_id": 24,
+      "language": "en",
+      "created_at": "2026-09-14T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 131,
+      "phone_hash": "a5c3712309b42b0bdba9117d66da3b7d3e2c88e22a7fa33d4aee9fa054cb870d",
+      "raw_phone_display": "+91 9820...132",
+      "spot_id": 24,
+      "language": "hi",
+      "created_at": "2026-09-13T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 132,
+      "phone_hash": "49cf632a5a9150f410792b3cbb4005fc4b1f03706a8fedb196e6442ce18bc7ce",
+      "raw_phone_display": "+91 9820...133",
+      "spot_id": 24,
+      "language": "hinglish",
+      "created_at": "2026-09-12T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 133,
+      "phone_hash": "b6f605eaf37f44488388cbc095e6e1241cb254fe13caae6763268e75ce309141",
+      "raw_phone_display": "+91 9820...134",
+      "spot_id": 25,
+      "language": "en",
+      "created_at": "2026-09-19T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 134,
+      "phone_hash": "8fa389684c94fcbb8d217f92b3a8f9b031efa4fc9fe4b9f4e1cde8657a9249a5",
+      "raw_phone_display": "+91 9820...135",
+      "spot_id": 25,
+      "language": "hi",
+      "created_at": "2026-09-18T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 135,
+      "phone_hash": "106ee2ce4f8a21541dc11f8bfbd2ba78d2702f6c91f016df5f1e6abf52bfa60e",
+      "raw_phone_display": "+91 9820...136",
+      "spot_id": 25,
+      "language": "hinglish",
+      "created_at": "2026-09-17T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 136,
+      "phone_hash": "3e73df21898a1748339d5de32757c7bb39f55b50a2fb3e3c495ca87222e94e9c",
+      "raw_phone_display": "+91 9820...137",
+      "spot_id": 26,
+      "language": "hi",
+      "created_at": "2026-09-19T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 137,
+      "phone_hash": "fcfb429bcef262fe4ae2286c4ac1db75461b1a09d46176cee3154a239e98a190",
+      "raw_phone_display": "+91 9820...138",
+      "spot_id": 26,
+      "language": "hinglish",
+      "created_at": "2026-09-18T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 138,
+      "phone_hash": "69718138fd699acf242805269c61974c3f6783cac19babeac16804105b0aea91",
+      "raw_phone_display": "+91 9820...139",
+      "spot_id": 26,
+      "language": "mr",
+      "created_at": "2026-09-17T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 139,
+      "phone_hash": "0ca08770dd74857aada4c778e9a3916ffcfb8a29a2215e934e447bf05b68d243",
+      "raw_phone_display": "+91 9820...140",
+      "spot_id": 26,
+      "language": "en",
+      "created_at": "2026-09-16T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 140,
+      "phone_hash": "058fafb920899eda49229dcd4e6a6239750902ea9ffa45e298790f140e59f4ec",
+      "raw_phone_display": "+91 9820...141",
+      "spot_id": 27,
+      "language": "hinglish",
+      "created_at": "2026-09-19T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 141,
+      "phone_hash": "6c56667618c82bf3b0e3e6b30552cc987b1ab39d885e6b8ed0b202f73a62074f",
+      "raw_phone_display": "+91 9820...142",
+      "spot_id": 27,
+      "language": "mr",
+      "created_at": "2026-09-18T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 142,
+      "phone_hash": "27347f22adbbe2498771818b181d7dcbaf54b13b1cb92d18828ae642a5b41c45",
+      "raw_phone_display": "+91 9820...143",
+      "spot_id": 27,
+      "language": "en",
+      "created_at": "2026-09-17T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 143,
+      "phone_hash": "a91c808f1be9fbae23d49fb5ecceaad20395b872e9e4550936b4abc94db164c6",
+      "raw_phone_display": "+91 9820...144",
+      "spot_id": 27,
+      "language": "hi",
+      "created_at": "2026-09-16T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 144,
+      "phone_hash": "ec33a05b1bb82355ece71e4aace49dfe5554d3e1190fbc43d1dc045972f475c8",
+      "raw_phone_display": "+91 9820...145",
+      "spot_id": 27,
+      "language": "hinglish",
+      "created_at": "2026-09-15T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 145,
+      "phone_hash": "39556ba3511002e1608d0a3aa1aa8558e76ca32842c08e8f6c23dc27ea268161",
+      "raw_phone_display": "+91 9820...146",
+      "spot_id": 28,
+      "language": "mr",
+      "created_at": "2026-09-19T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 146,
+      "phone_hash": "dab843504d7e35c36b857d9927195fa91b87f7e48a1ed7df7e5cc666aea534e2",
+      "raw_phone_display": "+91 9820...147",
+      "spot_id": 28,
+      "language": "en",
+      "created_at": "2026-09-18T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 147,
+      "phone_hash": "e308ab774d827bcb557b4bbcf21a23f7afcc4ae3d9f2088995728055ad7539c3",
+      "raw_phone_display": "+91 9820...148",
+      "spot_id": 28,
+      "language": "hi",
+      "created_at": "2026-09-17T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 148,
+      "phone_hash": "b00dbbe5593c4ecb1661e7bdecd8846ff9ff38aa2016d2c9826c776b91b91cda",
+      "raw_phone_display": "+91 9820...149",
+      "spot_id": 28,
+      "language": "hinglish",
+      "created_at": "2026-09-16T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 149,
+      "phone_hash": "71e0c00c24645847102a07f64b69609deaed6bb8d4869b40c255104f05dc137b",
+      "raw_phone_display": "+91 9820...150",
+      "spot_id": 28,
+      "language": "mr",
+      "created_at": "2026-09-15T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 150,
+      "phone_hash": "8b284fc367dee3675540d4fbbf5a9e696c4e4605c99b54e2aac280732e9f8c63",
+      "raw_phone_display": "+91 9820...151",
+      "spot_id": 28,
+      "language": "en",
+      "created_at": "2026-09-14T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 151,
+      "phone_hash": "3e53b48604d78e1a865ae3f71647e5ed4174b5ca9522be43c1ea6d1541d86fa2",
+      "raw_phone_display": "+91 9820...152",
+      "spot_id": 29,
+      "language": "en",
+      "created_at": "2026-09-19T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 152,
+      "phone_hash": "f341562206eca92ff262b233c773b634844af8368a6090a50de23506a12c7304",
+      "raw_phone_display": "+91 9820...153",
+      "spot_id": 29,
+      "language": "hi",
+      "created_at": "2026-09-18T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 153,
+      "phone_hash": "d6719583e8451b4b18a57e709ca2c4ec1004d6ae93b5c83a0139332ff28a2c2e",
+      "raw_phone_display": "+91 9820...154",
+      "spot_id": 29,
+      "language": "hinglish",
+      "created_at": "2026-09-17T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 154,
+      "phone_hash": "ece3647892966f51152098a47bd6ca221884c998bafe7eedc5a10772be7c6f71",
+      "raw_phone_display": "+91 9820...155",
+      "spot_id": 29,
+      "language": "mr",
+      "created_at": "2026-09-16T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 155,
+      "phone_hash": "02a7bbcbc9f75717a016886d7ba7da2e76936eb7d00d8552e4092e9105b6a746",
+      "raw_phone_display": "+91 9820...156",
+      "spot_id": 29,
+      "language": "en",
+      "created_at": "2026-09-15T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 156,
+      "phone_hash": "add67b3a8139e640d4f2897caa3e4d6df52f2f7ccffbe93ea6bb21015934eff2",
+      "raw_phone_display": "+91 9820...157",
+      "spot_id": 29,
+      "language": "hi",
+      "created_at": "2026-09-14T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 157,
+      "phone_hash": "0e822afccc46995cda853ff3d3b5402a826d86994aa3bd44f56367bbac17c526",
+      "raw_phone_display": "+91 9820...158",
+      "spot_id": 29,
+      "language": "hinglish",
+      "created_at": "2026-09-13T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 158,
+      "phone_hash": "96f9112cb9554d3136e0058eaa8bc2a83dd0ab542486b4e449c4c811a371fc0e",
+      "raw_phone_display": "+91 9820...159",
+      "spot_id": 30,
+      "language": "hi",
+      "created_at": "2026-09-19T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 159,
+      "phone_hash": "ec7e9954b241e88256fa3467a2d5eef7a76aaa6f111d32a233b6434c918d6e5c",
+      "raw_phone_display": "+91 9820...160",
+      "spot_id": 30,
+      "language": "hinglish",
+      "created_at": "2026-09-18T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 160,
+      "phone_hash": "500e28362f6654864da84f3236f9be4521bdd54c2cfa7e48429aa43d016362d5",
+      "raw_phone_display": "+91 9820...161",
+      "spot_id": 30,
+      "language": "mr",
+      "created_at": "2026-09-17T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 161,
+      "phone_hash": "0fa4dcc6b1c0448541b68f29382c78fa25c36d4eb0e578de558e199f007f787d",
+      "raw_phone_display": "+91 9820...162",
+      "spot_id": 30,
+      "language": "en",
+      "created_at": "2026-09-16T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 162,
+      "phone_hash": "375f840a2de69a770dbc7c851db16de5b18921f66da5eda27a45633ab2b5b874",
+      "raw_phone_display": "+91 9820...163",
+      "spot_id": 30,
+      "language": "hi",
+      "created_at": "2026-09-15T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 163,
+      "phone_hash": "3a88177472d3774c36299d63a132a23425997523f65aa462574589405be45460",
+      "raw_phone_display": "+91 9820...164",
+      "spot_id": 30,
+      "language": "hinglish",
+      "created_at": "2026-09-14T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 164,
+      "phone_hash": "196371fb62074feacb04b04f00488b11f679be2fb18d8a0e4a8e8e6ebb062f8c",
+      "raw_phone_display": "+91 9820...165",
+      "spot_id": 30,
+      "language": "mr",
+      "created_at": "2026-09-13T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    },
+    {
+      "id": 165,
+      "phone_hash": "9688321cd14cf01c5ad91e3ac7ef780fd463cf88103d4e34c2958b0329744b7c",
+      "raw_phone_display": "+91 9820...166",
+      "spot_id": 30,
+      "language": "en",
+      "created_at": "2026-09-12T14:43:29.891Z",
+      "expires_at": "2026-09-27T14:43:29.891Z"
+    }
+  ],
+  "alerts_sent": [
+    {
+      "id": 11,
+      "spot_id": 1,
+      "spot_name": "Hindmata Junction",
+      "language": "en",
+      "recipient": "whatsapp:+919876543210",
+      "channel": "whatsapp",
+      "status": "simulated",
+      "provider_sid": "SIM_1789980233186",
+      "body": "🚨 BMC WARD G-SOUTH FLOOD ALERT 🚨\n\nLocation: Hindmata Junction\nRisk Level: MODERATE (37% probability)\nCause: heavy rainfall\n3h Rainfall: 34.8 mm (updated just now)\n\nAction: pumps and traffic marshals on standby - avoid the stretch\n\nReply STATUS for latest update\nReply EXTEND to keep receiving alerts\nReply STOP to unsubscribe\n",
+      "sent_at": "2026-09-21T08:43:53.186Z"
+    },
+    {
+      "id": 10,
+      "spot_id": 4,
+      "spot_name": "Lower Parel (Kamla Mills)",
+      "language": "en",
+      "recipient": "+919876543210",
+      "channel": "whatsapp",
+      "status": "sent",
+      "provider_sid": "WX_1789980198751",
+      "body": "🚨 BMC WARD G-SOUTH FLOOD ALERT 🚨\n\nLocation: Lower Parel (Kamla Mills)\nRisk Level: HIGH (47% probability)\nCause: heavy rainfall\n3h Rainfall: 34.8 mm (updated just now)\n\nAction: pumps and traffic marshals on standby - avoid the stretch\n\nReply STATUS for latest update\nReply EXTEND to keep receiving alerts\nReply STOP to unsubscribe\n",
+      "sent_at": "2026-09-21T08:43:18.751Z"
+    },
+    {
+      "id": 9,
+      "spot_id": 4,
+      "spot_name": "Lower Parel (Kamla Mills)",
+      "language": "en",
+      "recipient": "BROADCAST:131_SUBSCRIBERS",
+      "channel": "whatsapp+sms",
+      "status": "simulated",
+      "provider_sid": "BROADCAST_1789980168667",
+      "body": "🚨 BMC WARD G-SOUTH FLOOD ALERT 🚨\n\nLocation: Lower Parel (Kamla Mills)\nRisk Level: HIGH (47% probability)\nCause: heavy rainfall\n3h Rainfall: 34.8 mm (updated just now)\n\nAction: pumps and traffic marshals on standby - avoid the stretch\n\nReply STATUS for latest update\nReply EXTEND to keep receiving alerts\nReply STOP to unsubscribe\n",
+      "sent_at": "2026-09-21T08:42:48.667Z"
+    },
+    {
+      "id": 8,
+      "spot_id": 1,
+      "spot_name": "Hindmata Junction",
+      "language": "en",
+      "recipient": "BROADCAST:107_SUBSCRIBERS",
+      "channel": "whatsapp+sms",
+      "status": "simulated",
+      "provider_sid": "BROADCAST_1789980158602",
+      "body": "🚨 BMC WARD G-SOUTH FLOOD ALERT 🚨\n\nLocation: Hindmata Junction\nRisk Level: MODERATE (37% probability)\nCause: heavy rainfall\n3h Rainfall: 34.8 mm (updated just now)\n\nAction: pumps and traffic marshals on standby - avoid the stretch\n\nReply STATUS for latest update\nReply EXTEND to keep receiving alerts\nReply STOP to unsubscribe\n",
+      "sent_at": "2026-09-21T08:42:38.602Z"
+    },
+    {
+      "id": 7,
+      "spot_id": 1,
+      "spot_name": "Hindmata Junction",
+      "language": "en",
+      "recipient": "BROADCAST:3_SUBSCRIBERS",
+      "channel": "whatsapp",
+      "status": "simulated",
+      "provider_sid": "BROADCAST_1789980139685",
+      "body": "🚨 BMC WARD G-SOUTH FLOOD ALERT 🚨\n\nLocation: Hindmata Junction\nRisk Level: MODERATE (37% probability)\nCause: heavy rainfall\n3h Rainfall: 34.8 mm (updated just now)\n\nAction: pumps and traffic marshals on standby - avoid the stretch\n\nReply STATUS for latest update\nReply EXTEND to keep receiving alerts\nReply STOP to unsubscribe\n",
+      "sent_at": "2026-09-21T08:42:19.685Z"
+    },
+    {
+      "id": 6,
+      "spot_id": 12,
+      "spot_name": "Senapati Bapat Marg",
+      "language": "en",
+      "recipient": "MUNICIPAL_DISPATCH",
+      "channel": "sms",
+      "status": "sent",
+      "provider_sid": "DESILT_SRV_1789980114052",
+      "body": "MUNICIPAL DESILTING LOG: Emergency clearance verified for Senapati Bapat Marg. Culvert flushed. Hydraulic health score restored to 94.5%.",
+      "sent_at": "2026-09-21T08:41:54.052Z"
+    },
+    {
+      "id": 5,
+      "spot_id": 1,
+      "spot_name": "Hindmata Junction",
+      "language": "en",
+      "recipient": "BROADCAST:107_SUBSCRIBERS",
+      "channel": "whatsapp+sms",
+      "status": "simulated",
+      "provider_sid": "BROADCAST_1789980068168",
+      "body": "🚨 BMC WARD G-SOUTH FLOOD ALERT 🚨\n\nLocation: Hindmata Junction\nRisk Level: MODERATE (37% probability)\nCause: heavy rainfall\n3h Rainfall: 34.8 mm (updated just now)\n\nAction: pumps and traffic marshals on standby - avoid the stretch\n\nReply STATUS for latest update\nReply EXTEND to keep receiving alerts\nReply STOP to unsubscribe\n",
+      "sent_at": "2026-09-21T08:41:08.168Z"
+    },
+    {
+      "id": 4,
+      "spot_id": 1,
+      "spot_name": "Hindmata Junction",
+      "language": "en",
+      "recipient": "BROADCAST:3_SUBSCRIBERS",
+      "channel": "whatsapp",
+      "status": "simulated",
+      "provider_sid": "BROADCAST_1789980063285",
+      "body": "🚨 BMC WARD G-SOUTH FLOOD ALERT 🚨\n\nLocation: Hindmata Junction\nRisk Level: MODERATE (37% probability)\nCause: heavy rainfall\n3h Rainfall: 34.8 mm (updated just now)\n\nAction: pumps and traffic marshals on standby - avoid the stretch\n\nReply STATUS for latest update\nReply EXTEND to keep receiving alerts\nReply STOP to unsubscribe\n",
+      "sent_at": "2026-09-21T08:41:03.285Z"
+    },
+    {
+      "id": 3,
+      "spot_id": 1,
+      "spot_name": "Hindmata Junction",
+      "language": "en",
+      "recipient": "BROADCAST:107_SUBSCRIBERS",
+      "channel": "whatsapp+sms",
+      "status": "simulated",
+      "provider_sid": "BROADCAST_1789917259062",
+      "body": "🚨 BMC WARD G-SOUTH FLOOD ALERT 🚨\n\nLocation: Hindmata Junction\nRisk Level: CRITICAL (77% probability)\nCause: heavy rainfall\n3h Rainfall: 34.8 mm (updated just now)\n\nAction: pumps and traffic marshals on standby - avoid the stretch\n\nReply STATUS for latest update\nReply EXTEND to keep receiving alerts\nReply STOP to unsubscribe\n",
+      "sent_at": "2026-09-20T15:14:19.062Z"
+    },
+    {
+      "id": 1,
+      "spot_id": 1,
+      "spot_name": "Hindmata Junction",
+      "language": "en",
+      "recipient": "whatsapp:+919820123456",
+      "channel": "whatsapp",
+      "status": "simulated",
+      "provider_sid": "SM_SIMULATED_001",
+      "body": "🚨 BMC WARD G-SOUTH FLOOD ALERT 🚨\n\nLocation: Hindmata Junction\nRisk Level: CRITICAL (88% probability)\nCause: drain blockage\n3h Rainfall: 34.8 mm (updated just now)\n\nAction: desilting crew requested - avoid the stretch\n\nReply STATUS for latest update\nReply EXTEND to keep receiving alerts\nReply STOP to unsubscribe",
+      "sent_at": "2026-09-20T13:58:29.891Z"
+    },
+    {
+      "id": 2,
+      "spot_id": 7,
+      "spot_name": "Parel TT",
+      "language": "mr",
+      "recipient": "whatsapp:+919820234567",
+      "channel": "whatsapp",
+      "status": "simulated",
+      "provider_sid": "SM_SIMULATED_002",
+      "body": "🚨 बीएमसी प्रभाग जी-दक्षिण पूर सूचना 🚨\n\nस्थान: Parel TT\nधोका पातळी: जास्त (68% शक्यता)\nकारण: गटार तुंबले\n३ तासांचा पाऊस: ३४.८ मिमी (अपडेट: आत्ताच)\n\nकृती: गाळ काढणारे पथक बोलावले - हा रस्ता टाळा\n\nताज्या माहितीसाठी STATUS पाठवा\nसूचना सुरू ठेवण्यासाठी EXTEND पाठवा\nरद्द करण्यासाठी STOP पाठवा",
+      "sent_at": "2026-09-20T13:13:29.891Z"
+    }
+  ],
+  "drain_records": [
+    {
+      "spot_id": 1,
+      "name": "Hindmata Junction",
+      "health_score": 84,
+      "avg_delta": -0.0408,
+      "status": "stable",
+      "predicted_failure_date": null,
+      "last_desilted": "2026-08-21T14:43:29.883Z"
+    },
+    {
+      "spot_id": 2,
+      "name": "Worli Naka",
+      "health_score": 85,
+      "avg_delta": -0.0481,
+      "status": "improving",
+      "predicted_failure_date": null,
+      "last_desilted": "2026-08-20T14:43:29.883Z"
+    },
+    {
+      "spot_id": 3,
+      "name": "Prabhadevi Junction",
+      "health_score": 86,
+      "avg_delta": -0.0527,
+      "status": "improving",
+      "predicted_failure_date": null,
+      "last_desilted": "2026-08-19T14:43:29.883Z"
+    },
+    {
+      "spot_id": 4,
+      "name": "Lower Parel (Kamla Mills)",
+      "health_score": 87,
+      "avg_delta": -0.0527,
+      "status": "improving",
+      "predicted_failure_date": null,
+      "last_desilted": "2026-08-18T14:43:29.883Z"
+    },
+    {
+      "spot_id": 5,
+      "name": "Elphinstone Road Station",
+      "health_score": 88,
+      "avg_delta": -0.0375,
+      "status": "improving",
+      "predicted_failure_date": null,
+      "last_desilted": "2026-08-17T14:43:29.883Z"
+    },
+    {
+      "spot_id": 6,
+      "name": "Currey Road",
+      "health_score": 89,
+      "avg_delta": -0.0521,
+      "status": "improving",
+      "predicted_failure_date": null,
+      "last_desilted": "2026-08-16T14:43:29.883Z"
+    },
+    {
+      "spot_id": 7,
+      "name": "Parel TT",
+      "health_score": 90,
+      "avg_delta": -0.0425,
+      "status": "improving",
+      "predicted_failure_date": null,
+      "last_desilted": "2026-08-15T14:43:29.883Z"
+    },
+    {
+      "spot_id": 8,
+      "name": "Love Grove Junction",
+      "health_score": 84,
+      "avg_delta": -0.0434,
+      "status": "stable",
+      "predicted_failure_date": null,
+      "last_desilted": "2026-08-14T14:43:29.883Z"
+    },
+    {
+      "spot_id": 9,
+      "name": "Worli Sea Face",
+      "health_score": 85,
+      "avg_delta": -0.0481,
+      "status": "improving",
+      "predicted_failure_date": null,
+      "last_desilted": "2026-08-13T14:43:29.883Z"
+    },
+    {
+      "spot_id": 10,
+      "name": "Dr Ambedkar Road Prabhadevi",
+      "health_score": 86,
+      "avg_delta": -0.0416,
+      "status": "improving",
+      "predicted_failure_date": null,
+      "last_desilted": "2026-08-12T14:43:29.883Z"
+    },
+    {
+      "spot_id": 11,
+      "name": "Sane Guruji Marg",
+      "health_score": 87,
+      "avg_delta": -0.0468,
+      "status": "improving",
+      "predicted_failure_date": null,
+      "last_desilted": "2026-08-11T14:43:29.883Z"
+    },
+    {
+      "spot_id": 12,
+      "name": "Senapati Bapat Marg",
+      "health_score": 94.5,
+      "avg_delta": 0.015,
+      "status": "improving",
+      "predicted_failure_date": null,
+      "last_desilted": "2026-09-21T08:41:54.052Z"
+    },
+    {
+      "spot_id": 13,
+      "name": "NM Joshi Marg",
+      "health_score": 89,
+      "avg_delta": -0.0481,
+      "status": "improving",
+      "predicted_failure_date": null,
+      "last_desilted": "2026-08-09T14:43:29.883Z"
+    },
+    {
+      "spot_id": 14,
+      "name": "Delisle Road",
+      "health_score": 90,
+      "avg_delta": -0.0494,
+      "status": "improving",
+      "predicted_failure_date": null,
+      "last_desilted": "2026-08-08T14:43:29.883Z"
+    },
+    {
+      "spot_id": 15,
+      "name": "Prabhadevi Chowpatty",
+      "health_score": 84,
+      "avg_delta": -0.0481,
+      "status": "stable",
+      "predicted_failure_date": null,
+      "last_desilted": "2026-08-07T14:43:29.883Z"
+    },
+    {
+      "spot_id": 16,
+      "name": "Worli Village",
+      "health_score": 85,
+      "avg_delta": -0.0481,
+      "status": "improving",
+      "predicted_failure_date": null,
+      "last_desilted": "2026-08-06T14:43:29.883Z"
+    },
+    {
+      "spot_id": 17,
+      "name": "Century Bazaar Prabhadevi",
+      "health_score": 86,
+      "avg_delta": -0.0416,
+      "status": "improving",
+      "predicted_failure_date": null,
+      "last_desilted": "2026-08-05T14:43:29.883Z"
+    },
+    {
+      "spot_id": 18,
+      "name": "Peninsula Corporate Park",
+      "health_score": 87,
+      "avg_delta": 0.0254,
+      "status": "improving",
+      "predicted_failure_date": null,
+      "last_desilted": "2026-08-04T14:43:29.883Z"
+    },
+    {
+      "spot_id": 19,
+      "name": "Pandurang Budhkar Marg",
+      "health_score": 88,
+      "avg_delta": -0.0388,
+      "status": "improving",
+      "predicted_failure_date": null,
+      "last_desilted": "2026-08-03T14:43:29.883Z"
+    },
+    {
+      "spot_id": 20,
+      "name": "Annie Besant Road Worli",
+      "health_score": 89,
+      "avg_delta": -0.0379,
+      "status": "improving",
+      "predicted_failure_date": null,
+      "last_desilted": "2026-08-02T14:43:29.883Z"
+    },
+    {
+      "spot_id": 21,
+      "name": "Jamshedji Tata Road",
+      "health_score": 90,
+      "avg_delta": -0.0481,
+      "status": "improving",
+      "predicted_failure_date": null,
+      "last_desilted": "2026-08-01T14:43:29.883Z"
+    },
+    {
+      "spot_id": 22,
+      "name": "Curry Road Bridge Approach",
+      "health_score": 84,
+      "avg_delta": -0.0445,
+      "status": "stable",
+      "predicted_failure_date": null,
+      "last_desilted": "2026-07-31T14:43:29.883Z"
+    },
+    {
+      "spot_id": 23,
+      "name": "Ganpatrao Kadam Marg",
+      "health_score": 85,
+      "avg_delta": -0.0468,
+      "status": "improving",
+      "predicted_failure_date": null,
+      "last_desilted": "2026-07-30T14:43:29.883Z"
+    },
+    {
+      "spot_id": 24,
+      "name": "Tulsi Pipe Road",
+      "health_score": 86,
+      "avg_delta": -0.0425,
+      "status": "improving",
+      "predicted_failure_date": null,
+      "last_desilted": "2026-07-29T14:43:29.883Z"
+    },
+    {
+      "spot_id": 25,
+      "name": "Sayani Road Prabhadevi",
+      "health_score": 87,
+      "avg_delta": -0.0408,
+      "status": "improving",
+      "predicted_failure_date": null,
+      "last_desilted": "2026-07-28T14:43:29.883Z"
+    },
+    {
+      "spot_id": 26,
+      "name": "Veer Savarkar Marg",
+      "health_score": 88,
+      "avg_delta": -0.0481,
+      "status": "improving",
+      "predicted_failure_date": null,
+      "last_desilted": "2026-07-27T14:43:29.883Z"
+    },
+    {
+      "spot_id": 27,
+      "name": "Mahalaxmi Racecourse Rd",
+      "health_score": 89,
+      "avg_delta": -0.0373,
+      "status": "improving",
+      "predicted_failure_date": null,
+      "last_desilted": "2026-07-26T14:43:29.883Z"
+    },
+    {
+      "spot_id": 28,
+      "name": "Haji Ali Junction",
+      "health_score": 90,
+      "avg_delta": -0.0456,
+      "status": "improving",
+      "predicted_failure_date": null,
+      "last_desilted": "2026-07-25T14:43:29.883Z"
+    },
+    {
+      "spot_id": 29,
+      "name": "Worli Dairy",
+      "health_score": 84,
+      "avg_delta": -0.0481,
+      "status": "stable",
+      "predicted_failure_date": null,
+      "last_desilted": "2026-07-24T14:43:29.883Z"
+    },
+    {
+      "spot_id": 30,
+      "name": "Elphinstone Bridge East",
+      "health_score": 85,
+      "avg_delta": -0.0456,
+      "status": "improving",
+      "predicted_failure_date": null,
+      "last_desilted": "2026-07-23T14:43:29.883Z"
+    }
+  ],
+  "drain_weekly_history": {
+    "1": [
+      {
+        "week_start": "2026-06-07",
+        "actual_delta": -0.05,
+        "trend_delta": -0.131,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-14",
+        "actual_delta": -0.05,
+        "trend_delta": -0.125,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-21",
+        "actual_delta": -0.05,
+        "trend_delta": -0.119,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-28",
+        "actual_delta": -0.05,
+        "trend_delta": -0.113,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-05",
+        "actual_delta": -0.05,
+        "trend_delta": -0.107,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-12",
+        "actual_delta": -0.05,
+        "trend_delta": -0.101,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-19",
+        "actual_delta": -0.05,
+        "trend_delta": -0.095,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-26",
+        "actual_delta": -0.05,
+        "trend_delta": -0.089,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-02",
+        "actual_delta": -0.05,
+        "trend_delta": -0.083,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-09",
+        "actual_delta": -0.05,
+        "trend_delta": -0.077,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-16",
+        "actual_delta": -0.05,
+        "trend_delta": -0.071,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-23",
+        "actual_delta": -0.05,
+        "trend_delta": -0.065,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-30",
+        "actual_delta": -0.05,
+        "trend_delta": -0.059,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-06",
+        "actual_delta": -0.05,
+        "trend_delta": -0.053,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-13",
+        "actual_delta": -0.03,
+        "trend_delta": -0.047,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 8.7
+      },
+      {
+        "week_start": "2026-09-20",
+        "actual_delta": -0.024,
+        "trend_delta": -0.041,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 9.4
+      }
+    ],
+    "2": [
+      {
+        "week_start": "2026-06-07",
+        "actual_delta": -0.05,
+        "trend_delta": -0.138,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-14",
+        "actual_delta": -0.05,
+        "trend_delta": -0.132,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-21",
+        "actual_delta": -0.05,
+        "trend_delta": -0.126,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-28",
+        "actual_delta": -0.05,
+        "trend_delta": -0.12,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-05",
+        "actual_delta": -0.05,
+        "trend_delta": -0.114,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-12",
+        "actual_delta": -0.05,
+        "trend_delta": -0.108,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-19",
+        "actual_delta": -0.05,
+        "trend_delta": -0.102,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-26",
+        "actual_delta": -0.05,
+        "trend_delta": -0.096,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-02",
+        "actual_delta": -0.05,
+        "trend_delta": -0.09,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-09",
+        "actual_delta": -0.05,
+        "trend_delta": -0.084,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-16",
+        "actual_delta": -0.05,
+        "trend_delta": -0.078,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-23",
+        "actual_delta": -0.05,
+        "trend_delta": -0.072,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-30",
+        "actual_delta": -0.05,
+        "trend_delta": -0.066,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-06",
+        "actual_delta": -0.05,
+        "trend_delta": -0.06,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-13",
+        "actual_delta": -0.05,
+        "trend_delta": -0.054,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-20",
+        "actual_delta": -0.03,
+        "trend_delta": -0.048,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 8.7
+      }
+    ],
+    "3": [
+      {
+        "week_start": "2026-06-07",
+        "actual_delta": -0.05,
+        "trend_delta": -0.143,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-14",
+        "actual_delta": -0.05,
+        "trend_delta": -0.137,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-21",
+        "actual_delta": -0.05,
+        "trend_delta": -0.131,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-28",
+        "actual_delta": -0.05,
+        "trend_delta": -0.125,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-05",
+        "actual_delta": -0.05,
+        "trend_delta": -0.119,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-12",
+        "actual_delta": -0.05,
+        "trend_delta": -0.113,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-19",
+        "actual_delta": -0.05,
+        "trend_delta": -0.107,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-26",
+        "actual_delta": -0.05,
+        "trend_delta": -0.101,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-02",
+        "actual_delta": -0.05,
+        "trend_delta": -0.095,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-09",
+        "actual_delta": -0.05,
+        "trend_delta": -0.089,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-16",
+        "actual_delta": -0.05,
+        "trend_delta": -0.083,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-23",
+        "actual_delta": -0.05,
+        "trend_delta": -0.077,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-30",
+        "actual_delta": -0.05,
+        "trend_delta": -0.071,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-06",
+        "actual_delta": -0.05,
+        "trend_delta": -0.065,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-13",
+        "actual_delta": -0.05,
+        "trend_delta": -0.059,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-20",
+        "actual_delta": -0.05,
+        "trend_delta": -0.053,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      }
+    ],
+    "4": [
+      {
+        "week_start": "2026-06-07",
+        "actual_delta": -0.05,
+        "trend_delta": -0.143,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-14",
+        "actual_delta": -0.05,
+        "trend_delta": -0.137,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-21",
+        "actual_delta": -0.05,
+        "trend_delta": -0.131,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-28",
+        "actual_delta": -0.05,
+        "trend_delta": -0.125,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-05",
+        "actual_delta": -0.05,
+        "trend_delta": -0.119,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-12",
+        "actual_delta": -0.05,
+        "trend_delta": -0.113,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-19",
+        "actual_delta": -0.05,
+        "trend_delta": -0.107,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-26",
+        "actual_delta": -0.05,
+        "trend_delta": -0.101,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-02",
+        "actual_delta": -0.05,
+        "trend_delta": -0.095,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-09",
+        "actual_delta": -0.05,
+        "trend_delta": -0.089,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-16",
+        "actual_delta": -0.05,
+        "trend_delta": -0.083,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-23",
+        "actual_delta": -0.05,
+        "trend_delta": -0.077,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-30",
+        "actual_delta": -0.05,
+        "trend_delta": -0.071,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-06",
+        "actual_delta": -0.05,
+        "trend_delta": -0.065,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-13",
+        "actual_delta": -0.05,
+        "trend_delta": -0.059,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-20",
+        "actual_delta": -0.05,
+        "trend_delta": -0.053,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      }
+    ],
+    "5": [
+      {
+        "week_start": "2026-06-07",
+        "actual_delta": -0.05,
+        "trend_delta": -0.128,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-14",
+        "actual_delta": -0.05,
+        "trend_delta": -0.121,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-21",
+        "actual_delta": -0.05,
+        "trend_delta": -0.115,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-28",
+        "actual_delta": -0.05,
+        "trend_delta": -0.11,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-05",
+        "actual_delta": -0.05,
+        "trend_delta": -0.104,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-12",
+        "actual_delta": -0.05,
+        "trend_delta": -0.098,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-19",
+        "actual_delta": -0.05,
+        "trend_delta": -0.091,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-26",
+        "actual_delta": -0.05,
+        "trend_delta": -0.085,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-02",
+        "actual_delta": -0.05,
+        "trend_delta": -0.08,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-09",
+        "actual_delta": -0.05,
+        "trend_delta": -0.074,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-16",
+        "actual_delta": -0.05,
+        "trend_delta": -0.068,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-23",
+        "actual_delta": -0.05,
+        "trend_delta": -0.061,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-30",
+        "actual_delta": -0.039,
+        "trend_delta": -0.056,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 7.7
+      },
+      {
+        "week_start": "2026-09-06",
+        "actual_delta": -0.038,
+        "trend_delta": -0.05,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 7.8
+      },
+      {
+        "week_start": "2026-09-13",
+        "actual_delta": -0.05,
+        "trend_delta": -0.043,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-20",
+        "actual_delta": -0.05,
+        "trend_delta": -0.037,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      }
+    ],
+    "6": [
+      {
+        "week_start": "2026-06-07",
+        "actual_delta": -0.05,
+        "trend_delta": -0.142,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-14",
+        "actual_delta": -0.05,
+        "trend_delta": -0.136,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-21",
+        "actual_delta": -0.05,
+        "trend_delta": -0.13,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-28",
+        "actual_delta": -0.05,
+        "trend_delta": -0.124,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-05",
+        "actual_delta": -0.05,
+        "trend_delta": -0.118,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-12",
+        "actual_delta": -0.05,
+        "trend_delta": -0.112,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-19",
+        "actual_delta": -0.05,
+        "trend_delta": -0.106,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-26",
+        "actual_delta": -0.05,
+        "trend_delta": -0.1,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-02",
+        "actual_delta": -0.05,
+        "trend_delta": -0.094,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-09",
+        "actual_delta": -0.05,
+        "trend_delta": -0.088,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-16",
+        "actual_delta": -0.05,
+        "trend_delta": -0.082,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-23",
+        "actual_delta": -0.05,
+        "trend_delta": -0.076,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-30",
+        "actual_delta": -0.05,
+        "trend_delta": -0.07,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-06",
+        "actual_delta": -0.046,
+        "trend_delta": -0.064,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.9
+      },
+      {
+        "week_start": "2026-09-13",
+        "actual_delta": -0.046,
+        "trend_delta": -0.058,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.9
+      },
+      {
+        "week_start": "2026-09-20",
+        "actual_delta": -0.05,
+        "trend_delta": -0.052,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      }
+    ],
+    "7": [
+      {
+        "week_start": "2026-06-07",
+        "actual_delta": -0.05,
+        "trend_delta": -0.133,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-14",
+        "actual_delta": -0.05,
+        "trend_delta": -0.127,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-21",
+        "actual_delta": -0.05,
+        "trend_delta": -0.12,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-28",
+        "actual_delta": -0.05,
+        "trend_delta": -0.115,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-05",
+        "actual_delta": -0.05,
+        "trend_delta": -0.109,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-12",
+        "actual_delta": -0.05,
+        "trend_delta": -0.103,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-19",
+        "actual_delta": -0.05,
+        "trend_delta": -0.097,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-26",
+        "actual_delta": -0.05,
+        "trend_delta": -0.09,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-02",
+        "actual_delta": -0.05,
+        "trend_delta": -0.085,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-09",
+        "actual_delta": -0.05,
+        "trend_delta": -0.079,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-16",
+        "actual_delta": -0.05,
+        "trend_delta": -0.073,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-23",
+        "actual_delta": -0.05,
+        "trend_delta": -0.067,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-30",
+        "actual_delta": -0.05,
+        "trend_delta": -0.061,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-06",
+        "actual_delta": -0.048,
+        "trend_delta": -0.055,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.7
+      },
+      {
+        "week_start": "2026-09-13",
+        "actual_delta": -0.03,
+        "trend_delta": -0.049,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 8.7
+      },
+      {
+        "week_start": "2026-09-20",
+        "actual_delta": -0.029,
+        "trend_delta": -0.043,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 8.8
+      }
+    ],
+    "8": [
+      {
+        "week_start": "2026-06-07",
+        "actual_delta": -0.05,
+        "trend_delta": -0.133,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-14",
+        "actual_delta": -0.05,
+        "trend_delta": -0.127,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-21",
+        "actual_delta": -0.05,
+        "trend_delta": -0.121,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-28",
+        "actual_delta": -0.05,
+        "trend_delta": -0.115,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-05",
+        "actual_delta": -0.05,
+        "trend_delta": -0.109,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-12",
+        "actual_delta": -0.05,
+        "trend_delta": -0.103,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-19",
+        "actual_delta": -0.05,
+        "trend_delta": -0.097,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-26",
+        "actual_delta": -0.05,
+        "trend_delta": -0.091,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-02",
+        "actual_delta": -0.05,
+        "trend_delta": -0.085,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-09",
+        "actual_delta": -0.05,
+        "trend_delta": -0.079,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-16",
+        "actual_delta": -0.05,
+        "trend_delta": -0.073,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-23",
+        "actual_delta": -0.05,
+        "trend_delta": -0.067,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-30",
+        "actual_delta": -0.05,
+        "trend_delta": -0.061,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-06",
+        "actual_delta": -0.05,
+        "trend_delta": -0.055,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-13",
+        "actual_delta": -0.042,
+        "trend_delta": -0.049,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 7.4
+      },
+      {
+        "week_start": "2026-09-20",
+        "actual_delta": -0.024,
+        "trend_delta": -0.043,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 9.4
+      }
+    ],
+    "9": [
+      {
+        "week_start": "2026-06-07",
+        "actual_delta": -0.05,
+        "trend_delta": -0.138,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-14",
+        "actual_delta": -0.05,
+        "trend_delta": -0.132,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-21",
+        "actual_delta": -0.05,
+        "trend_delta": -0.126,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-28",
+        "actual_delta": -0.05,
+        "trend_delta": -0.12,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-05",
+        "actual_delta": -0.05,
+        "trend_delta": -0.114,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-12",
+        "actual_delta": -0.05,
+        "trend_delta": -0.108,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-19",
+        "actual_delta": -0.05,
+        "trend_delta": -0.102,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-26",
+        "actual_delta": -0.05,
+        "trend_delta": -0.096,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-02",
+        "actual_delta": -0.05,
+        "trend_delta": -0.09,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-09",
+        "actual_delta": -0.05,
+        "trend_delta": -0.084,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-16",
+        "actual_delta": -0.05,
+        "trend_delta": -0.078,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-23",
+        "actual_delta": -0.05,
+        "trend_delta": -0.072,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-30",
+        "actual_delta": -0.05,
+        "trend_delta": -0.066,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-06",
+        "actual_delta": -0.05,
+        "trend_delta": -0.06,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-13",
+        "actual_delta": -0.05,
+        "trend_delta": -0.054,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-20",
+        "actual_delta": -0.04,
+        "trend_delta": -0.048,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 7.6
+      }
+    ],
+    "10": [
+      {
+        "week_start": "2026-06-07",
+        "actual_delta": -0.05,
+        "trend_delta": -0.132,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-14",
+        "actual_delta": -0.05,
+        "trend_delta": -0.126,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-21",
+        "actual_delta": -0.05,
+        "trend_delta": -0.12,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-28",
+        "actual_delta": -0.05,
+        "trend_delta": -0.114,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-05",
+        "actual_delta": -0.05,
+        "trend_delta": -0.108,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-12",
+        "actual_delta": -0.05,
+        "trend_delta": -0.102,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-19",
+        "actual_delta": -0.05,
+        "trend_delta": -0.096,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-26",
+        "actual_delta": -0.05,
+        "trend_delta": -0.09,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-02",
+        "actual_delta": -0.05,
+        "trend_delta": -0.084,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-09",
+        "actual_delta": -0.05,
+        "trend_delta": -0.078,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-16",
+        "actual_delta": -0.05,
+        "trend_delta": -0.072,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-23",
+        "actual_delta": -0.05,
+        "trend_delta": -0.066,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-30",
+        "actual_delta": -0.05,
+        "trend_delta": -0.06,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-06",
+        "actual_delta": -0.05,
+        "trend_delta": -0.054,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-13",
+        "actual_delta": -0.05,
+        "trend_delta": -0.048,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-20",
+        "actual_delta": -0.05,
+        "trend_delta": -0.042,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      }
+    ],
+    "11": [
+      {
+        "week_start": "2026-06-07",
+        "actual_delta": -0.05,
+        "trend_delta": -0.137,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-14",
+        "actual_delta": -0.05,
+        "trend_delta": -0.131,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-21",
+        "actual_delta": -0.05,
+        "trend_delta": -0.125,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-28",
+        "actual_delta": -0.05,
+        "trend_delta": -0.119,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-05",
+        "actual_delta": -0.05,
+        "trend_delta": -0.113,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-12",
+        "actual_delta": -0.05,
+        "trend_delta": -0.107,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-19",
+        "actual_delta": -0.05,
+        "trend_delta": -0.101,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-26",
+        "actual_delta": -0.05,
+        "trend_delta": -0.095,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-02",
+        "actual_delta": -0.05,
+        "trend_delta": -0.089,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-09",
+        "actual_delta": -0.05,
+        "trend_delta": -0.083,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-16",
+        "actual_delta": -0.05,
+        "trend_delta": -0.077,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-23",
+        "actual_delta": -0.05,
+        "trend_delta": -0.071,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-30",
+        "actual_delta": -0.048,
+        "trend_delta": -0.065,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.7
+      },
+      {
+        "week_start": "2026-09-06",
+        "actual_delta": -0.05,
+        "trend_delta": -0.059,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-13",
+        "actual_delta": -0.05,
+        "trend_delta": -0.053,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-20",
+        "actual_delta": -0.05,
+        "trend_delta": -0.047,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      }
+    ],
+    "12": [
+      {
+        "week_start": "2026-09-21",
+        "actual_delta": 0.015,
+        "trend_delta": 0.02,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 4.5
+      },
+      {
+        "week_start": "2026-06-07",
+        "actual_delta": 0.032,
+        "trend_delta": 0.028,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 15.5
+      },
+      {
+        "week_start": "2026-06-14",
+        "actual_delta": 0.035,
+        "trend_delta": 0.034,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 15.9
+      },
+      {
+        "week_start": "2026-06-21",
+        "actual_delta": 0.024,
+        "trend_delta": 0.04,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 14.6
+      },
+      {
+        "week_start": "2026-06-28",
+        "actual_delta": 0.016,
+        "trend_delta": 0.046,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 13.8
+      },
+      {
+        "week_start": "2026-07-05",
+        "actual_delta": 0.024,
+        "trend_delta": 0.052,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 14.6
+      },
+      {
+        "week_start": "2026-07-12",
+        "actual_delta": 0.048,
+        "trend_delta": 0.058,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 17.3
+      },
+      {
+        "week_start": "2026-07-19",
+        "actual_delta": 0.072,
+        "trend_delta": 0.064,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 19.9
+      },
+      {
+        "week_start": "2026-07-26",
+        "actual_delta": 0.08,
+        "trend_delta": 0.07,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 20.8
+      },
+      {
+        "week_start": "2026-08-02",
+        "actual_delta": 0.072,
+        "trend_delta": 0.076,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 19.9
+      },
+      {
+        "week_start": "2026-08-09",
+        "actual_delta": 0.061,
+        "trend_delta": 0.082,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 18.7
+      },
+      {
+        "week_start": "2026-08-16",
+        "actual_delta": 0.064,
+        "trend_delta": 0.088,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 19
+      },
+      {
+        "week_start": "2026-08-23",
+        "actual_delta": 0.084,
+        "trend_delta": 0.094,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 21.2
+      },
+      {
+        "week_start": "2026-08-30",
+        "actual_delta": 0.11,
+        "trend_delta": 0.1,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 24.1
+      },
+      {
+        "week_start": "2026-09-06",
+        "actual_delta": 0.124,
+        "trend_delta": 0.106,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 25.6
+      },
+      {
+        "week_start": "2026-09-13",
+        "actual_delta": 0.119,
+        "trend_delta": 0.112,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 25.1
+      },
+      {
+        "week_start": "2026-09-20",
+        "actual_delta": 0.107,
+        "trend_delta": 0.118,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 23.8
+      }
+    ],
+    "13": [
+      {
+        "week_start": "2026-06-07",
+        "actual_delta": -0.05,
+        "trend_delta": -0.138,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-14",
+        "actual_delta": -0.05,
+        "trend_delta": -0.132,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-21",
+        "actual_delta": -0.05,
+        "trend_delta": -0.126,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-28",
+        "actual_delta": -0.05,
+        "trend_delta": -0.12,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-05",
+        "actual_delta": -0.05,
+        "trend_delta": -0.114,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-12",
+        "actual_delta": -0.05,
+        "trend_delta": -0.108,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-19",
+        "actual_delta": -0.05,
+        "trend_delta": -0.102,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-26",
+        "actual_delta": -0.05,
+        "trend_delta": -0.096,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-02",
+        "actual_delta": -0.05,
+        "trend_delta": -0.09,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-09",
+        "actual_delta": -0.05,
+        "trend_delta": -0.084,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-16",
+        "actual_delta": -0.05,
+        "trend_delta": -0.078,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-23",
+        "actual_delta": -0.05,
+        "trend_delta": -0.072,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-30",
+        "actual_delta": -0.05,
+        "trend_delta": -0.066,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-06",
+        "actual_delta": -0.049,
+        "trend_delta": -0.06,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.6
+      },
+      {
+        "week_start": "2026-09-13",
+        "actual_delta": -0.035,
+        "trend_delta": -0.054,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 8.1
+      },
+      {
+        "week_start": "2026-09-20",
+        "actual_delta": -0.04,
+        "trend_delta": -0.048,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 7.6
+      }
+    ],
+    "14": [
+      {
+        "week_start": "2026-06-07",
+        "actual_delta": -0.05,
+        "trend_delta": -0.139,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-14",
+        "actual_delta": -0.05,
+        "trend_delta": -0.133,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-21",
+        "actual_delta": -0.05,
+        "trend_delta": -0.127,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-28",
+        "actual_delta": -0.05,
+        "trend_delta": -0.121,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-05",
+        "actual_delta": -0.05,
+        "trend_delta": -0.115,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-12",
+        "actual_delta": -0.05,
+        "trend_delta": -0.109,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-19",
+        "actual_delta": -0.05,
+        "trend_delta": -0.103,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-26",
+        "actual_delta": -0.05,
+        "trend_delta": -0.097,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-02",
+        "actual_delta": -0.05,
+        "trend_delta": -0.091,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-09",
+        "actual_delta": -0.05,
+        "trend_delta": -0.085,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-16",
+        "actual_delta": -0.05,
+        "trend_delta": -0.079,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-23",
+        "actual_delta": -0.05,
+        "trend_delta": -0.073,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-30",
+        "actual_delta": -0.05,
+        "trend_delta": -0.067,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-06",
+        "actual_delta": -0.05,
+        "trend_delta": -0.061,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-13",
+        "actual_delta": -0.043,
+        "trend_delta": -0.055,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 7.3
+      },
+      {
+        "week_start": "2026-09-20",
+        "actual_delta": -0.03,
+        "trend_delta": -0.049,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 8.7
+      }
+    ],
+    "15": [
+      {
+        "week_start": "2026-06-07",
+        "actual_delta": -0.05,
+        "trend_delta": -0.138,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-14",
+        "actual_delta": -0.05,
+        "trend_delta": -0.132,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-21",
+        "actual_delta": -0.05,
+        "trend_delta": -0.126,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-28",
+        "actual_delta": -0.05,
+        "trend_delta": -0.12,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-05",
+        "actual_delta": -0.05,
+        "trend_delta": -0.114,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-12",
+        "actual_delta": -0.05,
+        "trend_delta": -0.108,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-19",
+        "actual_delta": -0.05,
+        "trend_delta": -0.102,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-26",
+        "actual_delta": -0.05,
+        "trend_delta": -0.096,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-02",
+        "actual_delta": -0.05,
+        "trend_delta": -0.09,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-09",
+        "actual_delta": -0.05,
+        "trend_delta": -0.084,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-16",
+        "actual_delta": -0.05,
+        "trend_delta": -0.078,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-23",
+        "actual_delta": -0.05,
+        "trend_delta": -0.072,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-30",
+        "actual_delta": -0.05,
+        "trend_delta": -0.066,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-06",
+        "actual_delta": -0.05,
+        "trend_delta": -0.06,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-13",
+        "actual_delta": -0.05,
+        "trend_delta": -0.054,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-20",
+        "actual_delta": -0.035,
+        "trend_delta": -0.048,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 8.1
+      }
+    ],
+    "16": [
+      {
+        "week_start": "2026-06-07",
+        "actual_delta": -0.05,
+        "trend_delta": -0.138,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-14",
+        "actual_delta": -0.05,
+        "trend_delta": -0.132,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-21",
+        "actual_delta": -0.05,
+        "trend_delta": -0.126,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-28",
+        "actual_delta": -0.05,
+        "trend_delta": -0.12,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-05",
+        "actual_delta": -0.05,
+        "trend_delta": -0.114,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-12",
+        "actual_delta": -0.05,
+        "trend_delta": -0.108,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-19",
+        "actual_delta": -0.05,
+        "trend_delta": -0.102,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-26",
+        "actual_delta": -0.05,
+        "trend_delta": -0.096,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-02",
+        "actual_delta": -0.05,
+        "trend_delta": -0.09,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-09",
+        "actual_delta": -0.05,
+        "trend_delta": -0.084,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-16",
+        "actual_delta": -0.05,
+        "trend_delta": -0.078,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-23",
+        "actual_delta": -0.05,
+        "trend_delta": -0.072,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-30",
+        "actual_delta": -0.05,
+        "trend_delta": -0.066,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-06",
+        "actual_delta": -0.05,
+        "trend_delta": -0.06,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-13",
+        "actual_delta": -0.05,
+        "trend_delta": -0.054,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-20",
+        "actual_delta": -0.05,
+        "trend_delta": -0.048,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      }
+    ],
+    "17": [
+      {
+        "week_start": "2026-06-07",
+        "actual_delta": -0.05,
+        "trend_delta": -0.132,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-14",
+        "actual_delta": -0.05,
+        "trend_delta": -0.126,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-21",
+        "actual_delta": -0.05,
+        "trend_delta": -0.12,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-28",
+        "actual_delta": -0.05,
+        "trend_delta": -0.114,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-05",
+        "actual_delta": -0.05,
+        "trend_delta": -0.108,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-12",
+        "actual_delta": -0.05,
+        "trend_delta": -0.102,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-19",
+        "actual_delta": -0.05,
+        "trend_delta": -0.096,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-26",
+        "actual_delta": -0.05,
+        "trend_delta": -0.09,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-02",
+        "actual_delta": -0.05,
+        "trend_delta": -0.084,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-09",
+        "actual_delta": -0.05,
+        "trend_delta": -0.078,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-16",
+        "actual_delta": -0.05,
+        "trend_delta": -0.072,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-23",
+        "actual_delta": -0.05,
+        "trend_delta": -0.066,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-30",
+        "actual_delta": -0.044,
+        "trend_delta": -0.06,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 7.2
+      },
+      {
+        "week_start": "2026-09-06",
+        "actual_delta": -0.05,
+        "trend_delta": -0.054,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-13",
+        "actual_delta": -0.05,
+        "trend_delta": -0.048,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-20",
+        "actual_delta": -0.05,
+        "trend_delta": -0.042,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      }
+    ],
+    "18": [
+      {
+        "week_start": "2026-06-07",
+        "actual_delta": -0.05,
+        "trend_delta": -0.065,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-14",
+        "actual_delta": -0.05,
+        "trend_delta": -0.059,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-21",
+        "actual_delta": -0.05,
+        "trend_delta": -0.053,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-28",
+        "actual_delta": -0.05,
+        "trend_delta": -0.047,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-05",
+        "actual_delta": -0.05,
+        "trend_delta": -0.041,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-12",
+        "actual_delta": -0.039,
+        "trend_delta": -0.035,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 7.7
+      },
+      {
+        "week_start": "2026-07-19",
+        "actual_delta": -0.018,
+        "trend_delta": -0.029,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 10
+      },
+      {
+        "week_start": "2026-07-26",
+        "actual_delta": -0.015,
+        "trend_delta": -0.023,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 10.3
+      },
+      {
+        "week_start": "2026-08-02",
+        "actual_delta": -0.026,
+        "trend_delta": -0.017,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 9.1
+      },
+      {
+        "week_start": "2026-08-09",
+        "actual_delta": -0.035,
+        "trend_delta": -0.011,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 8.1
+      },
+      {
+        "week_start": "2026-08-16",
+        "actual_delta": -0.027,
+        "trend_delta": -0.005,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 9
+      },
+      {
+        "week_start": "2026-08-23",
+        "actual_delta": -0.003,
+        "trend_delta": 0.001,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 11.7
+      },
+      {
+        "week_start": "2026-08-30",
+        "actual_delta": 0.021,
+        "trend_delta": 0.007,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 14.3
+      },
+      {
+        "week_start": "2026-09-06",
+        "actual_delta": 0.03,
+        "trend_delta": 0.013,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 15.3
+      },
+      {
+        "week_start": "2026-09-13",
+        "actual_delta": 0.021,
+        "trend_delta": 0.019,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 14.3
+      },
+      {
+        "week_start": "2026-09-20",
+        "actual_delta": 0.01,
+        "trend_delta": 0.025,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 13.1
+      }
+    ],
+    "19": [
+      {
+        "week_start": "2026-06-07",
+        "actual_delta": -0.05,
+        "trend_delta": -0.129,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-14",
+        "actual_delta": -0.05,
+        "trend_delta": -0.123,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-21",
+        "actual_delta": -0.05,
+        "trend_delta": -0.117,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-28",
+        "actual_delta": -0.05,
+        "trend_delta": -0.111,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-05",
+        "actual_delta": -0.05,
+        "trend_delta": -0.105,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-12",
+        "actual_delta": -0.05,
+        "trend_delta": -0.099,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-19",
+        "actual_delta": -0.05,
+        "trend_delta": -0.093,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-26",
+        "actual_delta": -0.05,
+        "trend_delta": -0.087,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-02",
+        "actual_delta": -0.05,
+        "trend_delta": -0.081,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-09",
+        "actual_delta": -0.05,
+        "trend_delta": -0.075,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-16",
+        "actual_delta": -0.05,
+        "trend_delta": -0.069,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-23",
+        "actual_delta": -0.05,
+        "trend_delta": -0.063,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-30",
+        "actual_delta": -0.05,
+        "trend_delta": -0.057,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-06",
+        "actual_delta": -0.036,
+        "trend_delta": -0.051,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 8
+      },
+      {
+        "week_start": "2026-09-13",
+        "actual_delta": -0.028,
+        "trend_delta": -0.045,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 8.9
+      },
+      {
+        "week_start": "2026-09-20",
+        "actual_delta": -0.036,
+        "trend_delta": -0.039,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 8
+      }
+    ],
+    "20": [
+      {
+        "week_start": "2026-06-07",
+        "actual_delta": -0.05,
+        "trend_delta": -0.128,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-14",
+        "actual_delta": -0.05,
+        "trend_delta": -0.122,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-21",
+        "actual_delta": -0.05,
+        "trend_delta": -0.116,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-28",
+        "actual_delta": -0.05,
+        "trend_delta": -0.11,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-05",
+        "actual_delta": -0.05,
+        "trend_delta": -0.104,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-12",
+        "actual_delta": -0.05,
+        "trend_delta": -0.098,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-19",
+        "actual_delta": -0.05,
+        "trend_delta": -0.092,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-26",
+        "actual_delta": -0.05,
+        "trend_delta": -0.086,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-02",
+        "actual_delta": -0.05,
+        "trend_delta": -0.08,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-09",
+        "actual_delta": -0.05,
+        "trend_delta": -0.074,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-16",
+        "actual_delta": -0.05,
+        "trend_delta": -0.068,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-23",
+        "actual_delta": -0.05,
+        "trend_delta": -0.062,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-30",
+        "actual_delta": -0.05,
+        "trend_delta": -0.056,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-06",
+        "actual_delta": -0.05,
+        "trend_delta": -0.05,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-13",
+        "actual_delta": -0.028,
+        "trend_delta": -0.044,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 8.9
+      },
+      {
+        "week_start": "2026-09-20",
+        "actual_delta": -0.02,
+        "trend_delta": -0.038,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 9.8
+      }
+    ],
+    "21": [
+      {
+        "week_start": "2026-06-07",
+        "actual_delta": -0.05,
+        "trend_delta": -0.138,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-14",
+        "actual_delta": -0.05,
+        "trend_delta": -0.132,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-21",
+        "actual_delta": -0.05,
+        "trend_delta": -0.126,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-28",
+        "actual_delta": -0.05,
+        "trend_delta": -0.12,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-05",
+        "actual_delta": -0.05,
+        "trend_delta": -0.114,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-12",
+        "actual_delta": -0.05,
+        "trend_delta": -0.108,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-19",
+        "actual_delta": -0.05,
+        "trend_delta": -0.102,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-26",
+        "actual_delta": -0.05,
+        "trend_delta": -0.096,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-02",
+        "actual_delta": -0.05,
+        "trend_delta": -0.09,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-09",
+        "actual_delta": -0.05,
+        "trend_delta": -0.084,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-16",
+        "actual_delta": -0.05,
+        "trend_delta": -0.078,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-23",
+        "actual_delta": -0.05,
+        "trend_delta": -0.072,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-30",
+        "actual_delta": -0.05,
+        "trend_delta": -0.066,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-06",
+        "actual_delta": -0.05,
+        "trend_delta": -0.06,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-13",
+        "actual_delta": -0.05,
+        "trend_delta": -0.054,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-20",
+        "actual_delta": -0.031,
+        "trend_delta": -0.048,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 8.6
+      }
+    ],
+    "22": [
+      {
+        "week_start": "2026-06-07",
+        "actual_delta": -0.05,
+        "trend_delta": -0.135,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-14",
+        "actual_delta": -0.05,
+        "trend_delta": -0.129,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-21",
+        "actual_delta": -0.05,
+        "trend_delta": -0.122,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-28",
+        "actual_delta": -0.05,
+        "trend_delta": -0.117,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-05",
+        "actual_delta": -0.05,
+        "trend_delta": -0.111,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-12",
+        "actual_delta": -0.05,
+        "trend_delta": -0.104,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-19",
+        "actual_delta": -0.05,
+        "trend_delta": -0.099,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-26",
+        "actual_delta": -0.05,
+        "trend_delta": -0.092,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-02",
+        "actual_delta": -0.05,
+        "trend_delta": -0.086,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-09",
+        "actual_delta": -0.05,
+        "trend_delta": -0.081,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-16",
+        "actual_delta": -0.05,
+        "trend_delta": -0.074,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-23",
+        "actual_delta": -0.05,
+        "trend_delta": -0.069,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-30",
+        "actual_delta": -0.05,
+        "trend_delta": -0.063,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-06",
+        "actual_delta": -0.05,
+        "trend_delta": -0.056,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-13",
+        "actual_delta": -0.05,
+        "trend_delta": -0.05,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-20",
+        "actual_delta": -0.045,
+        "trend_delta": -0.044,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 7
+      }
+    ],
+    "23": [
+      {
+        "week_start": "2026-06-07",
+        "actual_delta": -0.05,
+        "trend_delta": -0.137,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-14",
+        "actual_delta": -0.05,
+        "trend_delta": -0.131,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-21",
+        "actual_delta": -0.05,
+        "trend_delta": -0.125,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-28",
+        "actual_delta": -0.05,
+        "trend_delta": -0.119,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-05",
+        "actual_delta": -0.05,
+        "trend_delta": -0.113,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-12",
+        "actual_delta": -0.05,
+        "trend_delta": -0.107,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-19",
+        "actual_delta": -0.05,
+        "trend_delta": -0.101,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-26",
+        "actual_delta": -0.05,
+        "trend_delta": -0.095,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-02",
+        "actual_delta": -0.05,
+        "trend_delta": -0.089,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-09",
+        "actual_delta": -0.05,
+        "trend_delta": -0.083,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-16",
+        "actual_delta": -0.05,
+        "trend_delta": -0.077,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-23",
+        "actual_delta": -0.05,
+        "trend_delta": -0.071,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-30",
+        "actual_delta": -0.05,
+        "trend_delta": -0.065,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-06",
+        "actual_delta": -0.05,
+        "trend_delta": -0.059,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-13",
+        "actual_delta": -0.05,
+        "trend_delta": -0.053,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-20",
+        "actual_delta": -0.05,
+        "trend_delta": -0.047,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      }
+    ],
+    "24": [
+      {
+        "week_start": "2026-06-07",
+        "actual_delta": -0.05,
+        "trend_delta": -0.133,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-14",
+        "actual_delta": -0.05,
+        "trend_delta": -0.127,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-21",
+        "actual_delta": -0.05,
+        "trend_delta": -0.12,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-28",
+        "actual_delta": -0.05,
+        "trend_delta": -0.115,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-05",
+        "actual_delta": -0.05,
+        "trend_delta": -0.109,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-12",
+        "actual_delta": -0.05,
+        "trend_delta": -0.103,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-19",
+        "actual_delta": -0.05,
+        "trend_delta": -0.097,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-26",
+        "actual_delta": -0.05,
+        "trend_delta": -0.09,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-02",
+        "actual_delta": -0.05,
+        "trend_delta": -0.085,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-09",
+        "actual_delta": -0.05,
+        "trend_delta": -0.079,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-16",
+        "actual_delta": -0.05,
+        "trend_delta": -0.073,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-23",
+        "actual_delta": -0.05,
+        "trend_delta": -0.067,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-30",
+        "actual_delta": -0.044,
+        "trend_delta": -0.061,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 7.2
+      },
+      {
+        "week_start": "2026-09-06",
+        "actual_delta": -0.041,
+        "trend_delta": -0.055,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 7.5
+      },
+      {
+        "week_start": "2026-09-13",
+        "actual_delta": -0.05,
+        "trend_delta": -0.049,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-20",
+        "actual_delta": -0.05,
+        "trend_delta": -0.043,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      }
+    ],
+    "25": [
+      {
+        "week_start": "2026-06-07",
+        "actual_delta": -0.05,
+        "trend_delta": -0.131,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-14",
+        "actual_delta": -0.05,
+        "trend_delta": -0.125,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-21",
+        "actual_delta": -0.05,
+        "trend_delta": -0.119,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-28",
+        "actual_delta": -0.05,
+        "trend_delta": -0.113,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-05",
+        "actual_delta": -0.05,
+        "trend_delta": -0.107,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-12",
+        "actual_delta": -0.05,
+        "trend_delta": -0.101,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-19",
+        "actual_delta": -0.05,
+        "trend_delta": -0.095,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-26",
+        "actual_delta": -0.05,
+        "trend_delta": -0.089,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-02",
+        "actual_delta": -0.05,
+        "trend_delta": -0.083,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-09",
+        "actual_delta": -0.05,
+        "trend_delta": -0.077,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-16",
+        "actual_delta": -0.05,
+        "trend_delta": -0.071,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-23",
+        "actual_delta": -0.05,
+        "trend_delta": -0.065,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-30",
+        "actual_delta": -0.05,
+        "trend_delta": -0.059,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-06",
+        "actual_delta": -0.036,
+        "trend_delta": -0.053,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 8
+      },
+      {
+        "week_start": "2026-09-13",
+        "actual_delta": -0.033,
+        "trend_delta": -0.047,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 8.4
+      },
+      {
+        "week_start": "2026-09-20",
+        "actual_delta": -0.043,
+        "trend_delta": -0.041,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 7.3
+      }
+    ],
+    "26": [
+      {
+        "week_start": "2026-06-07",
+        "actual_delta": -0.05,
+        "trend_delta": -0.138,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-14",
+        "actual_delta": -0.05,
+        "trend_delta": -0.132,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-21",
+        "actual_delta": -0.05,
+        "trend_delta": -0.126,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-28",
+        "actual_delta": -0.05,
+        "trend_delta": -0.12,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-05",
+        "actual_delta": -0.05,
+        "trend_delta": -0.114,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-12",
+        "actual_delta": -0.05,
+        "trend_delta": -0.108,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-19",
+        "actual_delta": -0.05,
+        "trend_delta": -0.102,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-26",
+        "actual_delta": -0.05,
+        "trend_delta": -0.096,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-02",
+        "actual_delta": -0.05,
+        "trend_delta": -0.09,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-09",
+        "actual_delta": -0.05,
+        "trend_delta": -0.084,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-16",
+        "actual_delta": -0.05,
+        "trend_delta": -0.078,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-23",
+        "actual_delta": -0.05,
+        "trend_delta": -0.072,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-30",
+        "actual_delta": -0.05,
+        "trend_delta": -0.066,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-06",
+        "actual_delta": -0.05,
+        "trend_delta": -0.06,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-13",
+        "actual_delta": -0.036,
+        "trend_delta": -0.054,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 8
+      },
+      {
+        "week_start": "2026-09-20",
+        "actual_delta": -0.033,
+        "trend_delta": -0.048,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 8.4
+      }
+    ],
+    "27": [
+      {
+        "week_start": "2026-06-07",
+        "actual_delta": -0.05,
+        "trend_delta": -0.127,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-14",
+        "actual_delta": -0.05,
+        "trend_delta": -0.121,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-21",
+        "actual_delta": -0.05,
+        "trend_delta": -0.115,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-28",
+        "actual_delta": -0.05,
+        "trend_delta": -0.109,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-05",
+        "actual_delta": -0.05,
+        "trend_delta": -0.103,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-12",
+        "actual_delta": -0.05,
+        "trend_delta": -0.097,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-19",
+        "actual_delta": -0.05,
+        "trend_delta": -0.091,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-26",
+        "actual_delta": -0.05,
+        "trend_delta": -0.085,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-02",
+        "actual_delta": -0.05,
+        "trend_delta": -0.079,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-09",
+        "actual_delta": -0.05,
+        "trend_delta": -0.073,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-16",
+        "actual_delta": -0.05,
+        "trend_delta": -0.067,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-23",
+        "actual_delta": -0.05,
+        "trend_delta": -0.061,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-30",
+        "actual_delta": -0.05,
+        "trend_delta": -0.055,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-06",
+        "actual_delta": -0.05,
+        "trend_delta": -0.049,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-13",
+        "actual_delta": -0.039,
+        "trend_delta": -0.043,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 7.7
+      },
+      {
+        "week_start": "2026-09-20",
+        "actual_delta": -0.018,
+        "trend_delta": -0.037,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 10
+      }
+    ],
+    "28": [
+      {
+        "week_start": "2026-06-07",
+        "actual_delta": -0.05,
+        "trend_delta": -0.136,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-14",
+        "actual_delta": -0.05,
+        "trend_delta": -0.13,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-21",
+        "actual_delta": -0.05,
+        "trend_delta": -0.124,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-28",
+        "actual_delta": -0.05,
+        "trend_delta": -0.118,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-05",
+        "actual_delta": -0.05,
+        "trend_delta": -0.112,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-12",
+        "actual_delta": -0.05,
+        "trend_delta": -0.106,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-19",
+        "actual_delta": -0.05,
+        "trend_delta": -0.1,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-26",
+        "actual_delta": -0.05,
+        "trend_delta": -0.094,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-02",
+        "actual_delta": -0.05,
+        "trend_delta": -0.088,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-09",
+        "actual_delta": -0.05,
+        "trend_delta": -0.082,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-16",
+        "actual_delta": -0.05,
+        "trend_delta": -0.076,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-23",
+        "actual_delta": -0.05,
+        "trend_delta": -0.07,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-30",
+        "actual_delta": -0.05,
+        "trend_delta": -0.064,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-06",
+        "actual_delta": -0.05,
+        "trend_delta": -0.058,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-13",
+        "actual_delta": -0.05,
+        "trend_delta": -0.052,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-20",
+        "actual_delta": -0.04,
+        "trend_delta": -0.046,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 7.6
+      }
+    ],
+    "29": [
+      {
+        "week_start": "2026-06-07",
+        "actual_delta": -0.05,
+        "trend_delta": -0.138,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-14",
+        "actual_delta": -0.05,
+        "trend_delta": -0.132,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-21",
+        "actual_delta": -0.05,
+        "trend_delta": -0.126,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-28",
+        "actual_delta": -0.05,
+        "trend_delta": -0.12,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-05",
+        "actual_delta": -0.05,
+        "trend_delta": -0.114,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-12",
+        "actual_delta": -0.05,
+        "trend_delta": -0.108,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-19",
+        "actual_delta": -0.05,
+        "trend_delta": -0.102,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-26",
+        "actual_delta": -0.05,
+        "trend_delta": -0.096,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-02",
+        "actual_delta": -0.05,
+        "trend_delta": -0.09,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-09",
+        "actual_delta": -0.05,
+        "trend_delta": -0.084,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-16",
+        "actual_delta": -0.05,
+        "trend_delta": -0.078,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-23",
+        "actual_delta": -0.05,
+        "trend_delta": -0.072,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-30",
+        "actual_delta": -0.05,
+        "trend_delta": -0.066,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-06",
+        "actual_delta": -0.05,
+        "trend_delta": -0.06,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-13",
+        "actual_delta": -0.05,
+        "trend_delta": -0.054,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-20",
+        "actual_delta": -0.05,
+        "trend_delta": -0.048,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      }
+    ],
+    "30": [
+      {
+        "week_start": "2026-06-07",
+        "actual_delta": -0.05,
+        "trend_delta": -0.136,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-14",
+        "actual_delta": -0.05,
+        "trend_delta": -0.13,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-21",
+        "actual_delta": -0.05,
+        "trend_delta": -0.124,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-06-28",
+        "actual_delta": -0.05,
+        "trend_delta": -0.118,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-05",
+        "actual_delta": -0.05,
+        "trend_delta": -0.112,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-12",
+        "actual_delta": -0.05,
+        "trend_delta": -0.106,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-19",
+        "actual_delta": -0.05,
+        "trend_delta": -0.1,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-07-26",
+        "actual_delta": -0.05,
+        "trend_delta": -0.094,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-02",
+        "actual_delta": -0.05,
+        "trend_delta": -0.088,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-09",
+        "actual_delta": -0.05,
+        "trend_delta": -0.082,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-16",
+        "actual_delta": -0.05,
+        "trend_delta": -0.076,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-23",
+        "actual_delta": -0.05,
+        "trend_delta": -0.07,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-08-30",
+        "actual_delta": -0.047,
+        "trend_delta": -0.064,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.8
+      },
+      {
+        "week_start": "2026-09-06",
+        "actual_delta": -0.049,
+        "trend_delta": -0.058,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.6
+      },
+      {
+        "week_start": "2026-09-13",
+        "actual_delta": -0.05,
+        "trend_delta": -0.052,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      },
+      {
+        "week_start": "2026-09-20",
+        "actual_delta": -0.05,
+        "trend_delta": -0.046,
+        "critical_threshold": 0.15,
+        "siltation_depth_cm": 6.5
+      }
+    ]
+  }
+}

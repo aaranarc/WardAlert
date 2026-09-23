@@ -1,0 +1,24 @@
+{
+  "name": "wardalert",
+  "version": "2.1.0",
+  "description": "BMC Emergency Flood Operations and Risk Prediction System for Ward G/South, Mumbai",
+  "private": true,
+  "scripts": {
+    "api": "node standalone_api.js",
+    "dev": "npm --prefix frontend run dev",
+    "build": "npm --prefix frontend run build",
+    "start": "node -e \"const { spawn } = require('child_process'); console.log('Starting WardAlert API server on port 8000...'); const api = spawn('node', ['standalone_api.js'], { stdio: 'inherit' }); console.log('Starting WardAlert Next.js frontend on port 3000...'); const fe = spawn('npm', ['--prefix', 'frontend', 'run', 'dev'], { stdio: 'inherit', shell: true }); process.on('SIGINT', () => { api.kill(); fe.kill(); process.exit(); });\""
+  },
+  "keywords": [
+    "flood-prediction",
+    "mumbai",
+    "bmc",
+    "postgis",
+    "xgboost",
+    "shap",
+    "whatsapp",
+    "drain-health"
+  ],
+  "author": "WardAlert Team",
+  "license": "UNLICENSED"
+}

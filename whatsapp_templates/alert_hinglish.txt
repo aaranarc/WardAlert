@@ -1,9 +1,12 @@
-*WardAlert — {spot_name}*
+🚨 BMC WARD G-SOUTH FLOOD ALERT 🚨
 
-Flooding ka risk: *{risk_level}* ({p_actual_pct}% chance)
-Kya wajah: {cause_label}
-Pichle 3 ghante ki baarish: {rain_3h} mm
+Location: {spot_name}
+Risk Level: {risk_level} ({p_actual_pct}% chance)
+Wajah: {cause_label}
+3h Baarish: {rain_3h} mm (updated {updated_ago})
 
-Kya karna hai: {dispatch_action}
+Action: {dispatch_action}
 
-{updated_ago} update hua. Band karne ke liye STOP bhejein.
+Latest update ke liye STATUS reply karein
+Alerts continue rakhne ke liye EXTEND reply karein
+Unsubscribe karne ke liye STOP reply karein

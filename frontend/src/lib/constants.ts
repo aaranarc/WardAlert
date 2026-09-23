@@ -4,10 +4,10 @@ export const MAP_CENTER: [number, number] = [19.015, 72.825];
 export const DEFAULT_ZOOM = 14;
 
 export const RISK_COLORS: Record<RiskLevel | "unknown", string> = {
-  critical: "#ef4444",
-  high: "#f59e0b",
-  moderate: "#eab308",
   low: "#10b981",
+  moderate: "#d97706",
+  high: "#c2410c",
+  critical: "#dc2626",
   unknown: "#94a3b8",
 };
 

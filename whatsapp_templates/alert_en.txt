@@ -1,9 +1,12 @@
-*WardAlert — {spot_name}*
+🚨 BMC WARD G-SOUTH FLOOD ALERT 🚨
 
-Flood risk: *{risk_level}* ({p_actual_pct}% chance)
+Location: {spot_name}
+Risk Level: {risk_level} ({p_actual_pct}% probability)
 Cause: {cause_label}
-Rain in last 3h: {rain_3h} mm
+3h Rainfall: {rain_3h} mm (updated {updated_ago})
 
 Action: {dispatch_action}
 
-Updated {updated_ago}. Reply STOP to unsubscribe.
+Reply STATUS for latest update
+Reply EXTEND to keep receiving alerts
+Reply STOP to unsubscribe

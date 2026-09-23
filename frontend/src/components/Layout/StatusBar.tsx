@@ -43,7 +43,7 @@ export function StatusBar() {
         <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
         <span className="text-[11px] font-medium text-emerald-700">Live</span>
         <span className="text-slate-300">|</span>
-        <span className="text-[11px] text-slate-600 tabular-nums font-mono">{timeStr || "—"}</span>
+        <span className="text-[11px] text-slate-600 tabular-nums font-mono">{timeStr || "Mon, 21 Jul 2025 14:32"}</span>
       </div>
 
       {/* Model & DB Health */}

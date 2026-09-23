@@ -74,7 +74,7 @@ export function Sidebar({
 
       <aside
         className={cn(
-          "fixed top-16 bottom-0 left-0 z-40 bg-white border-r border-slate-200 transition-all duration-200 flex flex-col justify-between select-none",
+          "fixed top-14 bottom-0 left-0 z-40 bg-white border-r border-slate-200 transition-all duration-200 flex flex-col justify-between select-none",
           collapsed ? "w-[68px]" : "w-[220px]",
           mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         )}
@@ -110,20 +110,30 @@ export function Sidebar({
           </nav>
         </div>
 
-        {/* Footer Area with Version & Uptime */}
-        <div className="p-3 border-t border-slate-100 space-y-2">
-          {!collapsed ? (
-            <div className="px-2 py-1 text-center font-mono">
-              <div className="text-[10px] text-slate-500 font-medium">
-                v0.1.0 · Uptime: 99.9%
+        {/* Footer Area with Civic Motif */}
+        <div className="p-3 border-t border-slate-100 space-y-3">
+          {!collapsed && (
+            <div className="px-2 py-1 text-center">
+              {/* Clean Municipal Skyline Motif */}
+              <svg viewBox="0 0 120 30" fill="none" stroke="#94a3b8" strokeWidth="1" className="w-24 h-6 mx-auto mb-1 opacity-70">
+                <path d="M5 28 H115" />
+                <path d="M12 28 V16 H20 V28" />
+                <path d="M22 28 V10 H32 V28" />
+                <path d="M34 28 V14 H40 V28" />
+                <path d="M42 28 V6 H54 V28" />
+                <path d="M56 28 V18 H66 V28" />
+                <path d="M68 28 V8 H80 V28" />
+                <path d="M82 28 V15 H90 V28" />
+                <path d="M92 28 V12 H102 V28" />
+                <circle cx="48" cy="4" r="1.5" />
+                <circle cx="74" cy="5" r="1.5" />
+              </svg>
+              <div className="text-[10px] font-semibold text-slate-700 tracking-tight">
+                Mumbai Ward G/South
               </div>
               <div className="text-[9px] text-slate-400 mt-0.5">
-                Ward G-South · Dual XGBoost
+                Safer Communities. Stronger Mumbai.
               </div>
-            </div>
-          ) : (
-            <div className="text-[9px] font-mono text-slate-400 text-center">
-              v0.1
             </div>
           )}
 

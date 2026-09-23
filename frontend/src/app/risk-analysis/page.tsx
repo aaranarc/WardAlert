@@ -176,10 +176,6 @@ export default function RiskAnalysisPage() {
                 <span className="text-slate-400 text-[10px]">Test AUC:</span>{" "}
                 <span className="font-bold text-slate-800">0.8187</span>
               </div>
-              <div>
-                <span className="text-slate-400 text-[10px]">F1 Score:</span>{" "}
-                <span className="font-bold text-slate-800">0.2857</span>
-              </div>
             </div>
           </div>
 
@@ -190,10 +186,6 @@ export default function RiskAnalysisPage() {
               <div>
                 <span className="text-slate-500 text-[10px]">Test AUC:</span>{" "}
                 <span className="font-bold text-[#0066cc]">0.8500</span>
-              </div>
-              <div>
-                <span className="text-slate-500 text-[10px]">F1 Score:</span>{" "}
-                <span className="font-bold text-[#0066cc]">0.5000</span>
               </div>
             </div>
           </div>

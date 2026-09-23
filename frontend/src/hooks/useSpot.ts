@@ -4,7 +4,7 @@ import { SpotDetail } from "@/lib/types";
 
 export function useSpot(spotId: number | null, historyHours: number = 24) {
   const { data, error, isLoading, mutate } = useSWR<SpotDetail | null>(
-    spotId ? `/api/spots/${spotId}?history_hours=${historyHours}` : null,
+    spotId ? `/api/spots/${spotId}?hours=${historyHours}` : null,
     () => (spotId ? api.getSpot(spotId, historyHours) : null),
     {
       revalidateOnFocus: false,
